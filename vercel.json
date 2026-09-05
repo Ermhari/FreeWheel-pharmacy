@@ -2,7 +2,8 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/orders", "destination": "/orders.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/orders", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/((?!images/).*)", "destination": "/index.html" }
   ]
 }
