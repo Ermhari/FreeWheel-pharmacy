@@ -3966,7 +3966,7 @@ body.in-admin-mode .scroll-progress {
         <h3><i data-lucide="shopping-bag" style="color:var(--ochre)"></i> My Orders</h3>
         <p>View and track all your medicine requests.</p>
       </div>
-      <div style="overflow-x:auto">
+      <div style="overflow-x:auto" data-lenis-prevent>
         <table class="orders-table">
           <thead>
             <tr>
@@ -4056,7 +4056,7 @@ body.in-admin-mode .scroll-progress {
        VIEW: ADMIN DASHBOARD (Dispensary Management)
        ============================================================ -->
   <section id="view-admin-dashboard" class="app-view">
-    <aside class="sidebar">
+    <aside class="sidebar" data-lenis-prevent>
     <a class="sidebar-logo" href="#" onclick="showView('home');return false;">
       <div class="sb-logo-icon">
         <svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 2v12M2 8h12" stroke="#F5F0E3" stroke-width="3.4" stroke-linecap="round"/></svg>
@@ -4180,7 +4180,7 @@ body.in-admin-mode .scroll-progress {
           <h2>Recent Orders</h2>
           <a class="panel-link" href="#" onclick="renderAdminTable(); return false;">Refresh List</a>
         </div>
-        <div style="overflow-x:auto">
+        <div style="overflow-x:auto" data-lenis-prevent>
           <table class="admin-table">
             <thead>
               <tr>
@@ -5831,7 +5831,8 @@ if(ANIM){
    SINGLE-URL APPLICATION ROUTER & DATA CONTROLLERS
    ============================================================ */
 let currentView = 'home';
-let admAuth = sessionStorage.getItem('fw_adm_auth') === 'true';
+let admAuth = true; // Demo mode: direct admin access without PIN
+window.admAuth = true;
 
 const DEFAULT_ORDERS_LIST = [
   {
@@ -5932,11 +5933,7 @@ function showView(name, params = {}) {
     return;
   }
 
-  if (name === 'admin' || name === 'admin-dashboard') {
-    if (!admAuth) {
-      showView('admin-login');
-      return;
-    }
+  if (name === 'admin' || name === 'admin-login' || name === 'admin-dashboard') {
     name = 'admin-dashboard';
   }
 
@@ -5969,18 +5966,25 @@ function showView(name, params = {}) {
   if (name === 'orders') {
     const no = document.getElementById('navOrdersBtn');
     if (no) no.classList.add('active');
-  } else if (name === 'admin-login' || name === 'admin-dashboard') {
+  } else if (name === 'admin-dashboard') {
     const na = document.getElementById('navAdminBtn');
     if (na) na.classList.add('active');
   }
 
-  // View-specific initialization
-  if (name === 'home') {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    if (typeof lenis !== 'undefined' && lenis) lenis.start();
-  } else {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    if (typeof lenis !== 'undefined' && lenis) lenis.stop();
+  // View-specific scroll management (enable scrolling across all views)
+  document.body.style.overflow = '';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (typeof lenis !== 'undefined' && lenis) {
+    lenis.start();
+    lenis.scrollTo(0, { immediate: true });
+    requestAnimationFrame(() => {
+      if (typeof lenis !== 'undefined' && lenis) lenis.resize();
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    });
+    setTimeout(() => {
+      if (typeof lenis !== 'undefined' && lenis) lenis.resize();
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    }, 120);
   }
 
   if (name === 'orders') {
@@ -6256,19 +6260,10 @@ const adminLoginForm = document.getElementById('adminLoginForm');
 if (adminLoginForm) {
   adminLoginForm.addEventListener('submit', e => {
     e.preventDefault();
-    const pin = document.getElementById('adminPinInput').value.trim();
-    // Demo authentication check
-    if (pin === '4092' || pin === '1234') {
-      admAuth = true;
-      sessionStorage.setItem('fw_adm_auth', 'true');
-      document.getElementById('adminLoginError').style.display = 'none';
-      toast('Welcome to Pharmacy Admin');
-      showView('admin-dashboard');
-    } else {
-      const errBox = document.getElementById('adminLoginError');
-      if (errBox) errBox.style.display = 'flex';
-      shake(adminLoginForm);
-    }
+    admAuth = true;
+    window.admAuth = true;
+    toast('Welcome to Pharmacy Admin');
+    showView('admin-dashboard');
   });
 }
 
@@ -6367,10 +6362,9 @@ function selectDoctor(deptName, cardEl) {
 window.selectDoctor = selectDoctor;
 
 function adminLogout() {
-  admAuth = false;
-  window.admAuth = false;
-  sessionStorage.removeItem('fw_adm_auth');
-  toast('Logged out of Admin');
+  admAuth = true;
+  window.admAuth = true;
+  toast('Returned to Storefront');
   showView('home');
 }
 window.adminLogout = adminLogout;
