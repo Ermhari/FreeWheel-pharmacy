@@ -74,7 +74,7 @@ html.js .loader{display:grid}
 .announce{background:var(--green-950);color:rgba(245,240,227,.75);text-align:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:9px 16px}
 .announce b{color:var(--ochre-soft);font-weight:600}
 .site-header{position:sticky;top:0;z-index:100;background:rgba(245,240,227,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:transform .55s cubic-bezier(.3,.9,.3,1),box-shadow .3s}
-.site-header.hide{transform:translateY(-105%)}
+.site-header.hide{transform:translateY(-105%) !important}
 .site-header.scrolled{box-shadow:0 10px 26px -20px rgba(14,50,37,.4)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:72px;position:relative}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
@@ -443,6 +443,54 @@ footer h5{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(
 .f-top{display:flex;gap:8px;align-items:center;color:rgba(245,240,227,.7);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:color .2s}
 .f-top:hover{color:var(--ochre-soft)}
 .f-top svg{width:13px;height:13px}
+
+/* Floating Back to Top Button */
+.floating-back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green-950);
+  color: var(--cream);
+  border: 1.5px solid rgba(245, 240, 227, 0.25);
+  box-shadow: 0 8px 24px rgba(10, 33, 26, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 190;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.floating-back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+.floating-back-to-top:hover {
+  background: var(--green-800);
+  color: var(--ochre-soft);
+  border-color: var(--ochre-soft);
+  box-shadow: 0 12px 30px rgba(10, 33, 26, 0.38);
+  transform: translateY(-3px) scale(1.06);
+}
+.floating-back-to-top svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
+}
+.floating-back-to-top:hover svg {
+  transform: translateY(-2px);
+}
+body.in-admin-mode .floating-back-to-top {
+  display: none !important;
+}
 
 /* ============ Basket drawer ============ */
 .overlay{position:fixed;inset:0;background:rgba(10,24,17,.55);opacity:0;pointer-events:none;transition:opacity .35s;z-index:140}
@@ -4387,9 +4435,14 @@ body.in-admin-mode .scroll-progress {
     </div>
     <button class="btn-green-full" onclick="closeDrawer();showView('orders')" style="text-decoration:none;text-align:center;display:block;width:100%;padding:12px;border-radius:999px;border:none;cursor:pointer">
       + Place New Medicine Order
-    </a>
+    </button>
   </div>
 </aside>
+
+<!-- Floating Back to Top Button -->
+<button class="floating-back-to-top" id="floatingToTop" aria-label="Scroll to top" title="Back to top">
+  <i data-lucide="arrow-up"></i>
+</button>
 
 <div class="toasts" id="toasts"></div>
 
@@ -5541,7 +5594,44 @@ el('nlForm').addEventListener('submit', e=>{
     });
   }
 
-el('toTop').addEventListener('click', ()=> lenis ? lenis.scrollTo(0, {duration:1.6}) : window.scrollTo({top:0, behavior:'smooth'}));
+function scrollToTop(e){
+  if(e && e.preventDefault) e.preventDefault();
+  if(typeof currentView !== 'undefined' && currentView !== 'home'){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(typeof lenis !== 'undefined' && lenis) {
+      lenis.start();
+      lenis.scrollTo(0, { duration: 0.8, easing: t => 1 - Math.pow(1 - t, 3) });
+    }
+    return;
+  }
+  if(typeof lenis !== 'undefined' && lenis){
+    try {
+      lenis.scrollTo(0, {
+        duration: 0.9,
+        easing: t => 1 - Math.pow(1 - t, 3)
+      });
+    } catch(err){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+window.scrollToTop = scrollToTop;
+
+const floatTopBtn = el('floatingToTop');
+const footerTopBtn = el('toTop');
+if(floatTopBtn) floatTopBtn.addEventListener('click', scrollToTop);
+if(footerTopBtn) footerTopBtn.addEventListener('click', scrollToTop);
+
+function updateFloatingTop(y){
+  if(!floatTopBtn) return;
+  const pos = typeof y === 'number' ? y : (window.scrollY || document.documentElement.scrollTop || 0);
+  if(pos > 320) floatTopBtn.classList.add('visible');
+  else floatTopBtn.classList.remove('visible');
+}
+window.addEventListener('scroll', ()=> updateFloatingTop(), { passive: true });
+refreshIcons();
 addEventListener('keydown', e=>{
   if(e.key==='Escape'){
     if(activeModal){ closeModal(); return; }
@@ -5587,7 +5677,7 @@ if(ANIM){
   const cnt = {v:0};
   const heroIntro = gsap.timeline({paused:true})
     .to('.announce', {yPercent:0, duration:.7, ease:'power3.out'}, 0)
-    .to('.site-header', {y:0, duration:.8, ease:'power3.out'}, .05)
+    .to('.site-header', {y:0, duration:.8, ease:'power3.out', clearProps:'transform'}, .05)
     .to('.hero .eb-line', {scaleX:1, duration:.6, ease:'power2.out'}, .15)
     .to('.hero .eyebrow', {opacity:1, duration:.4}, .15)
     .to('.hero-title .w', {yPercent:0, duration:1.1, ease:'power4.out', stagger:.075}, .18)
@@ -5637,6 +5727,7 @@ if(ANIM){
       header.classList.toggle('scrolled', self.scroll()>8);
       const hide = self.direction===1 && self.scroll()>160 && !panelsOpen();
       header.classList.toggle('hide', hide);
+      updateFloatingTop(self.scroll());
     }
   });
 
