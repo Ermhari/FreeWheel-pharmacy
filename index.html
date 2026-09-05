@@ -4467,11 +4467,24 @@ if(ANIM) gsap.registerPlugin(ScrollTrigger);
 else { const L = el('loader'); if(L) L.style.display='none'; document.body.classList.remove('loading'); }
 
 if(typeof Lenis !== 'undefined' && !reduced){
-  lenis = new Lenis({ lerp: 0.1 });
+  lenis = new Lenis({
+    lerp: 0.1,
+    virtualScroll: () => {
+      // Only run virtual smooth scroll on home view; use native smooth scrolling on orders and admin to eliminate sticky jitter and scroll glitches
+      if(typeof currentView !== 'undefined' && currentView !== 'home'){
+        return false;
+      }
+      return true;
+    }
+  });
   if(ANIM){
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(t => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.add(t => {
+      if(lenis && (typeof currentView === 'undefined' || currentView === 'home')){
+        lenis.raf(t * 1000);
+      }
+    });
+    gsap.ticker.lagSmoothing(500, 33);
     lenis.stop();
   }
 }
@@ -6061,20 +6074,33 @@ function showView(name, params = {}) {
     if (na) na.classList.add('active');
   }
 
-  // View-specific scroll management (enable scrolling across all views)
+  // View-specific scroll management
   document.body.style.overflow = '';
   window.scrollTo({ top: 0, behavior: 'instant' });
-  if (typeof lenis !== 'undefined' && lenis) {
-    lenis.start();
-    lenis.scrollTo(0, { immediate: true });
-    requestAnimationFrame(() => {
-      if (typeof lenis !== 'undefined' && lenis) lenis.resize();
-      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
-    });
-    setTimeout(() => {
-      if (typeof lenis !== 'undefined' && lenis) lenis.resize();
-      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
-    }, 120);
+  const siteHdr = document.getElementById('siteHeader');
+  if (siteHdr) {
+    siteHdr.classList.remove('hide');
+    siteHdr.classList.remove('scrolled');
+  }
+
+  if (name === 'home') {
+    if (typeof lenis !== 'undefined' && lenis) {
+      lenis.start();
+      lenis.scrollTo(0, { immediate: true });
+      requestAnimationFrame(() => {
+        if (lenis) lenis.resize();
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+      });
+    }
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.getAll().forEach(t => t.enable());
+      ScrollTrigger.refresh();
+    }
+  } else {
+    // Orders & Admin views: disable home ScrollTriggers to eliminate glitching when scrolling from bottom to top
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.getAll().forEach(t => t.disable(false));
+    }
   }
 
   if (name === 'orders') {
