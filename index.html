@@ -5,8 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Freewheel+ — Clinic &amp; Pharmacy · Better Health, Brighter Tomorrows</title>
 <meta name="description" content="Trusted clinic care and a fully-stocked pharmacy under one roof. Same-day doctor appointments, genuine medicines, on-site lab, order tracking and prescription uploads.">
-<script>document.documentElement.classList.add('js');</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<script>
+document.documentElement.classList.add('js');
+// Failsafe: guarantee loader disappears even under slow network, device lag, or script interruption
+setTimeout(function() {
+  var ldr = document.getElementById('loader');
+  if (ldr && ldr.style.display !== 'none') {
+    ldr.style.transition = 'opacity 0.4s ease';
+    ldr.style.opacity = '0';
+    setTimeout(function() {
+      if (ldr) ldr.style.display = 'none';
+      document.body.classList.remove('loading');
+    }, 400);
+  }
+}, 1800);
+</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <style>
@@ -2955,16 +2968,17 @@ function openProduct(id){
 }
 
 /* ================= Checkout & orders ================= */
-el('checkoutBtn').addEventListener('click', ()=>{
-  if(cart.size===0) return;
-  const items = [...cart.entries()].map(([id,q])=>{
-    const p = PRODUCTS.find(x=>x.id===id);
-    return {id:p.id, name:p.name, price:p.price, qty:q};
+if(el('checkoutBtn')){
+  el('checkoutBtn').addEventListener('click', ()=>{
+    if(cart.size===0) return;
+    const items = [...cart.entries()].map(([id,q])=>{
+      const p = PRODUCTS.find(x=>x.id===id);
+      return {id:p.id, name:p.name, price:p.price, qty:q};
+    });
+    localStorage.setItem('freewheel_cart_transfer', JSON.stringify(items));
+    window.location.href = 'orders.html';
   });
-  // Transfer cart items directly to Orders Page
-  localStorage.setItem('freewheel_cart_transfer', JSON.stringify(items));
-  window.location.href = 'orders.html';
-});
+}
 function openConfirm(o){
   const box = openModal(`
     <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
