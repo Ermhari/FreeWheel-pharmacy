@@ -1609,8 +1609,28 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
 /* ============================================================
    SINGLE-URL APPLICATION VIEWS & ROUTING SYSTEM
    ============================================================ */
-.app-view { display: none; }
-.app-view.active-view { display: block; animation: viewFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+.app-view { display: none !important; }
+.app-view.active-view { display: block !important; animation: viewFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+#view-admin-dashboard.active-view {
+  display: flex !important;
+  min-height: 100vh;
+  width: 100%;
+}
+#view-admin-login.active-view {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 992px) {
+  #view-admin-dashboard.active-view {
+    flex-direction: column;
+  }
+  #view-admin-dashboard .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+}
 @keyframes viewFadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -3134,12 +3154,12 @@ body.in-admin-mode .scroll-progress {
       <a href="#medicines">Medicines</a>
       <a href="#reviews">Reviews</a>
       <a href="#" onclick="showView('orders');return false;" id="navOrdersBtn">Orders</a>
-      <a href="#" onclick="showView(admAuth ? 'admin-dashboard' : 'admin-login');return false;" id="navAdminBtn">Admin</a>
+      <a href="#" onclick="showView('admin');return false;" id="navAdminBtn">Admin</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn" id="searchBtn" aria-label="Search medicines" title="Search"><i data-lucide="search"></i></button>
       <button class="icon-btn hide-sm" onclick="showView('orders')" id="trackBtn" aria-label="Orders &amp; Tracking" title="Customer Orders"><i data-lucide="package"></i></button>
-      <button class="icon-btn hide-sm" onclick="showView(admAuth ? 'admin-dashboard' : 'admin-login')" id="topAdminIcon" aria-label="Dispensary Admin" title="Pharmacy Admin Dashboard"><i data-lucide="shield-check"></i></button>
+      <button class="icon-btn hide-sm" onclick="showView('admin')" id="topAdminIcon" aria-label="Dispensary Admin" title="Pharmacy Admin Dashboard"><i data-lucide="shield-check"></i></button>
       <button class="icon-btn" id="cartBtn" aria-label="Open basket"><i data-lucide="shopping-basket"></i><span class="cart-badge" id="cartBadge"></span></button>
       <button class="icon-btn" id="accBtn" aria-label="My account"><span id="accIco"><i data-lucide="user-round"></i></span></button>
       <a class="btn-pill btn-solid-green hide-sm" href="#book" data-magnetic>Book a Visit</a>
@@ -3164,7 +3184,7 @@ body.in-admin-mode .scroll-progress {
   <a href="#medicines">Medicines <i data-lucide="arrow-up-right"></i></a>
   <a href="#reviews">Reviews <i data-lucide="arrow-up-right"></i></a>
   <a href="#" onclick="closeMobileMenu();showView('orders');return false;">Orders <i data-lucide="arrow-up-right"></i></a>
-  <a href="#" onclick="closeMobileMenu();showView(admAuth ? 'admin-dashboard' : 'admin-login');return false;">Admin Dashboard <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" onclick="closeMobileMenu();showView('admin');return false;">Admin Dashboard <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="account">My account <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="track">Track order <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="rx">Upload prescription <i data-lucide="arrow-up-right"></i></a>
@@ -3547,22 +3567,22 @@ body.in-admin-mode .scroll-progress {
         </h2>
         <p class="refill-intro reveal">No queues, no phone tag. Pick a department and a time — we confirm by text within fifteen minutes, and any medicines from the visit are ready before you leave.</p>
                 <div class="doc-card-grid">
-          <div class="doc-card-thumb selected" onclick="document.getElementById('bDept').value='general'">
+          <div class="doc-card-thumb selected" onclick="selectDoctor('general', this)">
             <img src="images/doc-marcus.jpg" alt="Dr. Marcus Vance">
             <div class="doc-card-name">Dr. Marcus Vance</div>
             <div class="doc-card-spec">General Medicine</div>
           </div>
-          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='cardio'">
+          <div class="doc-card-thumb" onclick="selectDoctor('cardio', this)">
             <img src="images/doc-sarah.jpg" alt="Dr. Sarah Jenkins">
             <div class="doc-card-name">Dr. Sarah Jenkins</div>
             <div class="doc-card-spec">Cardiology</div>
           </div>
-          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='peds'">
+          <div class="doc-card-thumb" onclick="selectDoctor('peds', this)">
             <img src="images/doc-priya.jpg" alt="Dr. Priya Patel">
             <div class="doc-card-name">Dr. Priya Patel</div>
             <div class="doc-card-spec">Pediatrics</div>
           </div>
-          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='derma'">
+          <div class="doc-card-thumb" onclick="selectDoctor('derma', this)">
             <img src="images/doc-elena.jpg" alt="Dr. Elena Rostova">
             <div class="doc-card-name">Dr. Elena Rostova</div>
             <div class="doc-card-spec">Dermatology</div>
@@ -3987,6 +4007,7 @@ body.in-admin-mode .scroll-progress {
       <button class="modal-close" onclick="closeOrderModal()"><i data-lucide="x"></i></button>
       <div id="modalBody"></div>
     </div>
+  </div>
   </section>
 
   <!-- ============================================================
@@ -4081,12 +4102,12 @@ body.in-admin-mode .scroll-progress {
           <small>Pharmacy Team</small>
         </div>
       </div>
-      <a class="sb-logout" href="#" onclick="showView('home');return false;" title="Return to Storefront">
+      <button class="sb-logout" onclick="adminLogout();return false;" title="Sign Out & Return to Storefront" style="background:none;border:none;cursor:pointer">
         <i data-lucide="log-out"></i>
       </button>
     </div>
   </aside>
-    <main class="main-wrap">
+    <div class="main-wrap">
 
     <!-- Top Bar -->
     <header class="topbar">
@@ -4286,7 +4307,7 @@ body.in-admin-mode .scroll-progress {
       </div>
 
     </div>
-  </main>
+  </div>
   </section>
 
 </main>
@@ -4342,7 +4363,7 @@ body.in-admin-mode .scroll-progress {
     <span>© 2026 Freewheel+ · Registered Pharmacy No. PH-4471</span>
     <span>A fictional demo storefront · Always read the label before use.</span>
     <span style="display:flex;gap:18px">
-      <button class="f-top" id="staffBtn" onclick="showView(admAuth ? 'admin-dashboard' : 'admin-login')">Staff area</button>
+      <button class="f-top" id="staffBtn" onclick="showView('admin')">Staff area</button>
       <button class="f-top" id="toTop">Back to top <i data-lucide="arrow-up"></i></button>
     </span>
   </div>
@@ -4413,6 +4434,16 @@ function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ r
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 function today(){ return new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
 function goTo(target){
+  if(typeof currentView !== 'undefined' && currentView !== 'home'){
+    showView('home');
+    setTimeout(()=>{
+      const t = typeof target === 'string' ? document.querySelector(target) : target;
+      if(!t) return;
+      if(lenis) lenis.scrollTo(t, { offset:-84, duration:1.4, easing: x => 1 - Math.pow(1 - x, 4) });
+      else t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+    }, 60);
+    return;
+  }
   const t = typeof target === 'string' ? document.querySelector(target) : target;
   if(!t) return;
   if(lenis) lenis.scrollTo(t, { offset:-84, duration:1.4, easing: x => 1 - Math.pow(1 - x, 4) });
@@ -5282,7 +5313,7 @@ el('fTrack').addEventListener('click', openTrackPicker);
 
 /* ================= Staff / admin ================= */
 function openAdmin(){
-  showView(admAuth ? 'admin-dashboard' : 'admin-login');
+  showView('admin');
 }
 function renderAdmin(){
   const revenue = orders.reduce((s,o)=>s+o.total,0);
@@ -5901,11 +5932,12 @@ function showView(name, params = {}) {
     return;
   }
 
-  if (name === 'admin-dashboard') {
+  if (name === 'admin' || name === 'admin-dashboard') {
     if (!admAuth) {
       showView('admin-login');
       return;
     }
+    name = 'admin-dashboard';
   }
 
   // Hide all view panels
@@ -6057,7 +6089,7 @@ function viewOrderDetail(id) {
     ` : ''}
 
     <div style="display:flex;gap:12px;margin-top:24px">
-      <button onclick="closeOrderModal();showView(admAuth ? 'admin-dashboard' : 'admin-login')" style="flex:1;text-align:center;background:var(--green-800);color:var(--cream);padding:12px;border-radius:999px;border:none;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Open in Admin Portal</button>
+      <button onclick="closeOrderModal();showView('admin')" style="flex:1;text-align:center;background:var(--green-800);color:var(--cream);padding:12px;border-radius:999px;border:none;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Open in Admin Portal</button>
       <button onclick="closeOrderModal()" style="flex:1;background:var(--cream-2);border:1px solid var(--line);padding:12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);letter-spacing:.08em;text-transform:uppercase">Close</button>
     </div>
   `;
@@ -6275,7 +6307,7 @@ function renderAdminTable() {
         <td>${o.medicinesSummary}</td>
         <td><span class="status-chip ${chipClass}">${o.status}</span></td>
         <td>${o.date}</td>
-        <td><button class="btn-act-view" onclick="selectOrder('${o.id}')">View</button></td>
+        <td><button class="btn-act-view" onclick="selectOrder('${o.id}', true)">View</button></td>
       </tr>
     `;
   }).join('');
@@ -6283,7 +6315,7 @@ function renderAdminTable() {
 }
 window.renderAdminTable = renderAdminTable;
 
-function selectOrder(id) {
+function selectOrder(id, shouldScroll = false) {
   currentSelectedAdminId = id;
   const orders = getPharmacyOrders();
   const o = orders.find(x => x.id === id) || orders[0];
@@ -6317,9 +6349,45 @@ function selectOrder(id) {
 
   updateTimelineVisual(o.status);
   const dPanel = document.getElementById('detailPanel');
-  if (dPanel) dPanel.scrollIntoView({ behavior: 'smooth' });
+  if (shouldScroll && dPanel) dPanel.scrollIntoView({ behavior: 'smooth' });
 }
 window.selectOrder = selectOrder;
+function selectDoctor(deptName, cardEl) {
+  document.querySelectorAll('.doc-card-thumb').forEach(c => c.classList.remove('selected'));
+  if (cardEl) cardEl.classList.add('selected');
+  const radios = document.querySelectorAll('input[name="dept"]');
+  radios.forEach(r => {
+    if (r.value.toLowerCase().includes(deptName.toLowerCase())) {
+      r.checked = true;
+      document.querySelectorAll('.pillset label').forEach(l => l.classList.remove('on'));
+      r.closest('label').classList.add('on');
+    }
+  });
+}
+window.selectDoctor = selectDoctor;
+
+function adminLogout() {
+  admAuth = false;
+  window.admAuth = false;
+  sessionStorage.removeItem('fw_adm_auth');
+  toast('Logged out of Admin');
+  showView('home');
+}
+window.adminLogout = adminLogout;
+
+// Expose all view controllers to window for inline HTML handlers
+window.admAuth = admAuth;
+window.closeDrawer = closeDrawer;
+window.openDrawer = openDrawer;
+window.closeMobileMenu = closeMobileMenu;
+window.closeModal = closeModal;
+window.openModal = openModal;
+window.openAccount = openAccount;
+window.openTrack = openTrack;
+window.openTrackPicker = openTrackPicker;
+window.toast = toast;
+window.shake = shake;
+
 
 function updateTimelineVisual(status) {
   const steps = ['tlStepReceived', 'tlStepReview', 'tlStepConfirmed', 'tlStepPreparing', 'tlStepDelivered'];
@@ -6408,7 +6476,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (path.includes('order') || search.get('view') === 'orders' || med) {
     showView('orders', { med, qty });
   } else if (path.includes('admin') || search.get('view') === 'admin') {
-    showView(admAuth ? 'admin-dashboard' : 'admin-login');
+    showView('admin');
   } else {
     showView('home');
   }
