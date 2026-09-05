@@ -54,13 +54,8 @@ section{scroll-margin-top:96px}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grainShift 1.1s steps(6) infinite}
 @keyframes grainShift{0%{transform:translate(0,0)}20%{transform:translate(-4%,-7%)}40%{transform:translate(-10%,3%)}60%{transform:translate(5%,-9%)}80%{transform:translate(-6%,6%)}100%{transform:translate(0,0)}}
-.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:400;opacity:0}
-html.cursor-on,html.cursor-on *{cursor:none}
-.cursor-dot .cd-core{width:6px;height:6px;border-radius:50%;background:#fff;mix-blend-mode:difference;transform:translate(-50%,-50%)}
-.ring-core{transform:translate(-50%,-50%);width:34px;height:34px;border:1.5px solid rgba(255,255,255,.85);border-radius:50%;display:grid;place-items:center;mix-blend-mode:difference;transition:width .35s cubic-bezier(.3,1.2,.4,1),height .35s cubic-bezier(.3,1.2,.4,1),background .35s}
-.ring-core.on{width:62px;height:62px;background:rgba(255,255,255,.07)}
-.cursor-label{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#fff;opacity:0;transition:opacity .25s;white-space:nowrap}
-.ring-core.txt .cursor-label{opacity:1}
+.cursor-dot,.cursor-ring{display:none !important}
+html.cursor-on,html.cursor-on *{cursor:auto}
 
 /* ============ Loader ============ */
 .loader{display:none;position:fixed;inset:0;z-index:360;background:var(--green-950);place-items:center;clip-path:inset(0 0 0 0)}
@@ -3110,8 +3105,6 @@ body.in-admin-mode .scroll-progress {
 
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="grain" aria-hidden="true"></div>
-<div class="cursor-dot" id="cDot"><span class="cd-core"></span></div>
-<div class="cursor-ring" id="cRing"><span class="ring-core" id="ringCore"><span class="cursor-label" id="cLabel"></span></span></div>
 
 <!-- ============ Loader ============ -->
 <div class="loader" id="loader" aria-hidden="true">
@@ -5604,24 +5597,7 @@ if(ANIM){
   gsap.to('.cs1', {y:-22, x:12, rotation:6, duration:24, repeat:-1, yoyo:true, ease:'sine.inOut'});
   gsap.to('.cs2', {y:18, x:-10, rotation:-8, duration:30, repeat:-1, yoyo:true, ease:'sine.inOut'});
 
-  const hero = document.querySelector('.hero');
-  if(fine){
-    document.querySelectorAll('.fl').forEach(it=>{
-      it._x = gsap.quickTo(it.querySelector('.fl-in'), 'x', {duration:.7, ease:'power3'});
-      it._y = gsap.quickTo(it.querySelector('.fl-in'), 'y', {duration:.7, ease:'power3'});
-    });
-    hero.addEventListener('mousemove', e=>{
-      const r = hero.getBoundingClientRect();
-      const rx = (e.clientX - r.left)/r.width - .5, ry = (e.clientY - r.top)/r.height - .5;
-      document.querySelectorAll('.fl').forEach(it=>{
-        const d = +it.dataset.depth;
-        it._x(rx * d * 18); it._y(ry * d * 14);
-      });
-    });
-    hero.addEventListener('mouseleave', ()=>{
-      document.querySelectorAll('.fl').forEach(it=>{ it._x(0); it._y(0); });
-    });
-  }
+
 
   gsap.to('#scrollProgress', {scaleX:1, ease:'none', scrollTrigger:{start:0, end:'max', scrub:.3}});
 
@@ -5689,53 +5665,6 @@ if(ANIM){
       });
     });
 
-    document.addEventListener('mousemove', e=>{
-      const card = e.target.closest('.p-card'); if(!card) return;
-      const art = card.querySelector('.p-art svg'); if(!art) return;
-      if(!art._qx){
-        art._qx = gsap.quickTo(art,'x',{duration:.5,ease:'power3'});
-        art._qy = gsap.quickTo(art,'y',{duration:.5,ease:'power3'});
-      }
-      const r = card.getBoundingClientRect();
-      art._qx(((e.clientX-r.left)/r.width - .5)*14);
-      art._qy(((e.clientY-r.top)/r.height - .5)*10);
-    });
-
-    document.querySelectorAll('[data-magnetic]').forEach(m=>{
-      const x = gsap.quickTo(m, 'x', {duration:.4, ease:'power3'});
-      const y = gsap.quickTo(m, 'y', {duration:.4, ease:'power3'});
-      m.addEventListener('mousemove', e=>{
-        const r = m.getBoundingClientRect();
-        x((e.clientX - r.left - r.width/2)*.28);
-        y((e.clientY - r.top - r.height/2)*.28);
-      });
-      m.addEventListener('mouseleave', ()=>{ x(0); y(0); });
-    });
-
-    document.documentElement.classList.add('cursor-on');
-    const dot = el('cDot'), ringCore = el('ringCore'), cLabel = el('cLabel');
-    gsap.set([dot, el('cRing')], {xPercent:-50, yPercent:-50});
-    const rx = gsap.quickTo(el('cRing'), 'x', {duration:.35, ease:'power3'});
-    const ry = gsap.quickTo(el('cRing'), 'y', {duration:.35, ease:'power3'});
-    let shown = false;
-    addEventListener('mousemove', e=>{
-      if(!shown){ shown = true; gsap.to([dot, el('cRing')], {opacity:1, duration:.3}); }
-      gsap.set(dot, {x:e.clientX, y:e.clientY});
-      rx(e.clientX); ry(e.clientY);
-    });
-    document.addEventListener('mouseleave', ()=>{ shown=false; gsap.to([dot, el('cRing')], {opacity:0, duration:.3}); });
-    const HOVER = 'a, button, input, label, textarea, [data-tilt], .p-card, .art-head, .tab';
-    document.addEventListener('mouseover', e=>{
-      const t = e.target.closest(HOVER); if(!t) return;
-      const c = e.target.closest('[data-cursor]');
-      const txt = c ? c.dataset.cursor : '';
-      cLabel.textContent = txt;
-      ringCore.classList.add('on');
-      ringCore.classList.toggle('txt', !!txt);
-    });
-    document.addEventListener('mouseout', e=>{
-      if(e.target.closest(HOVER)){ ringCore.classList.remove('on','txt'); }
-    });
 
     document.querySelectorAll('.nav a').forEach(a=>{
       const orig = a.textContent;
