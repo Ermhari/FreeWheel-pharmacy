@@ -1632,13 +1632,13 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
       <a href="#services">Services</a>
       <a href="#medicines">Medicines</a>
       <a href="#reviews">Reviews</a>
-      <a href="orders.html" id="navOrdersBtn">Orders</a>
-      <a href="admin.html" id="navAdminBtn">Admin</a>
+      <a href="orders.html" onclick="window.location.href='orders.html'" id="navOrdersBtn">Orders</a>
+      <a href="admin.html" onclick="window.location.href='admin.html'" id="navAdminBtn">Admin</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn" id="searchBtn" aria-label="Search medicines" title="Search"><i data-lucide="search"></i></button>
-      <a class="icon-btn hide-sm" href="orders.html" id="trackBtn" aria-label="Orders &amp; Tracking" title="Customer Orders Page"><i data-lucide="package"></i></a>
-      <a class="icon-btn hide-sm" href="admin.html" id="topAdminIcon" aria-label="Dispensary Admin" title="Pharmacy Admin Dashboard"><i data-lucide="shield-check"></i></a>
+      <a class="icon-btn hide-sm" href="orders.html" onclick="window.location.href='orders.html'" id="trackBtn" aria-label="Orders &amp; Tracking" title="Customer Orders Page"><i data-lucide="package"></i></a>
+      <a class="icon-btn hide-sm" href="admin.html" onclick="window.location.href='admin.html'" id="topAdminIcon" aria-label="Dispensary Admin" title="Pharmacy Admin Dashboard"><i data-lucide="shield-check"></i></a>
       <button class="icon-btn" id="cartBtn" aria-label="Open basket"><i data-lucide="shopping-basket"></i><span class="cart-badge" id="cartBadge"></span></button>
       <button class="icon-btn" id="accBtn" aria-label="My account"><span id="accIco"><i data-lucide="user-round"></i></span></button>
       <a class="btn-pill btn-solid-green hide-sm" href="#book" data-magnetic>Book a Visit</a>
@@ -1662,8 +1662,8 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
   <a href="#services">Services <i data-lucide="arrow-up-right"></i></a>
   <a href="#medicines">Medicines <i data-lucide="arrow-up-right"></i></a>
   <a href="#reviews">Reviews <i data-lucide="arrow-up-right"></i></a>
-  <a href="orders.html">Orders <i data-lucide="arrow-up-right"></i></a>
-  <a href="admin.html">Admin Dashboard <i data-lucide="arrow-up-right"></i></a>
+  <a href="orders.html" onclick="window.location.href='orders.html'">Orders <i data-lucide="arrow-up-right"></i></a>
+  <a href="admin.html" onclick="window.location.href='admin.html'">Admin Dashboard <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="account">My account <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="track">Track order <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="rx">Upload prescription <i data-lucide="arrow-up-right"></i></a>
@@ -3197,7 +3197,6 @@ function openRx(){
 }
 el('fRx').addEventListener('click', openRx);
 el('fTrack').addEventListener('click', openTrackPicker);
-el('trackBtn').addEventListener('click', openTrackPicker);
 
 /* ================= Staff / admin ================= */
 let admAuth = false;
