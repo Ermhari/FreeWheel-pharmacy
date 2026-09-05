@@ -1181,6 +1181,55 @@
 
     // Initialize
     renderOrdersTable();
+
+    // Check for pre-filled medicine from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const medParam = urlParams.get('med');
+    const qtyParam = urlParams.get('qty');
+    if(medParam){
+      const firstMedInput = document.querySelector('.med-name-input');
+      if(firstMedInput) firstMedInput.value = decodeURIComponent(medParam);
+      const firstQtyInput = document.querySelector('.med-qty-input');
+      if(firstQtyInput && qtyParam) firstQtyInput.value = qtyParam;
+      setTimeout(()=>{
+        const formSec = document.getElementById('requestFormSec');
+        if(formSec) formSec.scrollIntoView({behavior:'smooth'});
+      }, 250);
+    }
+
+    // Check for cart items transferred from storefront
+    const transferred = localStorage.getItem('freewheel_cart_transfer');
+    if(transferred){
+      try {
+        const items = JSON.parse(transferred);
+        if(items && items.length){
+          const rowsWrap = document.getElementById('medicineRows');
+          rowsWrap.innerHTML = '';
+          items.forEach((it, idx)=>{
+            const div = document.createElement('div');
+            div.className = 'med-row';
+            div.innerHTML = `
+              <input type="text" class="form-control med-name-input" value="${it.name}" required>
+              <select class="form-control med-qty-input">
+                <option value="1" ${it.qty==1?'selected':''}>1</option>
+                <option value="2" ${it.qty==2?'selected':''}>2</option>
+                <option value="3" ${it.qty==3?'selected':''}>3</option>
+                <option value="4" ${it.qty==4?'selected':''}>4</option>
+                <option value="5" ${it.qty==5?'selected':''}>5</option>
+              </select>
+              ${idx > 0 ? `<button type="button" style="background:none;border:none;color:#C0731F;cursor:pointer;padding:0 8px;font-weight:700" onclick="this.parentElement.remove()">✕</button>` : ''}
+            `;
+            rowsWrap.appendChild(div);
+          });
+          localStorage.removeItem('freewheel_cart_transfer');
+          setTimeout(()=>{
+            const formSec = document.getElementById('requestFormSec');
+            if(formSec) formSec.scrollIntoView({behavior:'smooth'});
+          }, 250);
+        }
+      } catch(e) {}
+    }
+
     lucide.createIcons();
   </script>
 </body>

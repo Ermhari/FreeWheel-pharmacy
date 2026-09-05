@@ -1730,7 +1730,7 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
         <p class="hero-lead">Trusted clinic care and a fully-stocked pharmacy under one roof — experienced doctors, genuine medicines, and same-day service that keeps care within reach.</p>
         <div class="hero-cta">
           <a class="btn btn-cream" data-magnetic href="#book"><span class="btn-label">Book a Visit</span></a>
-          <a class="btn btn-ghost" data-magnetic href="#medicines"><span class="btn-label">Order Medicines</span></a>
+          <a class="btn btn-ghost" data-magnetic href="orders.html"><span class="btn-label">Order Medicines</span></a>
         </div>
         <div class="hero-trust">
           <span class="stars"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></span>
@@ -1974,7 +1974,7 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
           </h2>
           <p class="shelf-sub">Trusted medicines and wellness essentials, handpicked for your family's everyday health.</p>
         </div>
-        <a href="#medicines" class="shelf-view-all">View All Products <i data-lucide="arrow-right"></i></a>
+        <a href="orders.html" class="shelf-view-all">Order Medicines Online <i data-lucide="arrow-right"></i></a>
       </div>
 
       <div class="rail-head" style="margin-bottom:24px;margin-top:16px;">
@@ -2861,6 +2861,7 @@ function openProduct(id){
           </div>
           <button class="btn-green-full" id="pdAdd">Add to basket — <span id="pdTotal">${fmt(p.price)}</span></button>
         </div>
+        <button class="btn-pill btn-solid-green" id="pdOrderNow" style="width:100%;margin-top:10px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px">Order Medicine Online <i data-lucide="arrow-right"></i></button>
         <p class="pd-note">Always read the label and follow the directions for use.</p>
       </div>
     </div>`, {wide:true});
@@ -2878,6 +2879,9 @@ function openProduct(id){
     addToCart(p.id, box.querySelector('.pd-art'), q);
     closeModal();
   });
+  box.querySelector('#pdOrderNow').addEventListener('click', ()=>{
+    window.location.href = `orders.html?med=${encodeURIComponent(p.name)}&qty=${q}`;
+  });
   if(ANIM){
     gsap.fromTo(box.querySelector('.pd-art svg'), {y:40, scale:.8, opacity:0}, {y:0, scale:1, opacity:1, duration:.8, ease:'back.out(1.4)'});
     if(activeModal) activeModal.tweens.push(gsap.to(box.querySelector('.pd-art svg'), {y:-10, duration:2.6, yoyo:true, repeat:-1, ease:'sine.inOut'}));
@@ -2891,19 +2895,9 @@ el('checkoutBtn').addEventListener('click', ()=>{
     const p = PRODUCTS.find(x=>x.id===id);
     return {id:p.id, name:p.name, price:p.price, qty:q};
   });
-  const sub = cartSubtotal();
-  const disc = promo ? {code:promo.code, amt:sub*promo.pct} : null;
-  const base = sub - (disc?disc.amt:0);
-  const ship = base>=50 ? 0 : 4.95;
-  const order = {
-    id: 'MK-' + (1000 + Math.floor(Math.random()*9000)),
-    items, sub, disc, ship, total: base+ship,
-    status: 0, user: user ? user.name : 'Guest', date: today()
-  };
-  orders.unshift(order); saveOrders();
-  cart.clear(); promo = null; renderCart();
-  closeDrawer();
-  openConfirm(order);
+  // Transfer cart items directly to Orders Page
+  localStorage.setItem('freewheel_cart_transfer', JSON.stringify(items));
+  window.location.href = 'orders.html';
 });
 function openConfirm(o){
   const box = openModal(`
