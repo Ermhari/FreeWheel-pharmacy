@@ -75,7 +75,7 @@ html.js .loader{display:grid}
 .logo-text{display:flex;flex-direction:column;line-height:1}
 .logo-text b{font-family:'Fraunces';font-size:22px;font-weight:600}
 .logo-text small{font-size:8.5px;letter-spacing:.3em;color:var(--muted);margin-top:4px;text-transform:uppercase}
-.nav{display:flex;gap:30px}
+.nav{display:flex;gap:20px;align-items:center}
 .nav a{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:6px 0}
 .nav a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--ochre);transition:width .35s}
 .nav a:hover::after{width:100%}
@@ -1632,10 +1632,13 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
       <a href="#services">Services</a>
       <a href="#medicines">Medicines</a>
       <a href="#reviews">Reviews</a>
+      <a href="#orders" id="navOrdersBtn">Orders</a>
+      <a href="#admin" id="navAdminBtn">Admin</a>
     </nav>
     <div class="header-actions">
-      <button class="icon-btn" id="searchBtn" aria-label="Search medicines"><i data-lucide="search"></i></button>
-      <button class="icon-btn hide-sm" id="trackBtn" aria-label="Track an order"><i data-lucide="package"></i></button>
+      <button class="icon-btn" id="searchBtn" aria-label="Search medicines" title="Search"><i data-lucide="search"></i></button>
+      <button class="icon-btn hide-sm" id="trackBtn" aria-label="Orders &amp; Tracking" title="Orders"><i data-lucide="package"></i></button>
+      <button class="icon-btn hide-sm" id="topAdminIcon" aria-label="Dispensary Admin" title="Admin Dashboard"><i data-lucide="shield-check"></i></button>
       <button class="icon-btn" id="cartBtn" aria-label="Open basket"><i data-lucide="shopping-basket"></i><span class="cart-badge" id="cartBadge"></span></button>
       <button class="icon-btn" id="accBtn" aria-label="My account"><span id="accIco"><i data-lucide="user-round"></i></span></button>
       <a class="btn-pill btn-solid-green hide-sm" href="#book" data-magnetic>Book a Visit</a>
@@ -1659,6 +1662,8 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
   <a href="#services">Services <i data-lucide="arrow-up-right"></i></a>
   <a href="#medicines">Medicines <i data-lucide="arrow-up-right"></i></a>
   <a href="#reviews">Reviews <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" data-mm="orders">Orders <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" data-mm="admin">Admin Dashboard <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="account">My account <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="track">Track order <i data-lucide="arrow-up-right"></i></a>
   <a href="#" data-mm="rx">Upload prescription <i data-lucide="arrow-up-right"></i></a>
@@ -2974,6 +2979,40 @@ function openTrack(id){
   wireTrack(box, o.id);
   animateTrack(box, o);
 }
+function openOrdersModal(){
+  if(orders && orders.length){
+    const orderRows = orders.map(o=>`
+      <div class="acc-row" style="padding:12px;background:var(--cream-2);border-radius:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+        <div class="grow">
+          <b style="font-family:'Fraunces';font-size:16px;color:var(--ink)">${o.id}</b>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${o.date} · ${o.items.reduce((s,i)=>s+i.qty,0)} items · <b style="color:var(--ink)">${fmt(o.total)}</b></div>
+          <small style="color:var(--ink-soft)">Customer: ${esc(o.user)}</small>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="status-chip ${o.status===3?'done':(o.status===0?'pend':'')}">${STATUS[o.status].label}</span>
+          <button class="chip-btn" data-order-track="${o.id}">Track</button>
+        </div>
+      </div>`).join('');
+    const box = openModal(`
+      <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      <h3 class="m-title">Orders &amp; Tracking</h3>
+      <p class="m-sub">Live fulfilment and delivery progress for your Freewheel+ orders.</p>
+      <div class="orders-list" style="max-height:280px;overflow-y:auto;margin:16px 0">${orderRows}</div>
+      <form class="inline-form" id="tpOrderForm" style="margin-top:12px"><input id="tpOrderInput" placeholder="Look up another order # (e.g. MK-4821)"><button type="submit">Find</button></form>
+    `, {kind:'orders'});
+    box.querySelectorAll('[data-order-track]').forEach(b=> b.addEventListener('click', ()=> openTrack(b.dataset.orderTrack)));
+    box.querySelector('#tpOrderForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const v = box.querySelector('#tpOrderInput').value.trim().toUpperCase();
+      const o = orders.find(x=>x.id===v);
+      if(o) openTrack(o.id);
+      else toast('No order found for that number on this device.');
+    });
+  } else {
+    openTrackPicker();
+  }
+}
+
 function openTrackPicker(){
   if(orders.length) return openTrack(orders[0].id);
   const box = openModal(`
@@ -3218,6 +3257,9 @@ function renderAdmin(){
   }));
 }
 el('staffBtn').addEventListener('click', openAdmin);
+if(el('navAdminBtn')) el('navAdminBtn').addEventListener('click', (e)=>{ e.preventDefault(); openAdmin(); });
+if(el('topAdminIcon')) el('topAdminIcon').addEventListener('click', openAdmin);
+if(el('navOrdersBtn')) el('navOrdersBtn').addEventListener('click', (e)=>{ e.preventDefault(); openOrdersModal(); });
 
 /* ================= Search ================= */
 const header = el('siteHeader');
@@ -3273,10 +3315,14 @@ document.addEventListener('click', e=>{
     closeMobileMenu();
     if(act==='account') openAccount();
     else if(act==='track') openTrackPicker();
+    else if(act==='orders') openOrdersModal();
+    else if(act==='admin') openAdmin();
     else if(act==='rx') openRx();
     return;
   }
   const id = a.getAttribute('href');
+  if(id === '#orders'){ openOrdersModal(); return; }
+  if(id === '#admin'){ openAdmin(); return; }
   if(id.length > 1) goTo(id);
 });
 
