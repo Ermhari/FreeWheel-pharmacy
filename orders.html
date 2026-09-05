@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Medicines — FreeWheel Pharmacy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --primary: #0F5A47;
+      --primary-dark: #0A3E31;
+      --primary-light: #E8F4F0;
+      --accent: #22C55E;
+      --ink: #111827;
+      --ink-muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --badge-warn: #FEF3C7;
+      --badge-warn-text: #B45309;
+      --badge-info: #E0F2FE;
+      --badge-info-text: #0369A1;
+      --badge-success: #DCFCE7;
+      --badge-success-text: #15803D;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* Navbar */
+    .header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: #0F5A47;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+    }
+    .logo-text b {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0F5A47;
+      letter-spacing: -0.5px;
+      display: block;
+      line-height: 1.1;
+    }
+    .logo-text small {
+      font-size: 9px;
+      color: var(--ink-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #374151;
+      transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .btn-search, .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: #4B5563;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .btn-search:hover, .btn-icon:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-order-nav {
+      background: var(--primary);
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-order-nav:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Banner */
+    .main-container {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #F0FDF4 0%, #E6F4EA 50%, #DCF2E8 100%);
+      border-radius: 24px;
+      padding: 44px 48px 0 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      overflow: hidden;
+      border: 1px solid rgba(15, 90, 71, 0.12);
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .hero-content {
+      padding-bottom: 44px;
+      max-width: 580px;
+    }
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: #0A3E31;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .hero-subtitle {
+      font-size: 15px;
+      color: #334155;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .features-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .feat-card {
+      background: #FFFFFF;
+      padding: 8px 14px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0F5A47;
+      border: 1px solid rgba(15, 90, 71, 0.08);
+    }
+    .feat-card i {
+      width: 17px;
+      height: 17px;
+      color: #10B981;
+    }
+
+    .hero-image-wrap {
+      position: relative;
+      flex: 0 0 400px;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-doc-img {
+      width: 340px;
+      height: auto;
+      border-radius: 20px 20px 0 0;
+      display: block;
+      object-fit: cover;
+      filter: drop-shadow(0 14px 28px rgba(15, 90, 71, 0.15));
+    }
+    .tag-handwriting {
+      position: absolute;
+      top: 25px;
+      right: -10px;
+      font-family: 'Outfit', cursive, sans-serif;
+      font-weight: 700;
+      color: #0F5A47;
+      font-size: 16px;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .floating-pill {
+      position: absolute;
+      bottom: 24px;
+      right: 15px;
+      background: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(15, 90, 71, 0.15);
+      border: 1px solid rgba(15, 90, 71, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0A3E31;
+    }
+    .floating-pill span {
+      background: #D1FAE5;
+      color: #059669;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Medicine Request Form Card */
+    .form-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 36px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      margin-bottom: 32px;
+    }
+    .form-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-card-title i {
+      color: var(--primary);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px 36px;
+    }
+    .form-sec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #4B5563;
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 12px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #6B7280;
+    }
+    .form-control {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      background: #FAFAFA;
+      transition: all .2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(15, 90, 71, 0.1);
+    }
+    .input-with-prefix {
+      padding-left: 46px;
+    }
+    .med-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .med-row .form-control {
+      flex: 1;
+    }
+    .med-row select {
+      width: 80px;
+      flex: none;
+    }
+    .btn-add-med {
+      background: #F0FDF4;
+      border: 1px dashed #10B981;
+      color: #0F5A47;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-add-med:hover {
+      background: #DCFCE7;
+    }
+
+    /* Upload Box */
+    .upload-box {
+      border: 2px dashed #CBD5E1;
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      background: #F8FAFC;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .upload-box:hover {
+      border-color: var(--primary);
+      background: #F0FDF4;
+    }
+    .upload-box i {
+      width: 28px;
+      height: 28px;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .upload-box b {
+      display: block;
+      font-size: 13px;
+      color: #1E293B;
+      font-weight: 700;
+    }
+    .upload-box span {
+      font-size: 11.5px;
+      color: #64748B;
+    }
+
+    .city-pin-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    textarea.form-control {
+      height: 74px;
+      padding: 10px 14px;
+      resize: vertical;
+    }
+
+    .btn-submit-order {
+      width: 100%;
+      height: 52px;
+      background: #0F5A47;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: all .2s;
+    }
+    .btn-submit-order:hover {
+      background: #0A3E31;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(15, 90, 71, 0.25);
+    }
+
+    /* Submitted Confirmation Card */
+    .submitted-card {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .sub-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .sub-check {
+      width: 42px;
+      height: 42px;
+      background: #22C55E;
+      color: #fff;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+    .sub-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: #14532D;
+    }
+    .sub-desc {
+      font-size: 13px;
+      color: #166534;
+    }
+    .sub-info-block {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .sub-meta small {
+      display: block;
+      font-size: 11px;
+      color: #15803D;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .sub-meta b {
+      font-size: 15px;
+      color: #14532D;
+      font-weight: 800;
+    }
+    .btn-track-sub {
+      background: #0F5A47;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-track-sub:hover {
+      background: #0A3E31;
+    }
+
+    /* My Orders Table Card */
+    .orders-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      margin-bottom: 32px;
+    }
+    .orders-head {
+      margin-bottom: 20px;
+    }
+    .orders-head h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .orders-head p {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .orders-table th {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #6B7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .orders-table td {
+      padding: 16px;
+      font-size: 13.5px;
+      color: #374151;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .orders-table tr:hover td {
+      background: #FAFAFA;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .status-review {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+    .status-confirmed {
+      background: #E0F2FE;
+      color: #0369A1;
+    }
+    .status-preparing {
+      background: #F3E8FF;
+      color: #7E22CE;
+    }
+    .status-delivered {
+      background: #DCFCE7;
+      color: #15803D;
+    }
+    .btn-view-order {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #374151;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-view-order:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Doorstep Banner */
+    .doorstep-banner {
+      background: linear-gradient(90deg, #F0FDF4 0%, #E8F5EE 100%);
+      border-radius: 16px;
+      border: 1px solid #D1FAE5;
+      padding: 24px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doorstep-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .scooter-icon {
+      width: 48px;
+      height: 48px;
+      background: #10B981;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+    }
+    .doorstep-text b {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      color: #064E3B;
+      display: block;
+    }
+    .doorstep-text span {
+      font-size: 12.5px;
+      color: #047857;
+      font-weight: 500;
+    }
+    .doorstep-right {
+      text-align: right;
+    }
+    .doorstep-right b {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      color: #064E3B;
+      display: block;
+    }
+    .doorstep-right small {
+      font-size: 12px;
+      color: #059669;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      display: grid;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748B;
+    }
+
+    @media (max-width: 860px) {
+      .hero-banner {
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 24px 0 24px;
+        text-align: center;
+      }
+      .features-row {
+        justify-content: center;
+      }
+      .hero-image-wrap {
+        margin-top: 24px;
+        flex: none;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ Navbar ============ -->
+  <header class="header">
+    <div class="nav-container">
+      <a class="logo-group" href="index.html">
+        <div class="logo-icon">
+          <i data-lucide="plus"></i>
+        </div>
+        <div class="logo-text">
+          <b>FreeWheel</b>
+          <small>Your Health, Our Priority</small>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#about">Health Tips</a>
+        <a href="index.html#about">About</a>
+        <a href="admin.html" style="color:#0F5A47;font-weight:700">Admin Dashboard</a>
+        <a href="index.html#book">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn-search" href="index.html" title="Search Medicines"><i data-lucide="search"></i></a>
+        <button class="btn-order-nav" onclick="document.getElementById('requestFormSec').scrollIntoView({behavior:'smooth'})">Order Medicines</button>
+        <a class="btn-icon" href="admin.html" title="Pharmacy Admin Dashboard"><i data-lucide="user"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <!-- ============ Hero Banner ============ -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <h1 class="hero-title">Order Medicines</h1>
+        <p class="hero-subtitle">Upload your prescription or enter the medicines you need. Our pharmacist will review and contact you shortly.</p>
+        <div class="features-row">
+          <div class="feat-card"><i data-lucide="clipboard-list"></i> Simple Request</div>
+          <div class="feat-card"><i data-lucide="user-check"></i> Verified Pharmacists</div>
+          <div class="feat-card"><i data-lucide="shield-check"></i> Safe &amp; Secure</div>
+          <div class="feat-card"><i data-lucide="truck"></i> Home Delivery</div>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <span class="tag-handwriting">Care<br>Beyond<br>Medicines ♡</span>
+        <img class="hero-doc-img" src="images/order-doctor.jpg" alt="FreeWheel Pharmacist Doctor">
+        <div class="floating-pill">
+          <span>🍃</span> Stay Healthy &nbsp;·&nbsp; We Deliver Care
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Medicine Request Form ============ -->
+    <section class="form-card" id="requestFormSec">
+      <h2 class="form-card-title"><i data-lucide="file-text"></i> Medicine Request Form</h2>
+      <form id="medOrderForm">
+        <div class="form-grid">
+          <!-- Column 1 -->
+          <div>
+            <div class="form-sec-title"><i data-lucide="user"></i> 1. Patient Details</div>
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" class="form-control" id="custName" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <div class="input-wrap">
+                <span class="input-prefix">+91</span>
+                <input type="tel" class="form-control input-with-prefix" id="custMobile" placeholder="Enter your mobile number" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email (Optional)</label>
+              <input type="email" class="form-control" id="custEmail" placeholder="Enter your email">
+            </div>
+
+            <div class="form-sec-title" style="margin-top:24px"><i data-lucide="pill"></i> 2. Medicine Details</div>
+            <div id="medicineRows">
+              <div class="med-row">
+                <input type="text" class="form-control med-name-input" placeholder="E.g. Paracetamol 500mg" required>
+                <select class="form-control med-qty-input">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn-add-med" id="btnAddMedRow"><i data-lucide="plus"></i> Add Another Medicine</button>
+
+            <div class="form-sec-title" style="margin-top:24px"><i data-lucide="upload-cloud"></i> 3. Upload Prescription (Optional)</div>
+            <label class="upload-box" id="uploadLabel">
+              <input type="file" id="rxFileInput" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+              <i data-lucide="cloud-upload"></i>
+              <b id="rxFileText">Click to upload prescription</b>
+              <span>PDF, JPG, PNG (Max 5MB)</span>
+            </label>
+          </div>
+
+          <!-- Column 2 -->
+          <div>
+            <div class="form-sec-title"><i data-lucide="map-pin"></i> 4. Delivery Address</div>
+            <div class="form-group">
+              <label>Full Address *</label>
+              <input type="text" class="form-control" id="custAddress" placeholder="House No, Street, Area" required>
+            </div>
+            <div class="city-pin-row form-group">
+              <div>
+                <label>City *</label>
+                <input type="text" class="form-control" id="custCity" placeholder="Enter city" value="Coimbatore" required>
+              </div>
+              <div>
+                <label>Pincode *</label>
+                <input type="text" class="form-control" id="custPin" placeholder="Enter pincode" value="641040" required>
+              </div>
+            </div>
+
+            <div class="form-sec-title" style="margin-top:24px"><i data-lucide="clock"></i> 5. Preferred Delivery Time</div>
+            <div class="form-group">
+              <select class="form-control" id="custTime">
+                <option value="Select preferred time">Select preferred time</option>
+                <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                <option value="Afternoon (12 PM - 4 PM)">Afternoon (12 PM - 4 PM)</option>
+                <option value="Evening (5 PM - 8 PM)" selected>Evening (5 PM - 8 PM)</option>
+                <option value="Immediate / Express">Immediate / Express Delivery</option>
+              </select>
+            </div>
+
+            <div class="form-sec-title" style="margin-top:24px"><i data-lucide="message-square"></i> 6. Additional Notes (Optional)</div>
+            <div class="form-group">
+              <textarea class="form-control" id="custNotes" placeholder="Any special instructions (e.g. brand preference, call before delivery, etc.)"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-order"><i data-lucide="send"></i> Submit Order Request</button>
+      </form>
+    </section>
+
+    <!-- ============ Order Submitted Confirmation Banner ============ -->
+    <div class="submitted-card" id="submittedNotice">
+      <div class="sub-left">
+        <div class="sub-check"><i data-lucide="check"></i></div>
+        <div>
+          <div class="sub-title">Order Request Submitted!</div>
+          <div class="sub-desc">Your request has been received. Our pharmacist will review and contact you shortly.</div>
+        </div>
+      </div>
+      <div class="sub-info-block">
+        <div class="sub-meta">
+          <small>Order ID</small>
+          <b id="subNoticeId">FW-1024</b>
+        </div>
+        <div class="sub-meta">
+          <small>Request Date</small>
+          <b id="subNoticeDate">Sep 5, 2025, 10:24 AM</b>
+        </div>
+        <button class="btn-track-sub" id="btnTrackNotice"><i data-lucide="package"></i> Track Order</button>
+      </div>
+    </div>
+
+    <!-- ============ My Orders Section ============ -->
+    <section class="orders-card">
+      <div class="orders-head">
+        <h3><i data-lucide="shopping-bag" style="color:#0F5A47"></i> My Orders</h3>
+        <p>View and track all your medicine requests.</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Medicines</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="myOrdersTbody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ Doorstep Banner ============ -->
+    <div class="doorstep-banner">
+      <div class="doorstep-left">
+        <div class="scooter-icon"><i data-lucide="truck"></i></div>
+        <div class="doorstep-text">
+          <b>Medicines at your doorstep</b>
+          <span>Safe. Secure. On Time.</span>
+        </div>
+      </div>
+      <div class="doorstep-right">
+        <b>FreeWheel</b>
+        <small>Your Health Partner 🍃</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ Order Detail Modal ============ -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeOrderModal()"><i data-lucide="x"></i></button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // Initial / shared orders
+    const DEFAULT_ORDERS = [
+      {
+        id: "FW-1024",
+        customer: "Arun Kumar",
+        mobile: "+91 98765 43210",
+        email: "arun@gmail.com",
+        address: "12, Anna Nagar, Coimbatore - 641040",
+        date: "Sep 5, 2025",
+        datetime: "Sep 5, 2025, 10:24 AM",
+        medicinesSummary: "Paracetamol, Vitamin D3",
+        medicines: [
+          { name: "Paracetamol 500mg", qty: "1", notes: "" },
+          { name: "Vitamin D3", qty: "1", notes: "Morning use" }
+        ],
+        prescription: "Prescription.pdf (245 KB)",
+        preferredTime: "Evening (5 PM - 8 PM)",
+        notes: "Please call before delivery",
+        status: "Under Review"
+      },
+      {
+        id: "FW-1023",
+        customer: "Priya S",
+        mobile: "+91 94432 10987",
+        email: "priya.s@gmail.com",
+        address: "45/2 Gandhipuram, Coimbatore - 641012",
+        date: "Sep 2, 2025",
+        datetime: "Sep 2, 2025, 03:15 PM",
+        medicinesSummary: "Prescription (3 items)",
+        medicines: [
+          { name: "Amoxicillin 500mg", qty: "2", notes: "After food" },
+          { name: "Crocin Advance", qty: "1", notes: "" },
+          { name: "Vitamin C 500mg", qty: "1", notes: "Daily" }
+        ],
+        prescription: "Rx_Dr_Rajan.jpg (1.2 MB)",
+        preferredTime: "Morning (9 AM - 12 PM)",
+        notes: "Urgent delivery if possible",
+        status: "Confirmed"
+      },
+      {
+        id: "FW-1022",
+        customer: "Karthik R",
+        mobile: "+91 98940 55123",
+        email: "karthik.r@outlook.com",
+        address: "88, RS Puram West, Coimbatore - 641002",
+        date: "Aug 28, 2025",
+        datetime: "Aug 28, 2025, 11:40 AM",
+        medicinesSummary: "Cetirizine, Montelukast",
+        medicines: [
+          { name: "Cetirizine 10mg", qty: "1", notes: "Night" },
+          { name: "Montelukast 10mg", qty: "1", notes: "Night" }
+        ],
+        prescription: "Prescription_Refill.pdf (180 KB)",
+        preferredTime: "Evening (5 PM - 8 PM)",
+        notes: "",
+        status: "Delivered"
+      }
+    ];
+
+    function getOrders() {
+      const stored = localStorage.getItem('freewheel_pharmacy_orders');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      localStorage.setItem('freewheel_pharmacy_orders', JSON.stringify(DEFAULT_ORDERS));
+      return DEFAULT_ORDERS;
+    }
+
+    function saveOrders(orders) {
+      localStorage.setItem('freewheel_pharmacy_orders', JSON.stringify(orders));
+    }
+
+    function renderOrdersTable() {
+      const orders = getOrders();
+      const tbody = document.getElementById('myOrdersTbody');
+      tbody.innerHTML = orders.map(o => {
+        let statusClass = 'status-review';
+        if (o.status === 'Confirmed') statusClass = 'status-confirmed';
+        else if (o.status === 'Preparing') statusClass = 'status-preparing';
+        else if (o.status === 'Delivered') statusClass = 'status-delivered';
+
+        return `
+          <tr>
+            <td><b style="color:#0F5A47">${o.id}</b></td>
+            <td>${o.date}</td>
+            <td>${o.medicinesSummary}</td>
+            <td><span class="status-badge ${statusClass}">${o.status}</span></td>
+            <td><button class="btn-view-order" onclick="viewOrderDetail('${o.id}')">View</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Add another medicine row
+    document.getElementById('btnAddMedRow').addEventListener('click', () => {
+      const div = document.createElement('div');
+      div.className = 'med-row';
+      div.innerHTML = `
+        <input type="text" class="form-control med-name-input" placeholder="E.g. Cetirizine 10mg" required>
+        <select class="form-control med-qty-input">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button type="button" style="background:none;border:none;color:#EF4444;cursor:pointer;padding:0 8px" onclick="this.parentElement.remove()">✕</button>
+      `;
+      document.getElementById('medicineRows').appendChild(div);
+    });
+
+    // Handle Prescription file upload preview
+    let uploadedPrescriptionName = "Prescription.pdf";
+    document.getElementById('rxFileInput').addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        uploadedPrescriptionName = this.files[0].name;
+        document.getElementById('rxFileText').innerText = `Uploaded: ${this.files[0].name}`;
+      }
+    });
+
+    // Form submit
+    document.getElementById('medOrderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('custName').value.trim();
+      const mobile = document.getElementById('custMobile').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const city = document.getElementById('custCity').value.trim();
+      const pin = document.getElementById('custPin').value.trim();
+      const time = document.getElementById('custTime').value;
+      const notes = document.getElementById('custNotes').value.trim();
+
+      const medNames = Array.from(document.querySelectorAll('.med-name-input')).map(i => i.value.trim()).filter(Boolean);
+      const medQtys = Array.from(document.querySelectorAll('.med-qty-input')).map(s => s.value);
+
+      const medicines = medNames.map((m, idx) => ({
+        name: m,
+        qty: medQtys[idx] || "1",
+        notes: ""
+      }));
+
+      const medSummary = medNames.slice(0, 2).join(', ') + (medNames.length > 2 ? ` (+${medNames.length - 2} more)` : '');
+
+      const orders = getOrders();
+      const nextNum = orders.length ? Math.max(...orders.map(o => parseInt(o.id.replace('FW-', '')) || 1020)) + 1 : 1025;
+      const newId = `FW-${nextNum}`;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const fullDatetime = `${dateStr}, ${timeStr}`;
+
+      const newOrder = {
+        id: newId,
+        customer: name,
+        mobile: mobile ? `+91 ${mobile}` : "+91 98765 43210",
+        email: email || "customer@example.com",
+        address: `${address}, ${city} - ${pin}`,
+        date: dateStr,
+        datetime: fullDatetime,
+        medicinesSummary: medSummary || "General Prescription",
+        medicines: medicines.length ? medicines : [{ name: "Requested Medicines", qty: "1", notes: "" }],
+        prescription: uploadedPrescriptionName,
+        preferredTime: time,
+        notes: notes || "None",
+        status: "Under Review"
+      };
+
+      orders.unshift(newOrder);
+      saveOrders(orders);
+      renderOrdersTable();
+
+      // Update and show confirmation notice
+      document.getElementById('subNoticeId').innerText = newId;
+      document.getElementById('subNoticeDate').innerText = fullDatetime;
+      document.getElementById('submittedNotice').style.display = 'flex';
+      document.getElementById('submittedNotice').scrollIntoView({ behavior: 'smooth' });
+
+      alert(`🎉 Order ${newId} submitted successfully! Our pharmacist will review it immediately.`);
+    });
+
+    // Track button on notice
+    document.getElementById('btnTrackNotice').addEventListener('click', () => {
+      const orderId = document.getElementById('subNoticeId').innerText;
+      viewOrderDetail(orderId);
+    });
+
+    // View Order Detail Modal
+    function viewOrderDetail(id) {
+      const orders = getOrders();
+      const o = orders.find(x => x.id === id);
+      if (!o) return;
+
+      let statusClass = 'status-review';
+      if (o.status === 'Confirmed') statusClass = 'status-confirmed';
+      else if (o.status === 'Preparing') statusClass = 'status-preparing';
+      else if (o.status === 'Delivered') statusClass = 'status-delivered';
+
+      const medRows = o.medicines.map(m => `
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13.5px">
+          <div><b>${m.name}</b> ${m.notes ? `<small style="color:#64748b">(${m.notes})</small>` : ''}</div>
+          <span style="color:#0F5A47;font-weight:700">Qty: ${m.qty}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('modalBody').innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="font-family:'Outfit';font-size:22px;color:#0F5A47">${o.id}</h3>
+          <span class="status-badge ${statusClass}">${o.status}</span>
+        </div>
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">Requested on: <b>${o.datetime}</b></p>
+        
+        <div style="background:#F8FAFC;border-radius:12px;padding:16px;margin-bottom:16px">
+          <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:6px">Patient &amp; Delivery</div>
+          <div style="font-size:14px;color:#1E293B"><b>${o.customer}</b> · ${o.mobile}</div>
+          <div style="font-size:13px;color:#475569;margin-top:2px">${o.address}</div>
+          <div style="font-size:12px;color:#0F5A47;font-weight:600;margin-top:4px">Delivery: ${o.preferredTime}</div>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:6px">Medicines Requested</div>
+          ${medRows}
+        </div>
+
+        ${o.prescription ? `
+          <div style="display:flex;align-items:center;justify-content:space-between;background:#F0FDF4;padding:10px 14px;border-radius:10px;border:1px solid #BBF7D0;margin-bottom:16px">
+            <span style="font-size:13px;color:#166534;font-weight:600">📄 ${o.prescription}</span>
+            <span style="font-size:12px;color:#15803D;font-weight:700">Verified</span>
+          </div>
+        ` : ''}
+
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <a href="admin.html" style="flex:1;text-align:center;background:#0F5A47;color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700">Open in Admin Portal</a>
+          <button onclick="closeOrderModal()" style="flex:1;background:#E2E8F0;border:none;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">Close</button>
+        </div>
+      `;
+      document.getElementById('orderModal').classList.add('open');
+      lucide.createIcons();
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').classList.remove('open');
+    }
+
+    // Initialize
+    renderOrdersTable();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
