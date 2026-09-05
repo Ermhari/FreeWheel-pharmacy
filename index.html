@@ -3158,9 +3158,6 @@ body.in-admin-mode .scroll-progress {
     </nav>
     <div class="header-actions">
       <button class="icon-btn" id="searchBtn" aria-label="Search medicines" title="Search"><i data-lucide="search"></i></button>
-      <button class="icon-btn hide-sm" onclick="showView('orders')" id="trackBtn" aria-label="Orders &amp; Tracking" title="Customer Orders"><i data-lucide="package"></i></button>
-      <button class="icon-btn hide-sm" onclick="showView('admin')" id="topAdminIcon" aria-label="Dispensary Admin" title="Pharmacy Admin Dashboard"><i data-lucide="shield-check"></i></button>
-      <button class="icon-btn" id="cartBtn" aria-label="Open basket"><i data-lucide="shopping-basket"></i><span class="cart-badge" id="cartBadge"></span></button>
       <button class="icon-btn" id="accBtn" aria-label="My account"><span id="accIco"><i data-lucide="user-round"></i></span></button>
       <a class="btn-pill btn-solid-green hide-sm" href="#book" data-magnetic>Book a Visit</a>
       <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu"><i data-lucide="menu"></i><i data-lucide="x"></i></button>
@@ -4718,8 +4715,10 @@ function panelsOpen(){
 }
 function flyToCart(srcEl){
   if(!ANIM) return;
+  const cartEl = el('cartBtn');
+  if(!cartEl) return;
   const svg = srcEl.querySelector('svg'); if(!svg) return;
-  const s = srcEl.getBoundingClientRect(), d = el('cartBtn').getBoundingClientRect();
+  const s = srcEl.getBoundingClientRect(), d = cartEl.getBoundingClientRect();
   const fly = document.createElement('div');
   fly.className = 'fly';
   fly.style.cssText = `left:${s.left + s.width*.29}px;top:${s.top + s.height*.24}px;width:${s.width*.42}px`;
@@ -4901,7 +4900,7 @@ function openDrawer(){
   lockScroll(true);
 }
 function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('on'); if(!panelsOpen()) lockScroll(false); }
-el('cartBtn').addEventListener('click', openDrawer);
+if(el('cartBtn')) el('cartBtn').addEventListener('click', openDrawer);
 el('drawerClose').addEventListener('click', closeDrawer);
 overlay.addEventListener('click', closeDrawer);
 renderCart();
