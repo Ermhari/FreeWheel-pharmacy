@@ -2349,24 +2349,26 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
 
 <!-- basket drawer -->
 <div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Medicine basket">
+<aside class="drawer" id="drawer" aria-label="Orders and Tracking">
   <div class="d-head">
-    <h3>Your basket <span id="dCount"></span></h3>
+    <h3>Orders &amp; Tracking <span id="dCount" style="font-size:14px;color:var(--muted);font-weight:600"></span></h3>
     <button class="icon-btn" id="drawerClose" aria-label="Close basket"><i data-lucide="x"></i></button>
   </div>
-  <div class="d-ship" id="dShip">
-    <p id="shipMsg">Free delivery on medicines over <b>$50.00</b></p>
-    <div class="ship-bar"><div class="ship-fill" id="shipFill"></div></div>
+  <div class="d-ship" id="dShip" style="padding:14px 24px">
+    <p id="shipMsg" style="margin:0;font-size:12.5px;color:var(--green-950);display:flex;align-items:center;gap:8px">
+      <i data-lucide="truck" style="width:16px;height:16px;color:var(--ochre)"></i>
+      <span>Live dispensary updates &amp; medicine order tracking</span>
+    </p>
   </div>
-  <div class="d-items" id="dItems"></div>
-  <div class="d-foot" id="dFoot">
-    <div id="promoZone"></div>
-    <div class="d-sub"><span>Subtotal</span><span id="dSubtotal">$0.00</span></div>
-    <div class="d-sub soft" id="promoLine" hidden><span></span><span></span></div>
-    <div class="d-sub soft"><span>Delivery</span><span id="dShipCost">—</span></div>
-    <div class="d-total"><span>Total</span><span id="dTotal">$0.00</span></div>
-    <p class="d-note">Prescription items are confirmed at collection. Taxes included.</p>
-    <button class="btn-green-full" id="checkoutBtn">Proceed to checkout</button>
+  <div class="d-items" id="dItems" style="padding:16px 20px"></div>
+  <div class="d-foot" id="dFoot" style="padding:18px 24px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:13px;color:var(--muted)">Active Tracked Orders</span>
+      <b style="font-family:'Fraunces',serif;font-size:18px;color:var(--green-950)" id="activeOrdersNum">0</b>
+    </div>
+    <a class="btn-green-full" href="orders.html" style="text-decoration:none;text-align:center;display:block;padding:12px;border-radius:999px">
+      + Place New Medicine Order
+    </a>
   </div>
 </aside>
 
@@ -2726,89 +2728,145 @@ function applyPromo(code){
   renderCart();
   toast(`${code} applied — ${Math.round(def.pct*100)}% off`);
 }
-function renderCart(){
-  const items = [...cart.entries()];
-  const count = items.reduce((s,[,q])=>s+q, 0);
-  const badge = el('cartBadge');
-  badge.textContent = count;
-  badge.classList.toggle('on', count>0);
-  if(count>0){ badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
-  el('dCount').textContent = count ? `(${count})` : '';
-  const empty = items.length===0;
-  el('dFoot').style.display = empty ? 'none' : 'block';
-  el('dShip').style.display = empty ? 'none' : 'block';
-  el('dItems').innerHTML = empty
-    ? `<div class="d-empty"><p>Your basket is empty</p><span>Shall we fix that?</span><button class="d-empty-btn" id="dBrowse">Browse medicines</button></div>`
-    : items.map(([id,q])=>{
-        const p = PRODUCTS.find(x=>x.id===id);
-        return `<div class="c-item" data-id="${p.id}">
-          <div class="c-thumb tint-${p.tint}">${p.art}</div>
-          <div class="c-info">
-            <p class="c-name">${p.name}</p>
-            <p class="c-unit">${p.oldPrice?`<s>${fmt(p.oldPrice)}</s> `:''}${fmt(p.price)} each</p>
-            <div class="c-qty">
-              <button data-dec aria-label="Decrease quantity"><i data-lucide="minus"></i></button>
-              <span>${q}</span>
-              <button data-inc aria-label="Increase quantity"><i data-lucide="plus"></i></button>
-            </div>
-          </div>
-          <div class="c-right">
-            <span class="c-total">${fmt(p.price*q)}</span>
-            <button class="c-remove" data-rem aria-label="Remove ${p.name}"><i data-lucide="x"></i></button>
-          </div>
-        </div>`;
-      }).join('');
-  refreshIcons();
-  const b = el('dBrowse');
-  if(b) b.addEventListener('click', ()=>{ closeDrawer(); goTo('#medicines'); });
-  /* totals */
-  const sub = cartSubtotal();
-  const disc = promo ? sub*promo.pct : 0;
-  const base = sub - disc;
-  const ship = sub===0 ? 0 : (base>=50 ? 0 : 4.95);
-  const total = base + ship;
-  el('dSubtotal').textContent = fmt(sub);
-  const pl = el('promoLine');
-  if(promo && disc>0){ pl.hidden=false; pl.classList.add('disc'); pl.innerHTML = `<span>Promo · ${promo.code}</span><span>−${fmt(disc)}</span>`; }
-  else { pl.hidden=true; pl.classList.remove('disc'); }
-  el('dShipCost').textContent = sub===0 ? '—' : (ship===0 ? 'Free' : fmt(ship));
-  el('dTotal').textContent = fmt(total);
-  /* promo UI */
-  const zone = el('promoZone');
-  if(promo){
-    zone.innerHTML = `<div class="promo-on">${promo.code} · −${Math.round(promo.pct*100)}%<button id="promoClear" aria-label="Remove promo"><i data-lucide="x"></i></button></div>`;
-  } else {
-    zone.innerHTML = `<form class="inline-form" id="promoForm"><input id="promoInput" placeholder="Promo code (try WELCOME10)"><button type="submit">Apply</button></form>`;
+function getBasketOrders(){
+  const stored = localStorage.getItem('freewheel_pharmacy_orders');
+  if(stored){
+    try {
+      const list = JSON.parse(stored);
+      if(list && list.length) return list;
+    } catch(e) {}
   }
-  const pf = el('promoForm');
-  if(pf) pf.addEventListener('submit', e=>{ e.preventDefault(); applyPromo(el('promoInput').value); });
-  const pc = el('promoClear');
-  if(pc) pc.addEventListener('click', ()=>{ promo=null; renderCart(); toast('Promo removed'); });
-  /* ship bar */
-  const fill = el('shipFill');
-  fill.style.width = Math.min(base/50*100, 100)+'%';
-  fill.classList.toggle('full', base>=50);
-  el('shipMsg').innerHTML = base>=50
-    ? `You've unlocked <b>free delivery</b>`
-    : `You're <b>${fmt(50-base)}</b> away from free delivery`;
+  return orders && orders.length ? orders : [
+    {
+      id: "FW-1024",
+      customer: "Arun Kumar",
+      mobile: "+91 98765 43210",
+      address: "12, Anna Nagar, Coimbatore - 641040",
+      date: "Sep 5, 2025",
+      datetime: "Sep 5, 2025, 10:24 AM",
+      medicinesSummary: "Paracetamol, Vitamin D3",
+      medicines: [
+        { name: "Paracetamol 500mg", qty: "1" },
+        { name: "Vitamin D3", qty: "1" }
+      ],
+      status: "Under Review"
+    },
+    {
+      id: "FW-1023",
+      customer: "Priya S",
+      mobile: "+91 94432 10987",
+      address: "45/2 Gandhipuram, Coimbatore - 641012",
+      date: "Sep 2, 2025",
+      datetime: "Sep 2, 2025, 03:15 PM",
+      medicinesSummary: "Prescription (3 items)",
+      medicines: [
+        { name: "Amoxicillin 500mg", qty: "2" },
+        { name: "Crocin Advance", qty: "1" },
+        { name: "Vitamin C 500mg", qty: "1" }
+      ],
+      status: "Confirmed"
+    },
+    {
+      id: "FW-1022",
+      customer: "Karthik R",
+      mobile: "+91 98940 55123",
+      address: "88, RS Puram West, Coimbatore - 641002",
+      date: "Aug 28, 2025",
+      datetime: "Aug 28, 2025, 11:40 AM",
+      medicinesSummary: "Cetirizine, Montelukast",
+      medicines: [
+        { name: "Cetirizine 10mg", qty: "1" },
+        { name: "Montelukast 10mg", qty: "1" }
+      ],
+      status: "Delivered"
+    }
+  ];
+}
+
+function renderCart(){
+  const allOrders = getBasketOrders();
+  const count = allOrders.length;
+  const badge = el('cartBadge');
+  if(badge){
+    badge.textContent = count;
+    badge.classList.toggle('on', count > 0);
+  }
+  if(el('dCount')) el('dCount').textContent = count ? `(${count})` : '';
+  if(el('activeOrdersNum')) el('activeOrdersNum').textContent = count;
+
+  if(count === 0){
+    el('dItems').innerHTML = `
+      <div class="d-empty" style="padding:48px 20px;text-align:center">
+        <p style="font-family:'Fraunces',serif;font-size:20px;color:var(--green-950);margin-bottom:6px">No orders placed yet</p>
+        <span style="font-size:13px;color:var(--muted);display:block;margin-bottom:20px">Order medicines to track delivery in real time right here in your basket.</span>
+        <a class="d-empty-btn" href="orders.html" style="text-decoration:none;display:inline-block">Order Medicines Now</a>
+      </div>
+    `;
+    return;
+  }
+
+  el('dItems').innerHTML = allOrders.map(o => {
+    let chipClass = 'status-review';
+    let progressPct = 25;
+    if(o.status === 'Confirmed'){ chipClass = 'status-confirmed'; progressPct = 50; }
+    else if(o.status === 'Preparing'){ chipClass = 'status-preparing'; progressPct = 75; }
+    else if(o.status === 'Delivered'){ chipClass = 'status-delivered'; progressPct = 100; }
+
+    const isStep1 = true;
+    const isStep2 = o.status !== 'Under Review';
+    const isStep3 = o.status === 'Preparing' || o.status === 'Delivered';
+    const isStep4 = o.status === 'Delivered';
+
+    const medsSummary = (o.medicines && o.medicines.length)
+      ? o.medicines.map(m => `<b>${m.name}</b> (Qty: ${m.qty})`).join(', ')
+      : (o.medicinesSummary || 'Prescription Items');
+
+    return `
+      <div class="basket-order-card" style="background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 4px 12px rgba(14,52,36,0.04)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <b style="font-family:'Fraunces',serif;font-size:16.5px;color:var(--green-950)">${o.id}</b>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:2px">${o.datetime || o.date}</div>
+          </div>
+          <span class="status-badge ${chipClass}">${o.status}</span>
+        </div>
+
+        <div style="font-size:13px;color:var(--ink);margin:8px 0;line-height:1.4">
+          ${medsSummary}
+        </div>
+
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+          <i data-lucide="map-pin" style="width:13px;height:13px;color:var(--ochre);flex:none"></i>
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.address || 'Delivery Address'}</span>
+        </div>
+
+        <!-- Live Step Progress Track -->
+        <div style="background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
+            <span style="color:${isStep1?'var(--green-800)':'inherit'}">● Received</span>
+            <span style="color:${isStep2?'var(--green-800)':'inherit'}">● Review</span>
+            <span style="color:${isStep3?'var(--green-800)':'inherit'}">● Preparing</span>
+            <span style="color:${isStep4?'var(--green-800)':'inherit'}">● Delivered</span>
+          </div>
+          <div style="height:5px;background:var(--cream-2);border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${progressPct}%;background:var(--green-700);border-radius:3px;transition:width .4s"></div>
+          </div>
+        </div>
+
+        <button class="btn-pill btn-solid-green" style="width:100%;text-align:center;padding:9px 12px;font-size:11px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="openTrack('${o.id}')">
+          View Live Tracking Details <i data-lucide="arrow-up-right" style="width:13px;height:13px"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
   refreshIcons();
 }
-el('dItems').addEventListener('click', e=>{
-  const item = e.target.closest('.c-item'); if(!item) return;
-  const id = item.dataset.id;
-  if(e.target.closest('[data-inc]')){ addToCart(id, null, 1); }
-  else if(e.target.closest('[data-dec]')){
-    const q = cart.get(id)-1;
-    q<=0 ? cart.delete(id) : cart.set(id,q);
-    renderCart();
-  }
-  else if(e.target.closest('[data-rem]')){ cart.delete(id); renderCart(); }
-});
+
 function openDrawer(){
-  drawer.classList.add('open'); overlay.classList.add('on'); lockScroll(true);
-  if(ANIM && cart.size){
-    gsap.fromTo('.c-item', {x:26, opacity:0}, {x:0, opacity:1, stagger:.06, duration:.5, delay:.15, ease:'power3.out'});
-  }
+  renderCart();
+  drawer.classList.add('open');
+  overlay.classList.add('on');
+  lockScroll(true);
 }
 function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('on'); if(!panelsOpen()) lockScroll(false); }
 el('cartBtn').addEventListener('click', openDrawer);
@@ -2816,19 +2874,27 @@ el('drawerClose').addEventListener('click', closeDrawer);
 overlay.addEventListener('click', closeDrawer);
 renderCart();
 
-/* rail click: add or open detail */
+/* rail click: direct to order page for address & delivery */
 let dragKill = false;
 rail.addEventListener('click', e=>{
   if(dragKill){ e.preventDefault(); e.stopPropagation(); return; }
   const b = e.target.closest('[data-add]');
   if(b){
-    addToCart(b.dataset.add, b.closest('.p-art'));
-    b.classList.add('added');
-    setTimeout(()=> b.classList.remove('added'), 700);
-    return;
+    const pid = b.dataset.add;
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p){
+      window.location.href = `orders.html?med=${encodeURIComponent(p.name)}&qty=1`;
+      return;
+    }
   }
   const card = e.target.closest('.p-card');
-  if(card) openProduct(card.dataset.pid);
+  if(card){
+    const pid = card.dataset.pid;
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p){
+      window.location.href = `orders.html?med=${encodeURIComponent(p.name)}&qty=1`;
+    }
+  }
 }, true);
 
 /* ================= Product detail modal ================= */
@@ -2968,10 +3034,30 @@ function animateTrack(box, o){
   gsap.fromTo(box.querySelectorAll('.trk-dot'), {scale:0}, {scale:1, stagger:.09, duration:.45, ease:'back.out(2)'});
 }
 function openTrack(id){
-  const o = orders.find(x=>x.id===id); if(!o) return openTrackPicker();
-  const box = openModal(trackHTML(o), {kind:'track', ref:o.id});
-  wireTrack(box, o.id);
-  animateTrack(box, o);
+  const allOrders = getBasketOrders();
+  let o = allOrders.find(x=>x.id===id) || orders.find(x=>x.id===id);
+  if(!o) return openTrackPicker();
+  
+  let st = 0;
+  if(typeof o.status === 'number') st = o.status;
+  else if(o.status === 'Delivered') st = 3;
+  else if(o.status === 'Preparing') st = 2;
+  else if(o.status === 'Confirmed') st = 1;
+  else st = 0;
+
+  const formattedOrder = {
+    id: o.id,
+    date: o.datetime || o.date || 'Today',
+    user: o.customer || o.user || 'Customer',
+    total: o.total || 45.00,
+    status: st,
+    items: (o.medicines && o.medicines.length)
+      ? o.medicines.map(m => ({ qty: parseInt(m.qty)||1, name: m.name, price: 15.00 }))
+      : (o.items || [{ qty: 1, name: o.medicinesSummary || 'Medicines', price: 25.00 }])
+  };
+  const box = openModal(trackHTML(formattedOrder), {kind:'track', ref:formattedOrder.id});
+  wireTrack(box, formattedOrder.id);
+  animateTrack(box, formattedOrder);
 }
 function openOrdersModal(){
   if(orders && orders.length){
@@ -3275,7 +3361,11 @@ function renderSearch(q){
 }
 el('searchInput').addEventListener('input', e=> renderSearch(e.target.value.trim().toLowerCase()));
 el('sResults').addEventListener('click', e=>{
-  const r = e.target.closest('[data-add]'); if(r) addToCart(r.dataset.add, r.querySelector('.s-thumb'));
+  const r = e.target.closest('[data-add]');
+  if(r){
+    const p = PRODUCTS.find(x=>x.id===r.dataset.add);
+    if(p) window.location.href = `orders.html?med=${encodeURIComponent(p.name)}&qty=1`;
+  }
 });
 renderSearch('');
 
