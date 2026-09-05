@@ -1,0 +1,3752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freewheel+ — Clinic &amp; Pharmacy · Better Health, Brighter Tomorrows</title>
+<meta name="description" content="Trusted clinic care and a fully-stocked pharmacy under one roof. Same-day doctor appointments, genuine medicines, on-site lab, order tracking and prescription uploads.">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<style>
+/* ============ Foundations ============ */
+:root{
+  --green-950:#0A211A; --green-900:#0C2B20; --green-800:#0E3424;
+  --green-700:#1A4732; --green-600:#2E5C46;
+  --cream:#F5F0E3; --cream-2:#EDE6D1; --paper:#FBF8EE;
+  --ink:#1F2B24; --muted:#63705F;
+  --ochre:#C0731F; --ochre-soft:#E0A458; --blush:#E7C9B6;
+  --sage:#CBD6C0; --sand:#E9E0C9; --line:rgba(31,43,36,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{font-family:'Instrument Sans',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased}
+html.js body.loading{overflow:hidden}
+svg{display:block}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
+input{font:inherit}
+::selection{background:var(--ochre);color:#fff}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:4px}
+.container{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,44px)}
+section{scroll-margin-top:96px}
+.tint-sage{background:#E7EDDD}.tint-blush{background:#F2E4D8}.tint-sand{background:#EFE8D2}
+
+.mask{display:inline-block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em;vertical-align:top}
+.w{display:inline-block;will-change:transform}
+
+/* ============ Global chrome ============ */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--ochre);transform:scaleX(0);transform-origin:left;z-index:240}
+.grain{position:fixed;inset:-60%;z-index:350;pointer-events:none;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grainShift 1.1s steps(6) infinite}
+@keyframes grainShift{0%{transform:translate(0,0)}20%{transform:translate(-4%,-7%)}40%{transform:translate(-10%,3%)}60%{transform:translate(5%,-9%)}80%{transform:translate(-6%,6%)}100%{transform:translate(0,0)}}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:400;opacity:0}
+html.cursor-on,html.cursor-on *{cursor:none}
+.cursor-dot .cd-core{width:6px;height:6px;border-radius:50%;background:#fff;mix-blend-mode:difference;transform:translate(-50%,-50%)}
+.ring-core{transform:translate(-50%,-50%);width:34px;height:34px;border:1.5px solid rgba(255,255,255,.85);border-radius:50%;display:grid;place-items:center;mix-blend-mode:difference;transition:width .35s cubic-bezier(.3,1.2,.4,1),height .35s cubic-bezier(.3,1.2,.4,1),background .35s}
+.ring-core.on{width:62px;height:62px;background:rgba(255,255,255,.07)}
+.cursor-label{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#fff;opacity:0;transition:opacity .25s;white-space:nowrap}
+.ring-core.txt .cursor-label{opacity:1}
+
+/* ============ Loader ============ */
+.loader{display:none;position:fixed;inset:0;z-index:360;background:var(--green-950);place-items:center;clip-path:inset(0 0 0 0)}
+html.js .loader{display:grid}
+.loader-inner{display:flex;flex-direction:column;align-items:center;gap:18px;color:var(--cream)}
+.loader-cross{width:64px;height:64px}
+.lc-ring{fill:none;stroke:rgba(245,240,227,.35);stroke-width:2;stroke-dasharray:139;stroke-dashoffset:139}
+.lc-cross{fill:none;stroke:var(--ochre-soft);stroke-width:5;stroke-linecap:round;stroke-dasharray:70;stroke-dashoffset:70}
+.loader-word{font-family:'Fraunces';font-size:clamp(30px,5vw,46px);font-weight:480;letter-spacing:.02em;display:flex;overflow:hidden;line-height:1.1}
+.loader-word span{display:inline-block;transform:translateY(120%)}
+.loader-word .lp{color:var(--ochre-soft)}
+.loader-sub{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(245,240,227,.55);opacity:0}
+.loader-count{position:absolute;bottom:34px;right:44px;font-family:'Fraunces';font-style:italic;font-size:20px;color:var(--ochre-soft)}
+
+/* ============ Header ============ */
+.announce{background:var(--green-950);color:rgba(245,240,227,.75);text-align:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:9px 16px}
+.announce b{color:var(--ochre-soft);font-weight:600}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(245,240,227,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:transform .55s cubic-bezier(.3,.9,.3,1),box-shadow .3s}
+.site-header.hide{transform:translateY(-105%)}
+.site-header.scrolled{box-shadow:0 10px 26px -20px rgba(14,50,37,.4)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:72px;position:relative}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.logo-mark{width:36px;height:36px;border-radius:9px;background:var(--green-800);display:grid;place-items:center;flex:none}
+.logo-mark svg{width:16px;height:16px}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-text b{font-family:'Fraunces';font-size:22px;font-weight:600}
+.logo-text small{font-size:8.5px;letter-spacing:.3em;color:var(--muted);margin-top:4px;text-transform:uppercase}
+.nav{display:flex;gap:30px}
+.nav a{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:6px 0}
+.nav a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--ochre);transition:width .35s}
+.nav a:hover::after{width:100%}
+.header-actions{display:flex;align-items:center;gap:10px}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;position:relative;transition:.25s}
+.icon-btn:hover{background:var(--green-800);color:var(--cream);border-color:var(--green-800)}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn.logged{background:var(--green-800);color:var(--cream);border-color:var(--green-800);font-weight:800;font-size:12px}
+.cart-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--ochre);color:var(--paper);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px;transform:scale(0);transition:transform .25s cubic-bezier(.5,1.6,.5,1)}
+.cart-badge.on{transform:scale(1)}
+.cart-badge.bump{animation:bump .4s}
+@keyframes bump{40%{transform:scale(1.45)}}
+.btn-pill{border-radius:999px;padding:11px 20px;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:inline-block}
+.btn-solid-green{background:var(--green-800);color:var(--cream);border:1px solid var(--green-800);transition:.25s}
+.btn-solid-green:hover{background:var(--green-950)}
+.menu-btn{display:none}
+.menu-btn .lucide-x{display:none}
+.menu-btn.open .lucide-x{display:block}
+.menu-btn.open .lucide-menu{display:none}
+
+.search-panel{position:absolute;top:100%;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;box-shadow:0 24px 34px -30px rgba(14,50,37,.35)}
+.site-header.search-open .search-panel{max-height:430px;padding:16px 0 20px}
+.search-row{display:flex;align-items:center;gap:14px}
+.search-row>svg{width:20px;height:20px;color:var(--muted);flex:none}
+#searchInput{flex:1;border:none;background:none;font-family:'Fraunces';font-size:24px;padding:6px 0;outline:none;color:var(--ink);min-width:0}
+#searchInput::placeholder{color:rgba(99,112,95,.55);font-style:italic;font-weight:400}
+.s-results{margin-top:8px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.s-row{display:flex;align-items:center;gap:14px;padding:8px 12px;border-radius:12px;text-align:left;width:100%;transition:background .2s}
+.s-row:hover{background:var(--cream-2)}
+.s-thumb{width:44px;height:52px;border-radius:8px;display:grid;place-items:center;flex:none}
+.s-thumb svg{width:28px;height:auto}
+.s-meta{flex:1;display:flex;flex-direction:column;min-width:0}
+.s-name{font-family:'Fraunces';font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-cat{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.s-price{font-weight:600;font-size:14px;flex:none}
+.s-add{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;flex:none;transition:.2s}
+.s-add svg{width:14px;height:14px}
+.s-row:hover .s-add{background:var(--green-800);color:var(--cream);border-color:var(--green-800)}
+.s-hint{padding:10px 12px;color:var(--muted);font-size:14px;font-style:italic;font-family:'Fraunces'}
+
+.mobile-menu{position:fixed;top:0;left:0;right:0;bottom:0;z-index:96;background:var(--cream);padding:118px clamp(24px,7vw,48px) 34px;display:flex;flex-direction:column;overflow-y:auto;transform:translateY(-102%);visibility:hidden;transition:transform .55s cubic-bezier(.25,.9,.3,1),visibility .55s}
+.mobile-menu.open{transform:none;visibility:visible}
+.mobile-menu a{font-family:'Fraunces';font-size:clamp(26px,7vw,36px);color:var(--ink);text-decoration:none;padding:13px 2px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.mobile-menu a svg{width:20px;height:20px;color:var(--ochre)}
+.mobile-menu .mm-pill{margin-top:24px;align-self:flex-start}
+
+/* ============ Hero ============ */
+.hero{background:var(--green-800);color:var(--cream);position:relative}
+.constellations{position:absolute;inset:0;pointer-events:none}
+.constellation{position:absolute}
+.cs1{top:-30px;left:-60px;width:min(360px,34vw)}
+.cs2{bottom:-20px;right:-50px;width:min(300px,28vw)}
+.ecg{position:absolute;left:0;right:0;bottom:9%;width:100%;height:110px;opacity:.5;pointer-events:none;z-index:1}
+.ecg path{fill:none;stroke:var(--ochre-soft);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(40px,6vw,90px);align-items:center;padding:clamp(56px,8vw,110px) 0 clamp(72px,9vw,128px);position:relative;z-index:2}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.eb-line{width:30px;height:2px;background:currentColor;flex:none;transform-origin:left}
+.eyebrow.center{justify-content:center}
+.hero .eyebrow{color:var(--ochre-soft)}
+.hero-title{font-family:'Fraunces';font-weight:480;font-size:clamp(42px,6vw,84px);line-height:1.02;letter-spacing:-.015em;margin:22px 0 24px}
+.hero-title .line{display:block}
+.em-ud{position:relative;font-style:italic;color:var(--ochre-soft);font-weight:400}
+.ud{position:absolute;left:-2%;bottom:-.08em;width:104%;height:.22em;overflow:visible}
+.ud path{fill:none;stroke:var(--ochre);stroke-width:5;stroke-linecap:round;opacity:.9}
+.hero-lead{font-size:17px;line-height:1.65;color:rgba(245,240,227,.82);max-width:46ch;margin-bottom:36px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-trust{display:flex;align-items:center;gap:14px;margin-top:44px;flex-wrap:wrap;color:rgba(245,240,227,.75);font-size:13.5px}
+.hero-trust b{color:var(--cream)}
+.stars{display:flex;gap:2px}
+.stars svg{width:14px;height:14px;fill:var(--ochre-soft);color:var(--ochre-soft)}
+.hero-trust .sep{width:1px;height:16px;background:rgba(245,240,227,.3)}
+.hero-visual{position:relative;aspect-ratio:4/5}
+.stage-arch{position:absolute;inset:0;background:var(--green-700);border:1px solid rgba(245,240,227,.16);border-radius:300px 300px 22px 22px;z-index:1}
+.stage-shelf{position:absolute;left:14%;right:14%;bottom:9%;height:2px;background:rgba(245,240,227,.2);z-index:1}
+.stage-doc{position:absolute;inset:0;display:grid;place-items:center;padding-top:5%;z-index:1}
+.stage-doc svg{width:min(60%,250px);height:auto;will-change:transform}
+.fl{position:absolute;z-index:2}
+.fl-in{display:block;will-change:transform}
+.fl-bob{display:block}
+.fl-bob svg{width:100%;height:auto}
+.fl-1{left:8%;top:6%;width:26%}
+.fl-2{left:64%;top:4%;width:26%}
+.fl-3{left:4%;top:36%;width:24%}
+.fl-4{left:6%;top:60%;width:24%}
+.fl-5{left:66%;top:62%;width:24%}
+.seal{position:absolute;left:-7%;bottom:-5%;width:min(34%,150px);z-index:3;filter:drop-shadow(0 14px 22px rgba(10,25,18,.4))}
+.seal-rotor{transform-box:view-box;transform-origin:50% 50%;animation:spin 22s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(245,240,227,.6);z-index:2}
+.scroll-hint span{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:700}
+.sh-track{width:1.5px;height:42px;background:rgba(245,240,227,.2);position:relative;overflow:hidden}
+.sh-run{position:absolute;top:0;left:0;width:100%;height:14px;background:var(--ochre-soft);animation:shRun 2.1s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes shRun{0%{transform:translateY(-16px)}70%,100%{transform:translateY(46px)}}
+
+.btn{position:relative;overflow:hidden;border-radius:999px;padding:16px 30px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:.28s;border:1px solid transparent;text-decoration:none;display:inline-block;background:none}
+.btn .btn-label{position:relative;z-index:2;transition:color .35s}
+.btn::before{content:"";position:absolute;inset:-1px;background:var(--ochre);transform:translateY(102%);transition:transform .5s cubic-bezier(.65,0,.35,1);z-index:1}
+.btn:hover::before{transform:translateY(0)}
+.btn-cream{background:var(--cream);color:var(--green-950);border-color:var(--cream)}
+.btn-cream:hover .btn-label{color:var(--paper)}
+.btn-ghost{border-color:rgba(245,240,227,.5);color:var(--cream)}
+.btn-ghost::before{background:rgba(245,240,227,.14)}
+.btn-ghost:hover{border-color:var(--cream)}
+
+/* ============ Thin ticker ============ */
+.ticker{background:var(--ochre);color:var(--paper);overflow:hidden;padding:13px 0}
+.ticker-track{display:flex;width:max-content;will-change:transform}
+.ticker-group{display:flex;align-items:center;gap:36px;padding-right:36px;flex:none}
+.ticker-group span{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.ticker-group svg{width:12px;height:12px;flex:none}
+
+/* ============ Sections shared ============ */
+.categories{padding:clamp(80px,10vw,130px) 0 clamp(50px,7vw,90px)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:clamp(36px,5vw,56px);flex-wrap:wrap}
+.sec-title{font-family:'Fraunces';font-weight:500;font-size:clamp(34px,4.6vw,56px);line-height:1.05;letter-spacing:-.01em;margin-top:16px}
+.sec-title em,.refill-title em,.newsletter h2 em{font-style:italic;color:var(--ochre)}
+.text-link{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green-700);display:inline-flex;align-items:center;gap:8px;text-decoration:none;border-bottom:2px solid transparent;padding-bottom:2px;transition:.25s}
+.text-link:hover{border-color:var(--ochre)}
+.text-link svg{width:15px;height:15px;transition:transform .25s}
+.text-link:hover svg{transform:translateX(4px)}
+
+/* service cards */
+.cat-grid{display:grid;grid-template-columns:1.12fr 1fr;grid-template-rows:1fr 1fr;gap:18px}
+.cat-card{border:1px solid var(--line);border-radius:20px;padding:28px 30px 26px;display:flex;flex-direction:column;justify-content:space-between;transition:box-shadow .4s,border-color .4s;overflow:visible;cursor:pointer;transform-style:preserve-3d;position:relative}
+.cat-card:hover{box-shadow:0 30px 50px -34px rgba(14,50,37,.5);border-color:rgba(14,50,37,.32)}
+.cat-card.tall{grid-row:span 2}
+.c-med{background:var(--paper)}
+.c-vit{background:#E8EDDE}
+.c-care{background:#F1E4D5}
+.cat-count{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ochre)}
+.cat-art{padding:clamp(12px,2.6vw,24px) 0 clamp(16px,2.6vw,28px);transform:translateZ(34px)}
+.cat-art-row{display:flex;align-items:flex-end;justify-content:center;gap:4px}
+.ai{display:block;width:clamp(78px,9vw,112px)}
+.cat-card.tall .ai{width:clamp(96px,11vw,142px)}
+.ai svg{width:100%;height:auto}
+.cat-art-row .ai:nth-child(1){transform:translateY(-10px) rotate(-5deg)}
+.cat-art-row .ai:nth-child(2){transform:translateY(4px) scale(1.06);position:relative;z-index:2}
+.cat-art-row .ai:nth-child(3){transform:translateY(-7px) rotate(4deg)}
+.cat-link{transform:translateZ(18px)}
+.tilt-glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(240px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.15),transparent 62%)}
+.cat-title{font-family:'Fraunces';font-size:clamp(24px,2.6vw,34px);font-weight:500;margin-bottom:10px}
+.cat-card.tall .cat-title{font-size:clamp(30px,3.4vw,44px)}
+.cat-desc{font-size:14.5px;line-height:1.6;color:var(--muted);margin-bottom:18px;max-width:42ch}
+.cat-link{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green-800);display:inline-flex;gap:8px;align-items:center}
+.cat-link svg{width:14px;height:14px;transition:transform .3s}
+.cat-card:hover .cat-link svg{transform:translateX(5px)}
+
+/* ============ About ============ */
+.about{padding:clamp(80px,10vw,130px) 0}
+.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,5vw,70px);align-items:center}
+.about-lead{font-size:clamp(17px,1.6vw,20px);line-height:1.7;color:var(--ink);margin:0 0 18px;max-width:52ch}
+.about-p{font-size:15px;line-height:1.7;color:var(--muted);max-width:52ch;margin-bottom:14px}
+.about-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.about-art{background:#EFE8D2;aspect-ratio:16/11;display:grid;place-items:center;padding:24px;border-bottom:1px solid var(--line);overflow:hidden}
+.about-art svg{width:min(82%,360px);height:auto;will-change:transform}
+
+/* ============ Big editorial marquee ============ */
+.bigmarq{background:var(--green-950);width:110vw;margin-left:-5vw;transform:rotate(-2.2deg);padding:clamp(38px,5.5vw,60px) 0;overflow:hidden;margin-top:clamp(30px,4vw,54px);margin-bottom:clamp(40px,5vw,64px)}
+.bigmarq-track{display:flex;width:max-content;will-change:transform}
+.bm-group{display:flex;align-items:center;gap:clamp(36px,5vw,72px);padding-right:clamp(36px,5vw,72px);flex:none}
+.bm-t{font-family:'Fraunces';font-size:clamp(44px,7.5vw,104px);line-height:1;white-space:nowrap;font-weight:450}
+.bm-t.outline{color:rgba(245,240,227,.12);-webkit-text-stroke:1.5px rgba(245,240,227,.55)}
+.bm-t.ital{font-style:italic;color:var(--cream);font-weight:400}
+.bm-t.ochre{color:var(--ochre-soft)}
+.bm-plus{width:clamp(22px,3vw,34px);height:clamp(22px,3vw,34px);flex:none}
+.bm-plus svg{width:100%;height:100%;color:var(--ochre-soft);animation:spin 12s linear infinite}
+
+/* ============ Stats ============ */
+.stats{border-bottom:1px solid var(--line)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:clamp(30px,4vw,48px) 26px}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat-num{font-family:'Fraunces';font-size:clamp(42px,5vw,66px);font-weight:480;color:var(--green-800);line-height:1;font-variant-numeric:tabular-nums}
+.stat-cap{display:block;margin-top:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+
+/* ============ Medicines rail ============ */
+.arrivals{padding:clamp(70px,9vw,110px) 0;border-top:1px solid var(--line)}
+.rail-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:34px}
+.rail-controls{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{padding:10px 18px;border-radius:999px;border:1px solid var(--line);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:.25s}
+.tab:hover{border-color:var(--green-700);color:var(--green-800)}
+.tab.active{background:var(--green-800);color:var(--cream);border-color:var(--green-800)}
+.rail-nav{display:flex;gap:8px}
+.rail-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.25s}
+.rail-btn svg{width:16px;height:16px}
+.rail-btn:hover:not(:disabled){background:var(--green-800);color:var(--cream);border-color:var(--green-800)}
+.rail-btn:disabled{opacity:.3;cursor:default}
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 18px;scrollbar-width:thin}
+.rail.dragging{scroll-snap-type:none;user-select:none;cursor:grabbing}
+.rail::-webkit-scrollbar{height:8px}
+.rail::-webkit-scrollbar-thumb{background:rgba(14,50,37,.25);border-radius:4px}
+.rail::-webkit-scrollbar-track{background:transparent}
+.rail-progress{height:2px;background:rgba(31,43,36,.12);border-radius:1px;margin-top:6px;overflow:hidden}
+.rail-progress span{display:block;height:100%;background:var(--green-800);transform:scaleX(0);transform-origin:left}
+.p-card{flex:0 0 252px;scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s,box-shadow .35s;cursor:pointer}
+.p-card:hover{transform:translateY(-5px);box-shadow:0 26px 44px -34px rgba(14,50,37,.45)}
+.p-art{aspect-ratio:1/1.02;display:grid;place-items:center;position:relative;padding:20px}
+.p-art svg{width:62%;height:auto;will-change:transform}
+.p-tag{position:absolute;top:12px;left:12px;background:var(--ochre);color:var(--paper);font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.p-tag.alt{background:var(--green-700)}
+.p-tag.low{left:auto;right:12px;background:var(--green-950)}
+.p-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line)}
+.p-cat{font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.p-name{font-family:'Fraunces';font-size:19px;font-weight:520;line-height:1.25}
+.p-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.p-price{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.p-price s{font-size:12px;color:var(--muted);font-weight:400;margin-right:5px;text-decoration-color:rgba(99,112,95,.7)}
+.p-add{width:38px;height:38px;border-radius:50%;border:1px solid rgba(31,43,36,.28);display:grid;place-items:center;transition:.25s;background:var(--paper)}
+.p-add svg{width:15px;height:15px}
+.p-add:hover{background:var(--green-800);border-color:var(--green-800);color:var(--cream)}
+.p-add.added{background:var(--ochre);border-color:var(--ochre);color:var(--paper)}
+.fly{position:fixed;z-index:390;pointer-events:none}
+.fly svg{width:100%;height:auto}
+
+/* ============ Booking ============ */
+.refill{background:var(--green-800);color:var(--cream);padding:clamp(80px,10vw,130px) 0}
+.refill .eyebrow{color:var(--ochre-soft)}
+.refill-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,90px);align-items:start}
+.refill-title{font-family:'Fraunces';font-weight:470;font-size:clamp(34px,4.4vw,54px);line-height:1.06;margin:18px 0 16px}
+.refill-title .line{display:block}
+.refill-intro{color:rgba(245,240,227,.8);line-height:1.65;font-size:16px;max-width:44ch;margin-bottom:36px}
+.steps{position:relative}
+.steps-rail{position:absolute;left:19px;top:16px;bottom:16px;width:2px;background:rgba(245,240,227,.15)}
+.steps-fill{position:absolute;inset:0;background:var(--ochre-soft);transform:scaleY(0);transform-origin:top}
+.step{display:flex;gap:22px;padding:22px 0;border-top:1px solid rgba(245,240,227,.14);transition:opacity .5s}
+.step.active{opacity:1}
+.step-dot{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid rgba(245,240,227,.35);background:var(--green-800);display:grid;place-items:center;font-family:'Fraunces';font-style:italic;font-size:14px;color:var(--ochre-soft);transition:.5s;position:relative;z-index:2}
+.step.active .step-dot{background:var(--ochre);border-color:var(--ochre);color:var(--paper)}
+.step h4{font-family:'Fraunces';font-size:20px;font-weight:520;margin-bottom:6px}
+.step p{color:rgba(245,240,227,.72);font-size:14px;line-height:1.6}
+.refill-card{background:var(--cream);color:var(--ink);border-radius:20px;padding:clamp(26px,3vw,38px);box-shadow:0 40px 60px -50px rgba(0,0,0,.5)}
+.refill-card h3{font-family:'Fraunces';font-size:26px;font-weight:520;margin-bottom:6px}
+.refill-card .sub{font-size:13.5px;color:var(--muted);margin-bottom:24px}
+.field{position:relative;margin-bottom:22px}
+.field input[type=text],.field input[type=tel]{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:16px;font-size:15px;transition:border .25s}
+.field input[type=text]:focus,.field input[type=tel]:focus{outline:none;border-color:var(--green-700)}
+.field label{position:absolute;left:16px;top:16px;font-size:14.5px;color:var(--muted);pointer-events:none;transition:.25s cubic-bezier(.3,.9,.4,1);padding:0 4px}
+.field input:focus~label,.field input:not(:placeholder-shown)~label{top:-8px;left:12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--green-800);background:var(--cream)}
+.field.error input{border-color:#B0502F}
+.err{display:none;font-size:12px;color:#B0502F;margin-top:6px}
+.field.error .err{display:block}
+.f-label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green-800);margin-bottom:10px}
+.pillset{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.pillset.three{grid-template-columns:repeat(3,1fr)}
+.pillset label{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;background:var(--paper);color:var(--ink)}
+.pillset label.on{border-color:var(--green-700);background:#E7EDDD}
+.pillset input{position:absolute;opacity:0;pointer-events:none}
+.pillset .dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);display:grid;place-items:center;flex:none}
+.pillset .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--green-800);transform:scale(0);transition:.2s}
+.pillset label.on .dot{border-color:var(--green-800)}
+.pillset label.on .dot::after{transform:scale(1)}
+.btn-green-full{width:100%;background:var(--green-800);color:var(--cream);border-radius:999px;padding:16px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:.25s}
+.btn-green-full:hover{background:var(--green-950)}
+.refill-success{display:none;text-align:center;padding:26px 8px}
+.refill-card.done form{display:none}
+.refill-card.done .refill-success{display:block}
+.success-ic{width:58px;height:58px;border-radius:50%;background:var(--green-800);color:var(--cream);display:grid;place-items:center;margin:0 auto 18px}
+.success-ic svg{width:24px;height:24px}
+.refill-success h4{font-family:'Fraunces';font-size:24px;margin-bottom:10px}
+.refill-success p{color:var(--muted);font-size:14px;line-height:1.65;max-width:40ch;margin:0 auto 20px}
+.refill-success p b{color:var(--green-800)}
+.link-btn{text-decoration:underline;text-underline-offset:3px;color:var(--green-800);font-weight:600}
+
+/* ============ Departments ============ */
+.advice{padding:clamp(80px,10vw,130px) 0}
+.advice-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(36px,5vw,70px);align-items:start}
+.feature{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--paper)}
+.feature-art{background:#EFE8D2;aspect-ratio:16/10.5;display:grid;place-items:center;padding:34px 24px;border-bottom:1px solid var(--line);overflow:hidden}
+.feature-art svg{width:min(74%,320px);height:auto;will-change:transform}
+.feature-body{padding:clamp(22px,3vw,34px)}
+.meta{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.feature-body h3{font-family:'Fraunces';font-size:clamp(23px,2.4vw,30px);font-weight:500;line-height:1.2;margin:12px 0}
+.feature-body>p{color:var(--muted);font-size:14.5px;line-height:1.65}
+.art-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.art-item{border-bottom:1px solid var(--line)}
+.art-head{width:100%;display:flex;flex-direction:column;gap:8px;padding:20px 4px;text-align:left;transition:background .25s}
+.art-head:hover{background:rgba(231,237,221,.45)}
+.art-title-row{display:flex;align-items:center;gap:16px;width:100%}
+.art-head h4{font-family:'Fraunces';font-size:20px;font-weight:520;flex:1;line-height:1.3}
+.tog{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;flex:none;transition:.35s}
+.tog svg{width:13px;height:13px}
+.art-item.open .tog{background:var(--green-800);color:var(--cream);border-color:var(--green-800);transform:rotate(45deg)}
+.art-body{height:0;overflow:hidden}
+.art-body p{color:var(--muted);font-size:14px;line-height:1.65;padding:0 4px 22px;max-width:56ch}
+
+/* ============ Reviews ============ */
+.reviews{padding:clamp(70px,9vw,120px) 0;border-top:1px solid var(--line)}
+.reviews-grid{display:grid;grid-template-columns:.9fr 1.4fr;gap:clamp(30px,4vw,64px);align-items:start}
+.rv-score{font-family:'Fraunces';font-size:clamp(56px,7vw,84px);font-weight:480;color:var(--green-800);line-height:1;font-variant-numeric:tabular-nums}
+.rv-score sup{font-size:.35em;color:var(--ochre);top:-.9em}
+.rv-stars{display:flex;gap:3px;margin:12px 0 8px}
+.rv-stars svg{width:22px;height:22px;fill:var(--ochre);color:var(--ochre)}
+.rv-cap{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.rv-art{margin-top:26px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;overflow:hidden}
+.rv-art svg{width:100%;height:auto;will-change:transform}
+.rv-list{display:flex;flex-direction:column;gap:16px}
+.rv-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(20px,2.4vw,28px)}
+.rv-mark{font-family:'Fraunces';font-size:34px;line-height:.5;color:var(--ochre);display:block;height:18px}
+.rv-quote{font-size:15px;line-height:1.65;color:var(--ink);margin:10px 0 16px;max-width:56ch}
+.rv-foot{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rv-ava{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
+.rv-mini{display:flex;gap:2px;margin-left:auto}
+.rv-mini svg{width:13px;height:13px;fill:var(--ochre);color:var(--ochre)}
+.rv-name{font-weight:700;font-size:14px}
+.rv-tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* ============ Services strip ============ */
+.services{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}
+.services .container{display:grid;grid-template-columns:repeat(4,1fr)}
+.svc{padding:34px 26px;display:flex;flex-direction:column;gap:10px}
+.svc+.svc{border-left:1px solid var(--line)}
+.svc svg{width:26px;height:26px;color:var(--green-700)}
+.svc b{font-size:15px;font-weight:700}
+.svc p{font-size:13px;color:var(--muted);line-height:1.55}
+
+/* ============ Newsletter ============ */
+.newsletter{padding:clamp(80px,10vw,120px) 0;background:var(--cream-2);text-align:center}
+.newsletter h2{font-family:'Fraunces';font-weight:470;font-size:clamp(32px,4.4vw,52px);line-height:1.05;margin-top:18px}
+.newsletter .sub{color:var(--muted);margin:16px auto 30px;max-width:46ch;font-size:15px;line-height:1.6}
+.nl-form{display:flex;gap:10px;max-width:460px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px;transition:border .25s}
+.nl-form:focus-within{border-color:var(--green-700)}
+.nl-form input{flex:1;border:none;background:none;padding:0 18px;outline:none;font-size:15px;min-width:0}
+.nl-form button{background:var(--green-800);color:var(--cream);border-radius:999px;padding:13px 24px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:.25s;flex:none}
+.nl-form button:hover{background:var(--green-950)}
+.nl-error{color:#B0502F;font-size:12.5px;margin-top:10px;min-height:16px}
+.nl-done{display:none;gap:10px;justify-content:center;align-items:center;color:var(--green-800);font-weight:600;font-size:15px}
+.nl-done svg{width:20px;height:20px}
+.newsletter.done .nl-form,.newsletter.done .nl-error{display:none}
+.newsletter.done .nl-done{display:flex}
+.nl-small{margin-top:16px;font-size:12px;color:var(--muted)}
+
+/* ============ Footer ============ */
+footer{background:var(--green-950);color:rgba(245,240,227,.8);overflow:hidden}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:clamp(30px,4vw,60px);padding:clamp(60px,8vw,90px) 0 clamp(40px,6vw,70px)}
+.logo-light{color:var(--cream)}
+.logo-light .logo-mark{background:var(--cream)}
+.logo-light .logo-text b{color:var(--cream)}
+.logo-light .logo-text small{color:rgba(245,240,227,.55)}
+.f-blurb{font-size:14px;line-height:1.65;color:rgba(245,240,227,.7);margin:20px 0 18px;max-width:36ch}
+.f-blurb em{color:var(--ochre-soft)}
+.f-hours{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ochre-soft)}
+.f-hours svg{width:15px;height:15px}
+footer h5{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ochre-soft);margin-bottom:16px;font-weight:700}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:11px}
+.f-links a,.f-links button{color:rgba(245,240,227,.75);text-decoration:none;font-size:14px;transition:color .2s;text-align:left;padding:0}
+.f-links a:hover,.f-links button:hover{color:var(--ochre-soft)}
+.f-contact li{display:flex;gap:10px;align-items:center;font-size:14px;color:rgba(245,240,227,.75)}
+.f-contact svg{width:15px;height:15px;color:var(--ochre-soft);flex:none}
+.footer-word{font-family:'Fraunces';font-weight:400;font-size:clamp(44px,11vw,150px);line-height:.82;color:var(--cream);letter-spacing:-.02em;display:flex;align-items:flex-start;padding:10px 0 6px}
+.fw-mask{display:inline-block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.fw-l{display:inline-block;font-variation-settings:'wght' 400;transition:transform .4s cubic-bezier(.3,1.2,.4,1),font-variation-settings .4s;will-change:transform}
+.fw-l:hover{transform:translateY(-5%);font-variation-settings:'wght' 640}
+.fw-plus{width:.24em;height:.24em;color:var(--ochre-soft);margin-left:.07em;margin-top:.1em;flex:none}
+.fw-plus svg{animation:spin 14s linear infinite}
+.footer-bottom{border-top:1px solid rgba(245,240,227,.14);padding:22px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:rgba(245,240,227,.55)}
+.f-top{display:flex;gap:8px;align-items:center;color:rgba(245,240,227,.7);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:color .2s}
+.f-top:hover{color:var(--ochre-soft)}
+.f-top svg{width:13px;height:13px}
+
+/* ============ Basket drawer ============ */
+.overlay{position:fixed;inset:0;background:rgba(10,24,17,.55);opacity:0;pointer-events:none;transition:opacity .35s;z-index:140}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,94vw);background:var(--cream);z-index:150;transform:translateX(calc(100% + 24px));transition:transform .5s cubic-bezier(.25,.9,.3,1);display:flex;flex-direction:column;box-shadow:-30px 0 60px -40px rgba(0,0,0,.4)}
+.drawer.open{transform:none}
+.d-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line)}
+.d-head h3{font-family:'Fraunces';font-size:22px;font-weight:520}
+.d-ship{padding:16px 24px;border-bottom:1px solid var(--line);background:var(--paper)}
+.d-ship p{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.d-ship p b{color:var(--green-800)}
+.ship-bar{height:6px;border-radius:3px;background:var(--cream-2);overflow:hidden}
+.ship-fill{height:100%;background:var(--green-700);width:0;transition:width .5s cubic-bezier(.3,.9,.3,1)}
+.ship-fill.full{background:var(--ochre)}
+.d-items{flex:1;overflow-y:auto;padding:8px 24px}
+.c-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.c-thumb{width:58px;height:66px;border-radius:10px;display:grid;place-items:center;flex:none}
+.c-thumb svg{width:36px;height:auto}
+.c-info{flex:1;min-width:0}
+.c-name{font-family:'Fraunces';font-size:15.5px;font-weight:520;line-height:1.2;margin-bottom:2px}
+.c-unit{font-size:12px;color:var(--muted);margin-bottom:8px}
+.c-unit s{text-decoration-color:rgba(99,112,95,.7)}
+.c-qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px}
+.c-qty button{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;transition:.2s}
+.c-qty button:hover{background:var(--cream-2)}
+.c-qty button svg{width:12px;height:12px}
+.c-qty span{min-width:22px;text-align:center;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.c-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.c-total{font-weight:700;font-size:14.5px;font-variant-numeric:tabular-nums}
+.c-remove{width:26px;height:26px;display:grid;place-items:center;color:var(--muted);border-radius:50%;transition:.2s}
+.c-remove:hover{color:#B0502F;background:rgba(176,80,47,.1)}
+.c-remove svg{width:13px;height:13px}
+.d-empty{padding:52px 24px;text-align:center;color:var(--muted)}
+.d-empty p{font-family:'Fraunces';font-size:21px;margin-bottom:8px;color:var(--ink)}
+.d-empty span{font-size:13.5px;display:block;margin-bottom:22px}
+.d-empty-btn{border:1px solid var(--green-800);color:var(--green-800);border-radius:999px;padding:12px 22px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;transition:.25s}
+.d-empty-btn:hover{background:var(--green-800);color:var(--cream)}
+.d-foot{padding:20px 24px 26px;border-top:1px solid var(--line);background:var(--paper)}
+.d-sub{display:flex;justify-content:space-between;font-size:15px;font-weight:700;margin-bottom:4px}
+.d-sub.soft{font-weight:500;color:var(--muted);font-size:13px}
+.d-sub.disc{color:#2E5C46}
+.d-total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin:8px 0 16px}
+.d-note{font-size:11.5px;color:var(--muted);margin-bottom:14px}
+
+/* ============ NEW: modals, commerce & account ============ */
+.mscrim{position:fixed;inset:0;background:rgba(10,24,17,.62);z-index:170;opacity:0;backdrop-filter:blur(3px)}
+.mwrap{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:18px;pointer-events:none;overflow-y:auto}
+.mbox{position:relative;pointer-events:auto;width:min(540px,94vw);max-height:90vh;overflow-y:auto;background:var(--cream);border-radius:22px;box-shadow:0 60px 90px -55px rgba(0,0,0,.6);padding:clamp(24px,3.4vw,36px)}
+.mbox.wide{width:min(780px,94vw)}
+.mclose{position:absolute;top:16px;right:16px;z-index:5}
+.m-title{font-family:'Fraunces';font-size:26px;font-weight:520;margin-bottom:6px}
+.m-sub{font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.m-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:12px}
+.inline-form{display:flex;gap:8px}
+.inline-form input{flex:1;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:11px 16px;font-size:13.5px;outline:none}
+.inline-form input:focus{border-color:var(--green-700)}
+.inline-form button{background:var(--green-800);color:var(--cream);border-radius:999px;padding:11px 18px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:.25s;flex:none}
+.inline-form button:hover{background:var(--green-950)}
+textarea.ta{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:14px 16px;font-size:14.5px;min-height:90px;resize:vertical;color:var(--ink)}
+textarea.ta:focus{outline:none;border-color:var(--green-700)}
+/* product detail */
+.pd-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(20px,3vw,32px)}
+.pd-art{border-radius:18px;display:grid;place-items:center;padding:26px;min-height:280px}
+.pd-art svg{width:min(64%,210px);height:auto}
+.pd-name{font-family:'Fraunces';font-size:clamp(26px,3vw,34px);font-weight:520;line-height:1.1;margin:8px 0 12px}
+.pd-pricing{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.pd-price{font-size:26px;font-weight:800}
+.price-old{font-size:15px;color:var(--muted);text-decoration:line-through}
+.save-chip{background:var(--ochre);color:var(--paper);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:999px;align-self:center}
+.pd-desc{font-size:14.5px;line-height:1.65;color:var(--muted);margin-bottom:16px}
+.pd-meta{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.pd-meta li{display:flex;gap:10px;align-items:center;font-size:13.5px}
+.pd-meta svg{width:15px;height:15px;color:var(--green-700);flex:none}
+.pd-meta .pd-low{color:#B0502F}.pd-meta .pd-low svg{color:#B0502F}
+.pd-buy{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.qty-lg button{width:32px;height:32px}
+.qty-lg span{min-width:30px;font-size:15px}
+.pd-buy .btn-green-full{flex:1;min-width:180px}
+.pd-note{margin-top:14px;font-size:11px;color:var(--muted)}
+/* promo chip in drawer */
+.promo-on{display:flex;align-items:center;gap:8px;background:#E7EDDD;border:1px solid rgba(14,50,37,.25);border-radius:999px;padding:7px 8px 7px 14px;font-size:12px;font-weight:700;margin-bottom:14px;color:var(--green-800);width:fit-content}
+.promo-on button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.promo-on button:hover{background:rgba(176,80,47,.12);color:#B0502F}
+.promo-on button svg{width:12px;height:12px}
+/* order tracking */
+.trk-head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:18px}
+.trk-id{font-family:'Fraunces';font-size:24px;font-weight:520}
+.trk-sub{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:4px}
+.trk-total{font-weight:800;font-size:16px;text-align:right}
+.trk-steps{position:relative;margin:6px 0 22px}
+.trk-rail{position:absolute;left:19px;top:14px;bottom:14px;width:2px;background:var(--cream-2)}
+.trk-fill{position:absolute;inset:0;background:var(--ochre);transform:scaleY(0);transform-origin:top}
+.trk-step{display:flex;gap:16px;align-items:flex-start;padding:12px 0;position:relative;z-index:2}
+.trk-dot{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);display:grid;place-items:center;color:var(--muted);transition:.4s}
+.trk-dot svg{width:16px;height:16px}
+.trk-step.done .trk-dot{background:var(--green-800);border-color:var(--green-800);color:var(--cream)}
+.trk-step.now .trk-dot{background:var(--ochre);border-color:var(--ochre);color:var(--paper);box-shadow:0 0 0 6px rgba(192,115,31,.18)}
+.trk-step h5{font-size:15px;font-weight:700}
+.trk-step p{font-size:13px;color:var(--muted);margin-top:3px}
+.trk-items{border-top:1px solid var(--line);padding-top:14px;margin-bottom:16px}
+.trk-items h6{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:700}
+.trk-item{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0;gap:12px}
+.trk-item span:last-child{color:var(--muted)}
+.trk-actions{display:flex;gap:10px;flex-wrap:wrap}
+.trk-find{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+/* account */
+.acc-ava-lg{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces';font-size:24px;font-weight:600;margin:0 auto 14px}
+.acc-hello{font-family:'Fraunces';font-size:26px;text-align:center;margin-bottom:4px}
+.acc-mail{text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:8px}
+.acc-sec{margin-top:22px}
+.acc-sec h6{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.acc-row{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:12px 16px;margin-bottom:8px;flex-wrap:wrap}
+.acc-row .grow{flex:1;min-width:150px}
+.acc-row b{font-family:'Fraunces';font-size:16px;font-weight:560}
+.acc-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.status-chip{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:#E7EDDD;color:var(--green-800);white-space:nowrap}
+.status-chip.pend{background:#F2E4D8;color:var(--ochre)}
+.status-chip.done{background:var(--green-800);color:var(--cream)}
+.chip-btn{border:1px solid rgba(14,50,37,.3);border-radius:999px;padding:8px 14px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:.25s;white-space:nowrap}
+.chip-btn:hover{background:var(--green-800);color:var(--cream);border-color:var(--green-800)}
+.acc-signout{margin-top:20px;text-align:center}
+.link-plain{color:var(--green-800);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px}
+/* admin */
+.adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.adm-stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px}
+.adm-stat b{font-family:'Fraunces';font-size:24px;font-weight:560;display:block}
+.adm-stat span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.adm-sec{margin-bottom:20px}
+.adm-sec h6{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.adm-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:10px 2px;flex-wrap:wrap}
+.adm-row .grow{flex:1;min-width:150px}
+.adm-row b{font-size:14px}
+.adm-row small{color:var(--muted);font-size:12px}
+.stock-btn{width:26px;height:26px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;transition:.2s}
+.stock-btn svg{width:12px;height:12px}
+.stock-btn:hover{background:var(--green-800);color:var(--cream)}
+.stock-n{min-width:34px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.low-hi{color:#B0502F}
+.adm-pin{max-width:300px}
+
+/* ============ Toasts ============ */
+.toasts{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:260;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:max-content;max-width:92vw}
+.toast{display:flex;align-items:center;gap:10px;background:var(--green-950);color:var(--cream);padding:11px 20px 11px 12px;border-radius:999px;font-size:13.5px;box-shadow:0 18px 30px -18px rgba(0,0,0,.5);opacity:0;transform:translateY(14px);transition:.35s cubic-bezier(.3,1.2,.4,1);max-width:100%}
+.toast.show{opacity:1;transform:none}
+.t-ic{width:24px;height:24px;border-radius:50%;background:var(--ochre);display:grid;place-items:center;flex:none;color:var(--paper)}
+.t-ic svg{width:12px;height:12px}
+
+/* ============ Responsive ============ */
+@media(max-width:1000px){
+  .hero-grid{grid-template-columns:1fr;gap:56px}
+  .hero-visual{max-width:440px;margin:0 auto;width:100%}
+  .cat-grid{grid-template-columns:1fr 1fr}
+  .cat-card.tall{grid-column:1/-1;grid-row:auto}
+  .advice-grid,.refill-grid,.about-grid{grid-template-columns:1fr}
+  .reviews-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .services .container{grid-template-columns:1fr 1fr}
+  .svc:nth-child(odd){border-left:none}
+  .svc:nth-child(n+3){border-top:1px solid var(--line)}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat:nth-child(odd){border-left:none}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .cs1{left:-30px}.cs2{right:-20px}
+}
+@media(max-width:920px){
+  .nav{display:none}
+  .menu-btn{display:grid}
+}
+@media(max-width:640px){
+  .hide-sm{display:none}
+  .hero-cta .btn{flex:1;text-align:center}
+  .cat-grid{grid-template-columns:1fr}
+  .pillset,.pillset.three{grid-template-columns:1fr}
+  .nl-form{flex-direction:column;border-radius:22px;padding:10px}
+  .nl-form input{padding:12px 16px}
+  .nl-form button{width:100%}
+  .p-card{flex-basis:78%}
+  .footer-top{grid-template-columns:1fr;gap:34px}
+  .services .container{grid-template-columns:1fr}
+  .svc{border-left:none}
+  .svc:nth-child(n+2){border-top:1px solid var(--line)}
+  .stats-grid{grid-template-columns:1fr}
+  .stat{border-left:none}
+  .stat:nth-child(n+2){border-top:1px solid var(--line)}
+  .scroll-hint{display:none}
+  .rail-controls{width:100%;justify-content:space-between}
+  .seal{left:-4px;bottom:-10px}
+  .rv-mini{margin-left:0}
+  .pd-grid{grid-template-columns:1fr}
+  .pd-art{min-height:220px}
+  .adm-stats{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .grain{display:none}
+}
+
+/* ============ USER REFERENCE: SECTION 01 WHO WE ARE ============ */
+.about-section-custom {
+  background: #FAF7EE;
+  padding: clamp(80px, 9vw, 120px) 0 clamp(60px, 7vw, 90px);
+  position: relative;
+  overflow: hidden;
+}
+.about-custom-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(40px, 5.5vw, 80px);
+  align-items: center;
+}
+.about-custom-left {
+  display: flex;
+  flex-direction: column;
+}
+.about-custom-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3E4E42;
+  margin-bottom: 24px;
+}
+.about-custom-eyebrow .eb-dash {
+  display: inline-block;
+  width: 32px;
+  height: 2px;
+  background: #242E27;
+}
+.about-custom-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(38px, 4.4vw, 56px);
+  font-weight: 650;
+  line-height: 1.15;
+  color: #12281D;
+  margin: 0 0 28px 0;
+  letter-spacing: -0.015em;
+}
+.about-custom-title .ochre-accent {
+  font-style: italic;
+  font-weight: 500;
+  color: #C0731F;
+}
+.about-p-lead-custom {
+  font-size: 17.5px;
+  line-height: 1.65;
+  color: #1F2B24;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+  max-width: 52ch;
+}
+.about-p-body-custom {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #556456;
+  margin: 0 0 16px 0;
+  max-width: 52ch;
+}
+.about-custom-actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+.btn-dept-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #0E3424;
+  color: #ffffff !important;
+  padding: 15px 32px;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(14,52,36,0.18);
+}
+.btn-dept-custom:hover {
+  background: #1A4732;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(14,52,36,0.25);
+}
+.btn-story-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: transform 0.2s;
+}
+.btn-story-custom:hover {
+  transform: translateY(-2px);
+}
+.story-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #EFE4D0;
+  display: grid;
+  place-items: center;
+  color: #1F2B24;
+  transition: background 0.25s, transform 0.2s;
+}
+.btn-story-custom:hover .story-icon-circle {
+  background: #E5D6BD;
+  transform: scale(1.06);
+}
+.story-text-wrap {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.story-text-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1F2B24;
+  line-height: 1.2;
+}
+.story-text-sub {
+  font-size: 12px;
+  color: #6C7A6B;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+/* Right Visual Stage */
+.about-custom-right {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+}
+.about-blob-shape {
+  position: absolute;
+  width: 108%;
+  height: 112%;
+  top: -6%;
+  left: -4%;
+  background: #D8E2D2;
+  opacity: 0.75;
+  border-radius: 44% 56% 62% 38% / 48% 50% 50% 52%;
+  z-index: 1;
+}
+.about-storefront-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 560px;
+  border-radius: 58px 24px 66px 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 50px -8px rgba(14,52,36,0.2);
+  border: 4px solid #ffffff;
+  background: #ffffff;
+}
+.about-storefront-img {
+  width: 100%;
+  height: clamp(340px, 34vw, 390px);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.about-storefront-wrapper:hover .about-storefront-img {
+  transform: scale(1.03);
+}
+
+/* Floating badge cards */
+.about-floating-card {
+  position: absolute;
+  z-index: 4;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 14px 32px rgba(14,52,36,0.12);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(255,255,255,0.9);
+}
+.afc-top-right {
+  top: 6px;
+  right: -14px;
+}
+.afc-bottom-left {
+  bottom: 12px;
+  left: -20px;
+}
+.afc-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.afc-sage {
+  background: #E3ECDC;
+  color: #2E5C46;
+}
+.afc-sand {
+  background: #EBE5D6;
+  color: #1F2B24;
+}
+.afc-content-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.afc-title-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1F2B24;
+  line-height: 1.35;
+}
+.afc-subline {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: #BCC7B8;
+  margin-top: 6px;
+}
+.afc-sub-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #63705F;
+}
+.afc-main-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0E3424;
+  white-space: nowrap;
+}
+
+/* People First Hand-written Note */
+.about-people-first {
+  position: absolute;
+  right: -32px;
+  top: 48%;
+  transform: translateY(-50%) rotate(-8deg);
+  z-index: 5;
+  pointer-events: none;
+  font-family: 'Caveat', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: #72846E;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.people-first-underline {
+  width: 100px;
+  height: 14px;
+  margin-top: -2px;
+}
+
+/* ============ Custom Stats Section ============ */
+.stats-custom-section {
+  background: #FAF7EE;
+  border-top: 1px solid rgba(31,43,36,0.12);
+  border-bottom: 1px solid rgba(31,43,36,0.12);
+  padding: clamp(34px, 4.5vw, 52px) 0;
+}
+.stats-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+}
+.stat-custom-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 6px clamp(16px, 2.5vw, 36px);
+}
+.stat-custom-item + .stat-custom-item {
+  border-left: 1px solid rgba(31,43,36,0.14);
+}
+.stat-custom-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.sci-sage {
+  background: #E2EADA;
+  color: #2E5C46;
+}
+.sci-sand {
+  background: #EFE8D6;
+  color: #1F2B24;
+}
+.sci-blush {
+  background: #F5E5D8;
+  color: #C0731F;
+}
+.stat-custom-data {
+  display: flex;
+  flex-direction: column;
+}
+.stat-custom-num {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 4.2vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+  color: #0E3424;
+  letter-spacing: -0.01em;
+}
+.stat-custom-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #63705F;
+  margin-top: 8px;
+}
+
+/* Enhancements for Images across other sections */
+.hero-doc-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 120px 120px 0 0;
+  display: block;
+}
+.cat-card-img-wrap {
+  width: 100%;
+  height: 150px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.cat-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.cat-card:hover .cat-card-img-wrap img {
+  transform: scale(1.06);
+}
+.p-prod-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.p-card:hover .p-prod-img {
+  transform: scale(1.05);
+}
+.pd-modal-img {
+  width: 100%;
+  height: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+.dept-team-img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+.rv-main-photo {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin-top: 18px;
+  display: block;
+}
+.rv-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.doc-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.doc-card-thumb {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 10px;
+  text-align: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.doc-card-thumb:hover, .doc-card-thumb.selected {
+  border-color: var(--green-700);
+  box-shadow: 0 6px 18px rgba(14,52,36,0.12);
+  transform: translateY(-2px);
+}
+.doc-card-thumb img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 8px;
+  display: block;
+}
+.doc-card-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.doc-card-spec {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+@media (max-width: 980px) {
+  .about-custom-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .afc-top-right {
+    right: 0;
+  }
+  .afc-bottom-left {
+    left: 0;
+  }
+  .about-people-first {
+    right: 10px;
+    top: 15%;
+  }
+  .stats-custom-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 20px;
+  }
+  .stat-custom-item:nth-child(2n+1) {
+    border-left: none;
+  }
+  .doc-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .stats-custom-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .stat-custom-item + .stat-custom-item {
+    border-left: none;
+    border-top: 1px solid rgba(31,43,36,0.1);
+    padding-top: 18px;
+  }
+}
+
+
+/* Explore Our Care Cards Image Stages */
+.cat-img-stage {
+  width: 100%;
+  height: 190px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 26px -6px rgba(14,50,37,0.14);
+  border: 2px solid rgba(255,255,255,0.85);
+  background: #ffffff;
+  position: relative;
+}
+.cat-card.tall .cat-img-stage.tall-stage {
+  height: clamp(280px, 32vw, 400px);
+}
+.cat-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cat-card:hover .cat-card-img {
+  transform: scale(1.05);
+}
+
+
+/* ============ Shelf Section Custom Styles ============ */
+.shelf-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+.shelf-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3E4E42;
+  margin-bottom: 12px;
+}
+.shelf-eyebrow .eb-dash {
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: #242E27;
+}
+.shelf-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(38px, 4.4vw, 54px);
+  font-weight: 650;
+  line-height: 1.15;
+  color: #12281D;
+  letter-spacing: -0.015em;
+  margin-bottom: 10px;
+}
+.ochre-shelf {
+  font-style: italic;
+  font-weight: 500;
+  color: #C0731F;
+}
+.shelf-sub {
+  font-size: 15px;
+  color: #556456;
+  max-width: 54ch;
+  line-height: 1.6;
+}
+.shelf-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #12281D;
+  text-decoration: none;
+  margin-top: 14px;
+  transition: color 0.2s, transform 0.2s;
+}
+.shelf-view-all:hover {
+  color: #C0731F;
+  transform: translateX(3px);
+}
+.p-card {
+  flex: 0 0 268px !important;
+  border-radius: 20px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(31,43,36,0.12) !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(14,52,36,0.04);
+  transition: transform 0.35s ease, box-shadow 0.35s ease !important;
+}
+.p-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 20px 38px -10px rgba(14,50,37,0.18) !important;
+}
+.p-art {
+  aspect-ratio: 1/1.02 !important;
+  padding: 0 !important;
+  background: #FAF8F2 !important;
+  overflow: hidden;
+  position: relative;
+}
+.p-prod-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.4s ease;
+}
+.p-card:hover .p-prod-img {
+  transform: scale(1.04);
+}
+.p-body {
+  padding: 18px 20px 20px !important;
+  background: #ffffff;
+}
+.p-cat {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #63705F !important;
+}
+.p-name {
+  font-family: 'Fraunces', serif !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #12281D !important;
+  line-height: 1.25 !important;
+  margin: 4px 0 10px 0 !important;
+}
+.p-price {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #0E3424 !important;
+}
+.p-price s {
+  font-size: 14px;
+  color: #8C998B;
+  font-weight: 500;
+  margin-right: 6px;
+}
+.p-add {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  background: #0E3424 !important;
+  color: #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+  transition: background 0.2s, transform 0.2s !important;
+}
+.p-add:hover {
+  background: #1A4732 !important;
+  transform: scale(1.08) !important;
+}
+.shelf-trust-banner {
+  background: #ffffff;
+  border: 1px solid rgba(31,43,36,0.1);
+  border-radius: 999px;
+  padding: 18px clamp(20px, 3vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+  box-shadow: 0 4px 20px rgba(14,52,36,0.04);
+}
+.st-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.st-item + .st-item {
+  border-left: 1px solid rgba(31,43,36,0.08);
+  padding-left: 20px;
+}
+.st-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #FAF5EB;
+  color: #C0731F;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.st-text {
+  display: flex;
+  flex-direction: column;
+}
+.st-text strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1F2B24;
+}
+.st-text small {
+  font-size: 11.5px;
+  color: #63705F;
+}
+@media (max-width: 900px) {
+  .shelf-trust-banner {
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 20px;
+    gap: 18px;
+  }
+  .st-item:nth-child(2n+1) {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+@media (max-width: 560px) {
+  .shelf-trust-banner {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+    gap: 16px;
+  }
+  .st-item + .st-item {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(31,43,36,0.08);
+    padding-top: 14px;
+  }
+}
+
+
+.stage-doc {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  border-radius: 300px 300px 22px 22px !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  box-shadow: 0 24px 50px rgba(10,33,26,0.4) !important;
+  border: 2px solid rgba(245,240,227,0.25) !important;
+  padding: 0 !important;
+}
+.stage-doc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,33,26,0.45) 0%, transparent 35%);
+  pointer-events: none;
+}
+.hero-doc-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 10% !important;
+  display: block !important;
+  border-radius: 300px 300px 22px 22px !important;
+}
+
+
+
+.stage-arch {
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 36px 36px 24px 24px !important;
+  background: var(--green-700) !important;
+  border: 1px solid rgba(245,240,227,0.2) !important;
+  z-index: 1 !important;
+}
+.stage-doc {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  border-radius: 36px 36px 24px 24px !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  box-shadow: 0 24px 50px rgba(10,33,26,0.45) !important;
+  border: 2px solid rgba(245,240,227,0.3) !important;
+  padding: 0 !important;
+}
+.stage-doc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,33,26,0.4) 0%, transparent 30%);
+  pointer-events: none;
+}
+.hero-doc-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: left 2% top !important;
+  display: block !important;
+  border-radius: 34px 34px 22px 22px !important;
+}
+
+
+
+.stage-arch {
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 140px 140px 28px 28px !important;
+  background: var(--green-800) !important;
+  border: 1px solid rgba(245,240,227,0.25) !important;
+  z-index: 1 !important;
+}
+.stage-doc {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  border-radius: 140px 140px 28px 28px !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  box-shadow: 0 24px 55px rgba(10,33,26,0.45) !important;
+  border: 2px solid rgba(245,240,227,0.3) !important;
+  padding: 0 !important;
+}
+.stage-doc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,33,26,0.35) 0%, transparent 28%);
+  pointer-events: none;
+}
+.hero-doc-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: left 2% top !important;
+  display: block !important;
+  border-radius: 138px 138px 26px 26px !important;
+}
+
+/* Floating Badges - Positioned gracefully along the periphery */
+.fl {
+  position: absolute !important;
+  z-index: 5 !important;
+  filter: drop-shadow(0 12px 24px rgba(10,33,26,0.4)) !important;
+  pointer-events: none !important;
+}
+.fl-1 {
+  /* Outside the arch top-left, high above Freewheel+ sign */
+  top: -18px !important;
+  left: -16px !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: clamp(52px, 6.5vw, 70px) !important;
+}
+.fl-2 {
+  /* Top-right outside the arch, completely clear of face and hair */
+  top: -10px !important;
+  right: -22px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: clamp(54px, 7vw, 74px) !important;
+}
+.fl-3 {
+  /* Mid-right edge, outside the arch */
+  top: 46% !important;
+  right: -30px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: clamp(50px, 6.5vw, 68px) !important;
+}
+.fl-4 {
+  /* Bottom-left edge, below the acrylic desk sign */
+  bottom: 8px !important;
+  left: -20px !important;
+  top: auto !important;
+  right: auto !important;
+  width: clamp(48px, 6vw, 66px) !important;
+}
+.fl-5 {
+  /* Bottom-right corner, outside the arch */
+  bottom: 8px !important;
+  right: -16px !important;
+  left: auto !important;
+  top: auto !important;
+  width: clamp(50px, 6.5vw, 68px) !important;
+}
+.seal {
+  position: absolute !important;
+  left: -42px !important;
+  bottom: 12% !important;
+  width: clamp(90px, 11vw, 130px) !important;
+  aspect-ratio: 1 !important;
+  z-index: 6 !important;
+  pointer-events: none !important;
+}
+
+
+/* ============ FREEWHEEL ATTRACTIVE ARCH & FLOATING BADGES ============ */
+.hero-visual {
+  position: relative !important;
+  aspect-ratio: 1.14 / 1 !important;
+  width: 100% !important;
+  max-width: 580px !important;
+  margin: 0 auto !important;
+}
+.stage-arch {
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 120px 120px 28px 28px !important;
+  background: var(--green-800) !important;
+  border: 1px solid rgba(245,240,227,0.25) !important;
+  z-index: 1 !important;
+}
+.stage-doc {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  border-radius: 120px 120px 28px 28px !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  box-shadow: 0 24px 55px rgba(10,33,26,0.45) !important;
+  border: 2px solid rgba(245,240,227,0.3) !important;
+  padding: 0 !important;
+}
+.stage-doc::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,33,26,0.35) 0%, transparent 28%);
+  pointer-events: none;
+}
+.hero-doc-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: left 1% top !important;
+  display: block !important;
+  border-radius: 118px 118px 26px 26px !important;
+}
+
+/* Floating Badges - Positioned gracefully along the periphery, clear of face & Freewheel logo */
+.fl {
+  position: absolute !important;
+  z-index: 5 !important;
+  filter: drop-shadow(0 12px 24px rgba(10,33,26,0.4)) !important;
+  pointer-events: none !important;
+}
+.fl-1 {
+  /* Outside the arch top-left, high above Freewheel wall sign */
+  top: -18px !important;
+  left: -16px !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: clamp(52px, 6.5vw, 70px) !important;
+}
+.fl-2 {
+  /* Top-right outside the arch, completely clear of face and hair */
+  top: -10px !important;
+  right: -22px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: clamp(54px, 7vw, 74px) !important;
+}
+.fl-3 {
+  /* Mid-right edge, outside the arch */
+  top: 46% !important;
+  right: -30px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: clamp(50px, 6.5vw, 68px) !important;
+}
+.fl-4 {
+  /* Bottom-left edge, below the acrylic desk sign */
+  bottom: 8px !important;
+  left: -20px !important;
+  top: auto !important;
+  right: auto !important;
+  width: clamp(48px, 6vw, 66px) !important;
+}
+.fl-5 {
+  /* Bottom-right corner, outside the arch */
+  bottom: 8px !important;
+  right: -16px !important;
+  left: auto !important;
+  top: auto !important;
+  width: clamp(50px, 6.5vw, 68px) !important;
+}
+.seal {
+  position: absolute !important;
+  left: -42px !important;
+  bottom: 12% !important;
+  width: clamp(90px, 11vw, 130px) !important;
+  aspect-ratio: 1 !important;
+  z-index: 6 !important;
+  pointer-events: none !important;
+}
+
+</style>
+</head>
+<body class="loading">
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-dot" id="cDot"><span class="cd-core"></span></div>
+<div class="cursor-ring" id="cRing"><span class="ring-core" id="ringCore"><span class="cursor-label" id="cLabel"></span></span></div>
+
+<!-- ============ Loader ============ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <svg class="loader-cross" viewBox="0 0 48 48">
+      <circle class="lc-ring" cx="24" cy="24" r="22"/>
+      <path class="lc-cross" d="M24 14v20M14 24h20"/>
+    </svg>
+    <div class="loader-word"><span>F</span><span>R</span><span>E</span><span>E</span><span>W</span><span>H</span><span>E</span><span>E</span><span>L</span><span class="lp">+</span></div>
+    <p class="loader-sub">Clinic &amp; Pharmacy</p>
+  </div>
+  <div class="loader-count"><span id="loaderNum">0</span>%</div>
+</div>
+
+<!-- ============ Header ============ -->
+<div class="announce">Same-day doctor appointments — <b>book online</b> &nbsp;·&nbsp; Free medicine delivery over <b>$50</b></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a class="logo" href="#top" aria-label="Freewheel+ — home">
+      <span class="logo-mark"><svg viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="#F5F0E3" stroke-width="3.4" stroke-linecap="round"/></svg></span>
+      <span class="logo-text"><b>Freewheel+</b><small>Clinic &amp; Pharmacy</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#medicines">Medicines</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="Search medicines"><i data-lucide="search"></i></button>
+      <button class="icon-btn hide-sm" id="trackBtn" aria-label="Track an order"><i data-lucide="package"></i></button>
+      <button class="icon-btn" id="cartBtn" aria-label="Open basket"><i data-lucide="shopping-basket"></i><span class="cart-badge" id="cartBadge"></span></button>
+      <button class="icon-btn" id="accBtn" aria-label="My account"><span id="accIco"><i data-lucide="user-round"></i></span></button>
+      <a class="btn-pill btn-solid-green hide-sm" href="#book" data-magnetic>Book a Visit</a>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu"><i data-lucide="menu"></i><i data-lucide="x"></i></button>
+    </div>
+    <div class="search-panel">
+      <div class="container">
+        <div class="search-row">
+          <i data-lucide="search"></i>
+          <input id="searchInput" type="text" placeholder="Search medicines, vitamins, care…" autocomplete="off">
+          <button class="icon-btn" id="searchClose" aria-label="Close search"><i data-lucide="x"></i></button>
+        </div>
+        <div class="s-results" id="sResults"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+  <a href="#about">About <i data-lucide="arrow-up-right"></i></a>
+  <a href="#services">Services <i data-lucide="arrow-up-right"></i></a>
+  <a href="#medicines">Medicines <i data-lucide="arrow-up-right"></i></a>
+  <a href="#reviews">Reviews <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" data-mm="account">My account <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" data-mm="track">Track order <i data-lucide="arrow-up-right"></i></a>
+  <a href="#" data-mm="rx">Upload prescription <i data-lucide="arrow-up-right"></i></a>
+  <a class="btn-pill btn-solid-green mm-pill" href="#book">Book a Visit</a>
+</nav>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="constellations" id="constellations" aria-hidden="true">
+      <svg class="constellation cs1" viewBox="0 0 420 420" fill="none">
+        <g stroke="rgba(245,240,227,.22)" stroke-width="1">
+          <path class="draw" d="M60 100L160 48L250 108L320 64"/>
+          <path class="draw" d="M160 48L190 190"/>
+          <path class="draw" d="M250 108L280 240"/>
+          <path class="draw" d="M190 190L100 260"/>
+          <path class="draw" d="M190 190L280 240"/>
+          <path class="draw" d="M280 240L350 320"/>
+          <path class="draw" d="M100 260L150 350"/>
+        </g>
+        <g class="cs-nodes">
+          <circle cx="160" cy="48" r="3.5" fill="#E0A458"/>
+          <circle cx="60" cy="100" r="2.5" fill="rgba(245,240,227,.7)"/>
+          <circle cx="250" cy="108" r="2.5" fill="rgba(245,240,227,.7)"/>
+          <circle cx="320" cy="64" r="3.5" fill="rgba(245,240,227,.5)"/>
+          <circle cx="190" cy="190" r="4.5" fill="#E0A458"/>
+          <circle cx="100" cy="260" r="2.5" fill="rgba(245,240,227,.7)"/>
+          <circle cx="280" cy="240" r="3" fill="rgba(245,240,227,.7)"/>
+          <circle cx="350" cy="320" r="2.5" fill="rgba(245,240,227,.5)"/>
+          <circle cx="150" cy="350" r="2.5" fill="rgba(245,240,227,.7)"/>
+        </g>
+        <circle class="cs-orbit" cx="190" cy="190" r="34" stroke="rgba(224,164,88,.5)" stroke-dasharray="3 6" fill="none"/>
+      </svg>
+      <svg class="constellation cs2" viewBox="0 0 300 300" fill="none">
+        <g stroke="rgba(245,240,227,.2)" stroke-width="1">
+          <path class="draw" d="M150 40L240 92L240 197L150 250L60 197L60 92Z"/>
+          <path class="draw" d="M150 145L150 40M150 145L240 92M150 145L240 197M150 145L150 250M150 145L60 197M150 145L60 92"/>
+        </g>
+        <g class="cs-nodes">
+          <circle cx="150" cy="40" r="3" fill="rgba(245,240,227,.6)"/>
+          <circle cx="240" cy="92" r="2.5" fill="rgba(245,240,227,.6)"/>
+          <circle cx="240" cy="197" r="3" fill="#E0A458"/>
+          <circle cx="150" cy="250" r="2.5" fill="rgba(245,240,227,.6)"/>
+          <circle cx="60" cy="197" r="3" fill="rgba(245,240,227,.6)"/>
+          <circle cx="60" cy="92" r="2.5" fill="#E0A458"/>
+          <circle cx="150" cy="145" r="5" fill="#E0A458"/>
+        </g>
+        <circle class="cs-orbit" cx="150" cy="145" r="72" stroke="rgba(245,240,227,.28)" stroke-dasharray="2 6" fill="none"/>
+      </svg>
+    </div>
+
+    <svg class="ecg" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+      <path id="ecgPath" d="M0 80 H220 L238 80 L250 34 L268 126 L280 80 H520 L538 80 L550 34 L568 126 L580 80 H820 L838 80 L850 34 L868 126 L880 80 H1120 L1138 80 L1150 34 L1168 126 L1180 80 H1440"/>
+    </svg>
+
+    <div class="container hero-grid">
+      <div class="hero-copy" id="heroCopy">
+        <p class="eyebrow"><span class="eb-line"></span>Freewheel+ Health · Since 1998</p>
+        <h1 class="hero-title">
+          <span class="line"><span class="mask"><span class="w">Better</span></span> <span class="mask"><span class="w">Health.</span></span></span>
+          <span class="line"><span class="mask"><span class="w"><em class="em-ud">Brighter<svg class="ud" viewBox="0 0 240 14" preserveAspectRatio="none"><path id="hUnder" d="M3 9C42 3 84 12 124 7S202 2 237 8"/></svg></em></span></span> <span class="mask"><span class="w">Tomorrows.</span></span></span>
+        </h1>
+        <p class="hero-lead">Trusted clinic care and a fully-stocked pharmacy under one roof — experienced doctors, genuine medicines, and same-day service that keeps care within reach.</p>
+        <div class="hero-cta">
+          <a class="btn btn-cream" data-magnetic href="#book"><span class="btn-label">Book a Visit</span></a>
+          <a class="btn btn-ghost" data-magnetic href="#medicines"><span class="btn-label">Order Medicines</span></a>
+        </div>
+        <div class="hero-trust">
+          <span class="stars"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></span>
+          <span><b>4.9</b> · 12,400+ patient reviews</span>
+          <span class="sep"></span>
+          <span><b>120,000+</b> patients cared for since 1998</span>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <div class="stage-arch" id="stageArch"></div>
+        <div class="stage-shelf"></div>
+        <div class="stage-doc" id="stageDoc"><img src="images/home-doctor.jpg" alt="Freewheel Healthcare Professional" class="hero-doc-photo"></div>
+        <div class="fl fl-1" data-depth="0.55"><span class="fl-in"><span class="fl-bob" data-art="pills"></span></span></div>
+        <div class="fl fl-2" data-depth="1"><span class="fl-in"><span class="fl-bob" data-art="heart"></span></span></div>
+        <div class="fl fl-3" data-depth="0.7"><span class="fl-in"><span class="fl-bob" data-art="clipboard"></span></span></div>
+        <div class="fl fl-4" data-depth="0.4"><span class="fl-in"><span class="fl-bob" data-art="vial"></span></span></div>
+        <div class="fl fl-5" data-depth="0.85"><span class="fl-in"><span class="fl-bob" data-art="thermometer"></span></span></div>
+        <svg class="seal" id="seal" viewBox="0 0 160 160" aria-hidden="true">
+          <circle cx="80" cy="80" r="79" fill="#F5F0E3"/>
+          <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(36,46,39,.25)" stroke-width="1" stroke-dasharray="2 4"/>
+          <g class="seal-rotor">
+            <defs><path id="sealPath" d="M80 80m-49 0a49 49 0 1 1 98 0a49 49 0 1 1-98 0"/></defs>
+            <text font-family="Instrument Sans, sans-serif" font-size="9.5" font-weight="700" letter-spacing="1.6" fill="#0E3225">
+              <textPath href="#sealPath">BETTER HEALTH · SINCE 1998 · FREEWHEEL+ CLINIC &amp; PHARMACY ·</textPath>
+            </text>
+          </g>
+          <circle cx="80" cy="80" r="27" fill="#C0731F"/>
+          <path d="M80 68v24M68 80h24" stroke="#F5F0E3" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><span class="sh-track"><span class="sh-run"></span></span></div>
+  </section>
+
+  <!-- thin ticker -->
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"><div class="ticker-group" id="tickerGroup"></div></div></div>
+
+  <!-- ============ ABOUT ============ -->
+    <!-- ============ 01 · WHO WE ARE (EXACT USER REFERENCE DESIGN) ============ -->
+  <section class="about-section-custom" id="about">
+    <div class="container">
+      <div class="about-custom-grid">
+        <!-- Left content column -->
+        <div class="about-custom-left">
+          <p class="about-custom-eyebrow"><span class="eb-dash"></span>01 · WHO WE ARE</p>
+          <h2 class="about-custom-title">
+            Care and chemistry,<br>
+            under <em class="ochre-accent">one roof.</em>
+          </h2>
+          <p class="about-p-lead-custom">Freewheel+ began in 1998 as a corner pharmacy with one register and a stubborn belief: getting better shouldn't be complicated.</p>
+          <p class="about-p-body-custom">Today we're a full clinic and licensed pharmacy sharing the same roof — the doctor you see and the medicines you need, without the runaround between them.</p>
+          <p class="about-p-body-custom">Every prescription is checked by a registered pharmacist. Every appointment starts on time. And every price is matched if you find it lower nearby.</p>
+          
+          <div class="about-custom-actions">
+            <a href="#departments" class="btn-dept-custom">
+              <span>Meet Our Departments</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <button type="button" class="btn-story-custom" id="watchStoryBtn" aria-label="Watch Our Story">
+              <span class="story-icon-circle">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+              <span class="story-text-wrap">
+                <strong class="story-text-title">Watch Our Story</strong>
+                <small class="story-text-sub">1 min</small>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right visual column -->
+        <div class="about-custom-right">
+          <div class="about-blob-shape"></div>
+
+          <div class="about-storefront-wrapper">
+            <img src="images/freewheel-building.jpg" alt="Freewheel+ Clinic &amp; Pharmacy Storefront" class="about-storefront-img">
+          </div>
+
+          <!-- Top-right floating card -->
+          <div class="about-floating-card afc-top-right">
+            <div class="afc-icon-badge afc-sage">
+              <i data-lucide="leaf"></i>
+            </div>
+            <div class="afc-content-wrap">
+              <span class="afc-title-text">A healthier<br>tomorrow, together.</span>
+              <span class="afc-subline"></span>
+            </div>
+          </div>
+
+          <!-- Bottom-left floating card -->
+          <div class="about-floating-card afc-bottom-left">
+            <div class="afc-icon-badge afc-sand">
+              <i data-lucide="users"></i>
+            </div>
+            <div class="afc-content-wrap">
+              <span class="afc-sub-label">Trusted by</span>
+              <span class="afc-main-val">120,000+ patients</span>
+            </div>
+          </div>
+
+          <!-- People First script accent -->
+          <div class="about-people-first">
+            <span>People First</span>
+            <svg class="people-first-underline" viewBox="0 0 100 14" fill="none">
+              <path d="M4 8C35 3 70 11 96 5" stroke="#72846E" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ROW (EXACT USER REFERENCE DESIGN) ============ -->
+  <section class="stats-custom-section">
+    <div class="container stats-custom-grid">
+      <div class="stat-custom-item">
+        <div class="stat-custom-icon sci-sage">
+          <i data-lucide="sprout"></i>
+        </div>
+        <div class="stat-custom-data">
+          <span class="stat-custom-num">28+</span>
+          <span class="stat-custom-label">YEARS OF CARE</span>
+        </div>
+      </div>
+
+      <div class="stat-custom-item">
+        <div class="stat-custom-icon sci-sand">
+          <i data-lucide="users"></i>
+        </div>
+        <div class="stat-custom-data">
+          <span class="stat-custom-num">120k+</span>
+          <span class="stat-custom-label">PATIENTS CARED FOR</span>
+        </div>
+      </div>
+
+      <div class="stat-custom-item">
+        <div class="stat-custom-icon sci-sage">
+          <i data-lucide="stethoscope"></i>
+        </div>
+        <div class="stat-custom-data">
+          <span class="stat-custom-num">32</span>
+          <span class="stat-custom-label">DOCTORS &amp; PHARMACISTS</span>
+        </div>
+      </div>
+
+      <div class="stat-custom-item">
+        <div class="stat-custom-icon sci-blush">
+          <i data-lucide="pill"></i>
+        </div>
+        <div class="stat-custom-data">
+          <span class="stat-custom-num">3,000+</span>
+          <span class="stat-custom-label">MEDICINES IN STOCK</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="categories" id="services">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow"><span class="eb-line"></span>02 · What we do</p>
+          <h2 class="sec-title" data-words>
+            <span class="mask"><span class="w">Explore</span></span>
+            <span class="mask"><span class="w">our</span></span>
+            <span class="mask"><span class="w"><em>care.</em></span></span>
+          </h2>
+        </div>
+        <a class="text-link" href="#book">Book a visit <i data-lucide="arrow-right"></i></a>
+      </div>
+
+            <div class="cat-grid">
+        <article class="cat-card tall c-med" data-tilt data-nav="#book" data-cursor="Book" role="button" tabindex="0" aria-label="Clinic and doctors">
+          <span class="tilt-glare"></span>
+          <div>
+            <div class="cat-img-stage tall-stage">
+              <img src="images/care-clinic.jpg" alt="Clinic &amp; Doctors — Better Care Together" class="cat-card-img" loading="lazy">
+            </div>
+            <span class="cat-count">32 specialists · 6 departments</span>
+            <h3 class="cat-title">Clinic &amp; Doctors</h3>
+            <p class="cat-desc">Same-day GP appointments and six specialty departments — consultation to prescription, without the referral runaround.</p>
+          </div>
+          <span class="cat-link">Book a doctor <i data-lucide="arrow-right"></i></span>
+        </article>
+
+        <article class="cat-card c-vit" data-tilt data-nav="shop" data-cursor="Shop" role="button" tabindex="0" aria-label="Pharmacy and medicines">
+          <span class="tilt-glare"></span>
+          <div>
+            <div class="cat-img-stage">
+              <img src="images/care-pharmacy.jpg" alt="Pharmacy &amp; Medicines — Better Care Together" class="cat-card-img" loading="lazy">
+            </div>
+            <span class="cat-count">3,000+ medicines</span>
+            <h3 class="cat-title">Pharmacy &amp; Medicines</h3>
+            <p class="cat-desc">A licensed, fully-stocked pharmacy: genuine medicines, vitamins and daily essentials, delivered same-day over $50.</p>
+          </div>
+          <span class="cat-link">Order medicines <i data-lucide="arrow-right"></i></span>
+        </article>
+
+        <article class="cat-card c-care" data-tilt data-nav="#departments" data-cursor="Explore" role="button" tabindex="0" aria-label="Lab and diagnostics">
+          <span class="tilt-glare"></span>
+          <div>
+            <div class="cat-img-stage">
+              <img src="images/care-lab.jpg" alt="Lab &amp; Diagnostics — Better Care Together" class="cat-card-img" loading="lazy">
+            </div>
+            <span class="cat-count">Same-day results</span>
+            <h3 class="cat-title">Lab &amp; Diagnostics</h3>
+            <p class="cat-desc">On-site blood work, ECG and screening — results reviewed by your doctor before you've left the building.</p>
+          </div>
+          <span class="cat-link">See diagnostics <i data-lucide="arrow-right"></i></span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BIG EDITORIAL MARQUEE ============ -->
+  <div class="bigmarq" id="bigmarq" aria-hidden="true">
+    <div class="bigmarq-track" id="bmTrack">
+      <div class="bm-group">
+        <span class="bm-t outline">Better health</span>
+        <span class="bm-plus"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
+        <span class="bm-t ital">brighter tomorrows</span>
+        <span class="bm-plus"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
+        <span class="bm-t outline">care when you need it</span>
+        <span class="bm-plus"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
+        <span class="bm-t ital ochre">medicines when you need them</span>
+        <span class="bm-plus"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MEDICINES RAIL ============ -->
+  <section class="arrivals" id="medicines">
+    <div class="container">
+      <div class="shelf-header-row">
+        <div>
+          <p class="shelf-eyebrow"><span class="eb-dash"></span>03 · ORDER MEDICINES</p>
+          <h2 class="shelf-title">
+            From the <em class="ochre-shelf">shelf.</em>
+          </h2>
+          <p class="shelf-sub">Trusted medicines and wellness essentials, handpicked for your family's everyday health.</p>
+        </div>
+        <a href="#medicines" class="shelf-view-all">View All Products <i data-lucide="arrow-right"></i></a>
+      </div>
+
+      <div class="rail-head" style="margin-bottom:24px;margin-top:16px;">
+        <div></div>
+        <div class="rail-controls">
+          <div class="tabs" id="tabs">
+            <button class="tab active" data-filter="all">All</button>
+            <button class="tab" data-filter="medicine">Pain &amp; Fever</button>
+            <button class="tab" data-filter="vitamins">Vitamins</button>
+            <button class="tab" data-filter="care">Family &amp; Baby</button>
+          </div>
+          <div class="rail-nav">
+            <button class="rail-btn" id="railPrev" data-magnetic aria-label="Scroll back"><i data-lucide="arrow-left"></i></button>
+            <button class="rail-btn" id="railNext" data-magnetic aria-label="Scroll forward"><i data-lucide="arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail" id="rail" data-cursor="Drag"></div>
+      <div class="rail-progress"><span id="railFill"></span></div>
+
+      <!-- Trust banner below shelf -->
+      <div class="shelf-trust-banner">
+        <div class="st-item">
+          <div class="st-icon"><i data-lucide="truck"></i></div>
+          <div class="st-text">
+            <strong>Same-day delivery</strong>
+            <small>On orders over $50</small>
+          </div>
+        </div>
+        <div class="st-item">
+          <div class="st-icon"><i data-lucide="shield-check"></i></div>
+          <div class="st-text">
+            <strong>Genuine medicines</strong>
+            <small>From licensed pharmacies</small>
+          </div>
+        </div>
+        <div class="st-item">
+          <div class="st-icon"><i data-lucide="leaf"></i></div>
+          <div class="st-text">
+            <strong>Trusted brands</strong>
+            <small>For a healthier you</small>
+          </div>
+        </div>
+        <div class="st-item">
+          <div class="st-icon"><i data-lucide="credit-card"></i></div>
+          <div class="st-text">
+            <strong>Secure payments</strong>
+            <small>Safe &amp; hassle-free</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BOOK A VISIT ============ -->
+  <section class="refill" id="book">
+    <div class="container refill-grid">
+      <div>
+        <p class="eyebrow reveal"><span class="eb-line"></span>04 · Book a visit</p>
+        <h2 class="refill-title" data-words>
+          <span class="line"><span class="mask"><span class="w">See</span></span> <span class="mask"><span class="w">a</span></span> <span class="mask"><span class="w">doctor</span></span></span>
+          <span class="line"><span class="mask"><span class="w"><em>today.</em></span></span></span>
+        </h2>
+        <p class="refill-intro reveal">No queues, no phone tag. Pick a department and a time — we confirm by text within fifteen minutes, and any medicines from the visit are ready before you leave.</p>
+                <div class="doc-card-grid">
+          <div class="doc-card-thumb selected" onclick="document.getElementById('bDept').value='general'">
+            <img src="images/doc-marcus.jpg" alt="Dr. Marcus Vance">
+            <div class="doc-card-name">Dr. Marcus Vance</div>
+            <div class="doc-card-spec">General Medicine</div>
+          </div>
+          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='cardio'">
+            <img src="images/doc-sarah.jpg" alt="Dr. Sarah Jenkins">
+            <div class="doc-card-name">Dr. Sarah Jenkins</div>
+            <div class="doc-card-spec">Cardiology</div>
+          </div>
+          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='peds'">
+            <img src="images/doc-priya.jpg" alt="Dr. Priya Patel">
+            <div class="doc-card-name">Dr. Priya Patel</div>
+            <div class="doc-card-spec">Pediatrics</div>
+          </div>
+          <div class="doc-card-thumb" onclick="document.getElementById('bDept').value='derma'">
+            <img src="images/doc-elena.jpg" alt="Dr. Elena Rostova">
+            <div class="doc-card-name">Dr. Elena Rostova</div>
+            <div class="doc-card-spec">Dermatology</div>
+          </div>
+        </div>
+        <div class="steps" id="stepsWrap">
+          <div class="steps-rail"><span class="steps-fill" id="stepsFill"></span></div>
+          <div class="step"><span class="step-dot">01</span><div><h4>Pick a time</h4><p>Choose a department and a slot that suits you — mornings, afternoons or evenings, six days a week.</p></div></div>
+          <div class="step"><span class="step-dot">02</span><div><h4>We confirm fast</h4><p>A real person (not a robot) texts you within 15 minutes with your exact slot and doctor's name.</p></div></div>
+          <div class="step"><span class="step-dot">03</span><div><h4>Come in, leave sorted</h4><p>Consult, test if needed, and collect your medicines from the pharmacy downstairs — one visit, done.</p></div></div>
+        </div>
+      </div>
+
+      <div class="refill-card reveal" id="bookCard">
+        <h3>Request an appointment</h3>
+        <p class="sub">We'll text you within 15 minutes to confirm.</p>
+        <form id="bookForm" novalidate>
+          <div class="field" id="f-bname">
+            <input type="text" id="bName" placeholder=" " autocomplete="name">
+            <label for="bName">Full name</label>
+            <p class="err">Please tell us who the appointment is for.</p>
+          </div>
+          <div class="field" id="f-bphone">
+            <input type="tel" id="bPhone" placeholder=" " autocomplete="tel">
+            <label for="bPhone">Phone number</label>
+            <p class="err">Please enter a valid phone number so we can text you.</p>
+          </div>
+          <div>
+            <span class="f-label">Department</span>
+            <div class="pillset">
+              <label class="on"><input type="radio" name="dept" value="General Consultation" checked><span class="dot"></span>General Consultation</label>
+              <label><input type="radio" name="dept" value="Pediatrics"><span class="dot"></span>Pediatrics</label>
+              <label><input type="radio" name="dept" value="Cardiology"><span class="dot"></span>Cardiology</label>
+              <label><input type="radio" name="dept" value="Dental Care"><span class="dot"></span>Dental Care</label>
+            </div>
+          </div>
+          <div>
+            <span class="f-label">Preferred time</span>
+            <div class="pillset three">
+              <label class="on"><input type="radio" name="time" value="Morning (9–12)" checked><span class="dot"></span>Morning 9–12</label>
+              <label><input type="radio" name="time" value="Afternoon (12–5)"><span class="dot"></span>Afternoon 12–5</label>
+              <label><input type="radio" name="time" value="Evening (5–8)"><span class="dot"></span>Evening 5–8</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-green-full" data-magnetic>Request appointment</button>
+        </form>
+        <div class="refill-success">
+          <div class="success-ic"><i data-lucide="check"></i></div>
+          <h4>Appointment requested</h4>
+          <p id="bookConfirm"></p>
+          <button class="link-btn" id="bookAgain">Request another appointment</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEPARTMENTS ============ -->
+  <section class="advice" id="departments">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow"><span class="eb-line"></span>05 · Department by department</p>
+          <h2 class="sec-title" data-words>
+            <span class="mask"><span class="w">Every</span></span>
+            <span class="mask"><span class="w">specialty,</span></span>
+            <span class="mask"><span class="w">on</span></span>
+            <span class="mask"><span class="w">the</span></span>
+            <span class="mask"><span class="w"><em>same</em></span></span>
+            <span class="mask"><span class="w"><em>street.</em></span></span>
+          </h2>
+        </div>
+      </div>
+      <div class="advice-grid">
+        <article class="feature reveal">
+          <div class="feature-art"><img src="images/dept-team.jpg" alt="Freewheel Specialists Team" class="dept-team-img"></div>
+          <div class="feature-body">
+            <p class="meta">6 departments · One roof · One waiting room</p>
+            <h3>Specialists who share a corridor — and your file</h3>
+            <p>When your GP wants a second opinion, the cardiologist is twenty steps away, not twenty days away. Departments at Freewheel+ share notes, results and follow-ups, so care moves at the speed of a hallway conversation.</p>
+          </div>
+        </article>
+
+        <div class="art-list reveal">
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">Walk-ins welcome</span>
+              <span class="art-title-row">
+                <h4>General Consultation</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>Everyday illness, infections, checkups and referrals — our GPs keep same-day slots open every morning, and walk-ins are seen before lunch whenever possible.</p></div>
+          </div>
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">Evening slots for little ones</span>
+              <span class="art-title-row">
+                <h4>Pediatrics &amp; Child Care</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>Vaccinations, growth checks and gentle sick-day care for ages 0–16, with evening slots so no child has to miss school — and no parent has to miss work.</p></div>
+          </div>
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">On-site ECG &amp; echo</span>
+              <span class="art-title-row">
+                <h4>Cardiology &amp; Heart Health</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>ECG, echo and blood-pressure reviews done in-house the same visit, with results read before you leave — and a direct line to your GP's notes.</p></div>
+          </div>
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">Checkups from $29</span>
+              <span class="art-title-row">
+                <h4>Dental Care</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>Exams, cleaning and fillings in a chair that faces the window, not the wall. Anxious patients get the first appointment of the day and as long as they need.</p></div>
+          </div>
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">Screenings &amp; antenatal</span>
+              <span class="art-title-row">
+                <h4>Women's Health</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>Routine screenings, contraception advice and antenatal support with female clinicians — private rooms, unhurried appointments, no judgment.</p></div>
+          </div>
+          <div class="art-item">
+            <button class="art-head" aria-expanded="false">
+              <span class="meta">Results same day</span>
+              <span class="art-title-row">
+                <h4>Lab &amp; Diagnostics</h4>
+                <span class="tog"><i data-lucide="plus"></i></span>
+              </span>
+            </button>
+            <div class="art-body"><p>Blood panels, glucose, ECG and rapid tests processed in our on-site lab — most results back within hours and reviewed by your doctor, not just emailed.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <div class="sec-head reveal">
+        <div>
+          <p class="eyebrow"><span class="eb-line"></span>06 · What patients say</p>
+          <h2 class="sec-title" data-words>
+            <span class="mask"><span class="w">Care</span></span>
+            <span class="mask"><span class="w">patients</span></span>
+            <span class="mask"><span class="w"><em>remember.</em></span></span>
+          </h2>
+        </div>
+      </div>
+      <div class="reviews-grid">
+        <div class="reveal">
+          <span class="rv-score"><span id="rvNum">4.9</span><sup>/5</sup></span>
+          <div class="rv-stars"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></div>
+          <p class="rv-cap">from 12,400+ verified patient reviews</p>
+          <div class="rv-art"><img src="images/review-doctor.jpg" alt="Doctor with patient" class="rv-main-photo"></div>
+        </div>
+        <div class="rv-list">
+          <article class="rv-card reveal">
+            <span class="rv-mark">"</span>
+            <p class="rv-quote">Booked at 9am with a sore throat, saw Dr. Osei by noon, and left with the antibiotics already bagged from the pharmacy downstairs. One visit, done.</p>
+            <div class="rv-foot">
+              <img src="images/avatar-amelia.jpg" class="rv-avatar-circle" alt="Amelia R.">
+              <div><p class="rv-name">Amelia R.</p><p class="rv-tag">General Consultation</p></div>
+              <span class="rv-mini"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></span>
+            </div>
+          </article>
+          <article class="rv-card reveal">
+            <span class="rv-mark">"</span>
+            <p class="rv-quote">The pharmacist called to suggest a cheaper generic for my mother's blood-pressure meds — same medicine, a third of the price. That's care.</p>
+            <div class="rv-foot">
+              <img src="images/avatar-david.jpg" class="rv-avatar-circle" alt="David K.">
+              <div><p class="rv-name">David K.</p><p class="rv-tag">Pharmacy</p></div>
+              <span class="rv-mini"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></span>
+            </div>
+          </article>
+          <article class="rv-card reveal">
+            <span class="rv-mark">"</span>
+            <p class="rv-quote">Both my kids see Dr. Chen for checkups. Evening slots, no waiting-room tears, and lollipops that are apparently doctor-approved.</p>
+            <div class="rv-foot">
+              <img src="images/avatar-priya.jpg" class="rv-avatar-circle" alt="Priya S.">
+              <div><p class="rv-name">Priya S.</p><p class="rv-tag">Pediatrics</p></div>
+              <span class="rv-mini"><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i></span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES STRIP ============ -->
+  <div class="services">
+    <div class="container">
+      <div class="svc reveal"><i data-lucide="truck"></i><b>Medicines, delivered</b><p>Same-day delivery on orders over $50.</p></div>
+      <div class="svc reveal"><i data-lucide="stethoscope"></i><b>Certified doctors</b><p>32 licensed physicians and pharmacists on staff.</p></div>
+      <div class="svc reveal"><i data-lucide="flask-conical"></i><b>On-site lab</b><p>Blood work and ECG with same-day results.</p></div>
+      <div class="svc reveal"><i data-lucide="badge-percent"></i><b>Price-match promise</b><p>Found it cheaper nearby? We'll match it.</p></div>
+    </div>
+  </div>
+
+  <!-- ============ NEWSLETTER ============ -->
+  <section class="newsletter" id="newsletter">
+    <div class="container reveal">
+      <p class="eyebrow center"><span class="eb-line"></span>07 · Stay well<span class="eb-line"></span></p>
+      <h2 data-words>
+        <span class="mask"><span class="w">Health</span></span>
+        <span class="mask"><span class="w">notes,</span></span>
+        <span class="mask"><span class="w"><em>monthly.</em></span></span>
+      </h2>
+      <p class="sub">Seasonal health advice, clinic updates and quiet discounts — written by our doctors and pharmacists, sent only when there's something worth saying.</p>
+      <form class="nl-form" id="nlForm" novalidate>
+        <input type="email" id="nlEmail" placeholder="your@email.com" aria-label="Email address">
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="nl-error" id="nlError"></p>
+      <p class="nl-done" id="nlDone"><i data-lucide="mail-check"></i> You're on the list — your first note arrives at the start of next month.</p>
+      <p class="nl-small">No spam, ever. Unsubscribe in one click.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container footer-top">
+    <div class="f-brand">
+      <a class="logo logo-light" href="#top">
+        <span class="logo-mark"><svg viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="#0E3424" stroke-width="3.4" stroke-linecap="round"/></svg></span>
+        <span class="logo-text"><b>Freewheel+</b><small>Clinic &amp; Pharmacy</small></span>
+      </a>
+      <p class="f-blurb"><em>Care when you need it. Medicines when you need them.</em> A neighbourhood clinic and licensed pharmacy under one roof — serving our community since 1998.</p>
+      <p class="f-hours"><i data-lucide="clock"></i>Mon–Sat 8:00–20:00 · Sun 9:00–17:00</p>
+    </div>
+    <div>
+      <h5>Departments</h5>
+      <ul class="f-links">
+        <li><button data-open="0">General Consultation</button></li>
+        <li><button data-open="1">Pediatrics &amp; Child Care</button></li>
+        <li><button data-open="2">Cardiology &amp; Heart Health</button></li>
+        <li><button data-open="3">Dental Care</button></li>
+        <li><button data-open="4">Women's Health</button></li>
+        <li><button data-open="5">Lab &amp; Diagnostics</button></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Medicines</h5>
+      <ul class="f-links">
+        <li><button data-goto="all">All medicines</button></li>
+        <li><button data-goto="medicine">Pain &amp; fever relief</button></li>
+        <li><button data-goto="vitamins">Vitamins &amp; immunity</button></li>
+        <li><button data-goto="care">Family &amp; baby care</button></li>
+        <li><button id="fRx">Upload prescription</button></li>
+        <li><button id="fTrack">Track an order</button></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Visit</h5>
+      <ul class="f-links f-contact">
+        <li><i data-lucide="map-pin"></i><span>14 Marigold Lane, Portland, OR</span></li>
+        <li><i data-lucide="phone"></i><span>(503) 555-0142</span></li>
+        <li><i data-lucide="mail"></i><span>care@freewheel.plus</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container">
+    <span class="footer-word" id="footerWord" aria-hidden="true">
+      <span class="fw-mask"><span class="fw-l">F</span></span><span class="fw-mask"><span class="fw-l">R</span></span><span class="fw-mask"><span class="fw-l">E</span></span><span class="fw-mask"><span class="fw-l">E</span></span><span class="fw-mask"><span class="fw-l">W</span></span><span class="fw-mask"><span class="fw-l">H</span></span><span class="fw-mask"><span class="fw-l">E</span></span><span class="fw-mask"><span class="fw-l">E</span></span><span class="fw-mask"><span class="fw-l">L</span></span><span class="fw-plus"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg></span>
+    </span>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 Freewheel+ · Registered Pharmacy No. PH-4471</span>
+    <span>A fictional demo storefront · Always read the label before use.</span>
+    <span style="display:flex;gap:18px">
+      <button class="f-top" id="staffBtn">Staff area</button>
+      <button class="f-top" id="toTop">Back to top <i data-lucide="arrow-up"></i></button>
+    </span>
+  </div>
+</footer>
+
+<!-- basket drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Medicine basket">
+  <div class="d-head">
+    <h3>Your basket <span id="dCount"></span></h3>
+    <button class="icon-btn" id="drawerClose" aria-label="Close basket"><i data-lucide="x"></i></button>
+  </div>
+  <div class="d-ship" id="dShip">
+    <p id="shipMsg">Free delivery on medicines over <b>$50.00</b></p>
+    <div class="ship-bar"><div class="ship-fill" id="shipFill"></div></div>
+  </div>
+  <div class="d-items" id="dItems"></div>
+  <div class="d-foot" id="dFoot">
+    <div id="promoZone"></div>
+    <div class="d-sub"><span>Subtotal</span><span id="dSubtotal">$0.00</span></div>
+    <div class="d-sub soft" id="promoLine" hidden><span></span><span></span></div>
+    <div class="d-sub soft"><span>Delivery</span><span id="dShipCost">—</span></div>
+    <div class="d-total"><span>Total</span><span id="dTotal">$0.00</span></div>
+    <p class="d-note">Prescription items are confirmed at collection. Taxes included.</p>
+    <button class="btn-green-full" id="checkoutBtn">Proceed to checkout</button>
+  </div>
+</aside>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ================= Environment guards ================= */
+const el = id => document.getElementById(id);
+const hasGsap = typeof gsap !== 'undefined';
+const hasST = typeof ScrollTrigger !== 'undefined';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+const ANIM = hasGsap && hasST && !reduced;
+let lenis = null;
+
+if(ANIM) gsap.registerPlugin(ScrollTrigger);
+else { const L = el('loader'); if(L) L.style.display='none'; document.body.classList.remove('loading'); }
+
+if(typeof Lenis !== 'undefined' && !reduced){
+  lenis = new Lenis({ lerp: 0.1 });
+  if(ANIM){
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    lenis.stop();
+  }
+}
+
+/* ================= Helpers ================= */
+const fmt = n => '$' + n.toFixed(2);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function refreshIcons(){ try{ if(window.lucide) lucide.createIcons(); }catch(e){} }
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function today(){ return new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function goTo(target){
+  const t = typeof target === 'string' ? document.querySelector(target) : target;
+  if(!t) return;
+  if(lenis) lenis.scrollTo(t, { offset:-84, duration:1.4, easing: x => 1 - Math.pow(1 - x, 4) });
+  else t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+}
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span class="t-ic"><i data-lucide="check"></i></span><span>${msg}</span>`;
+  el('toasts').appendChild(t);
+  refreshIcons();
+  requestAnimationFrame(()=> t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=> t.remove(), 350); }, 2800);
+}
+function shake(node){
+  if(ANIM) gsap.to(node, {keyframes:{x:[0,-8,7,-5,3,0]}, duration:.45, ease:'power2.out'});
+}
+function initials(name){ return String(name).trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join(''); }
+
+/* ================= Product illustrations ================= */
+const INK = '#242E27';
+const S = inner => `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${inner}</svg>`;
+const F = (x,y,size,ls,fill,txt,fam='Instrument Sans, sans-serif',weight='') =>
+  `<text x="${x}" y="${y}" text-anchor="middle" font-family="${fam}" ${weight?`font-weight="${weight}"`:''} font-size="${size}" letter-spacing="${ls}" fill="${fill}">${txt}</text>`;
+
+const ART = {
+  heart:()=>S(`
+    <ellipse cx="60" cy="150" rx="30" ry="4.5" fill="rgba(36,46,39,.10)"/>
+    <path d="M60 142C60 142 24 122 24 92C24 74 36 62 48 62C55 62 60 67 60 73C60 67 65 62 72 62C84 62 96 74 96 92C96 122 60 142 60 142Z" fill="#E7C9B6" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M36 98h14l5-9 6 18 5-9h18" stroke="#C0731F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`),
+  vial:()=>S(`
+    <ellipse cx="60" cy="150" rx="22" ry="4" fill="rgba(36,46,39,.10)"/>
+    <rect x="46" y="8" width="28" height="14" rx="4" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <path d="M52 24h16v104a8 8 0 0 1-16 0Z" fill="#FBF8EE" stroke="${INK}" stroke-width="2"/>
+    <path d="M52 94h16v34a8 8 0 0 1-16 0Z" fill="#E0A458"/>
+    <path d="M68 40h7M68 58h7M68 76h7" stroke="#9FB59A" stroke-width="2" stroke-linecap="round"/>`),
+  thermometer:()=>S(`
+    <ellipse cx="60" cy="154" rx="22" ry="4" fill="rgba(36,46,39,.10)"/>
+    <path d="M54 34a6 6 0 0 1 12 0v90h-12z" fill="#FBF8EE" stroke="${INK}" stroke-width="2"/>
+    <path d="M57 62a3 3 0 0 1 6 0v62h-6z" fill="#E0A458"/>
+    <circle cx="60" cy="134" r="13" fill="#E0A458" stroke="${INK}" stroke-width="2"/>
+    <path d="M66 44h7M66 60h7M66 76h7M66 92h7" stroke="#9FB59A" stroke-width="2" stroke-linecap="round"/>`),
+  clipboard:()=>S(`
+    <ellipse cx="60" cy="150" rx="30" ry="4" fill="rgba(36,46,39,.10)"/>
+    <rect x="34" y="20" width="52" height="118" rx="9" fill="#C99A82" stroke="${INK}" stroke-width="2.5"/>
+    <rect x="41" y="34" width="38" height="94" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/>
+    <rect x="48" y="12" width="24" height="14" rx="5" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <path d="M60 52v14M53 59h14" stroke="#C0731F" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M49 84h22M49 96h22M49 108h14" stroke="#9FB59A" stroke-width="2.5" stroke-linecap="round"/>`),
+  dropper:(l1='IMMUNE',l2='50ML')=>S(`
+    <ellipse cx="60" cy="150" rx="34" ry="5" fill="rgba(36,46,39,.10)"/>
+    <rect x="38" y="31" width="44" height="117" rx="10" fill="#EFE7D2" stroke="${INK}" stroke-width="2"/>
+    <rect x="43" y="92" width="34" height="51" rx="7" fill="#E0A458"/>
+    <rect x="40" y="62" width="40" height="48" fill="#FBF8EE" stroke="${INK}" stroke-width="2"/>
+    ${F(60,84,8,1,INK,l1)}${F(60,97,5.5,.3,'#63705F',l2)}
+    <rect x="48" y="103" width="24" height="2.5" fill="#C0731F"/>
+    <rect x="50" y="19" width="20" height="12" rx="2" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <rect x="54" y="6" width="12" height="14" rx="6" fill="#C99A82"/>`),
+  jar:(l1='Mg',l2='COMPLEX')=>S(`
+    <ellipse cx="60" cy="150" rx="36" ry="5" fill="rgba(36,46,39,.10)"/>
+    <rect x="34" y="68" width="52" height="80" rx="11" fill="#D6DFCC" stroke="${INK}" stroke-width="2"/>
+    <rect x="36" y="92" width="48" height="44" fill="#FBF8EE" stroke="${INK}" stroke-width="2"/>
+    ${F(60,118,20,0,INK,l1,'Fraunces, serif','600')}${F(60,131,5.5,1,'#63705F',l2)}
+    <rect x="32" y="48" width="56" height="22" rx="6" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <path d="M42 52v14M52 52v14M62 52v14M72 52v14" stroke="rgba(245,240,227,.35)" stroke-width="2"/>`),
+  tube:(l1='ARNICA')=>S(`
+    <ellipse cx="60" cy="150" rx="28" ry="5" fill="rgba(36,46,39,.10)"/>
+    <path d="M50 122L70 122L74 40Q60 28 46 40Z" fill="#E7C9B6" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="49" y="62" width="22" height="46" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/>
+    <text transform="rotate(-90 60 84)" x="60" y="84" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="8" letter-spacing="1.5" fill="${INK}">${l1}</text>
+    <circle cx="60" cy="101" r="3" fill="#C0731F"/>
+    <rect x="46" y="122" width="28" height="26" rx="4" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>`),
+  syrup:()=>S(`
+    <ellipse cx="60" cy="150" rx="34" ry="5" fill="rgba(36,46,39,.10)"/>
+    <rect x="36" y="46" width="48" height="102" rx="12" fill="#EFE7D2" stroke="${INK}" stroke-width="2"/>
+    <rect x="41" y="96" width="38" height="48" rx="8" fill="#E0A458"/>
+    <rect x="39" y="66" width="42" height="48" fill="#FBF8EE" stroke="${INK}" stroke-width="2"/>
+    <path d="M60 74v12M54 80h12" stroke="#C0731F" stroke-width="3.5" stroke-linecap="round"/>
+    ${F(60,98,8,2,INK,'COUGH')}${F(60,109,8,2,INK,'SYRUP')}
+    <rect x="50" y="32" width="20" height="14" fill="#EFE7D2" stroke="${INK}" stroke-width="2"/>
+    <rect x="46" y="16" width="28" height="16" rx="3" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <path d="M52 20v8M58 20v8M64 20v8" stroke="rgba(245,240,227,.35)" stroke-width="2"/>`),
+  sachet:()=>S(`
+    <ellipse cx="60" cy="150" rx="34" ry="5" fill="rgba(36,46,39,.10)"/>
+    <g transform="rotate(-8 54 57)"><rect x="46" y="44" width="16" height="26" rx="2" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/></g>
+    <g transform="rotate(7 66 58)"><rect x="58" y="42" width="16" height="28" rx="2" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/></g>
+    <rect x="34" y="64" width="52" height="84" rx="5" fill="#EFE7D2" stroke="${INK}" stroke-width="2"/>
+    <path d="M34 69a5 5 0 0 1 5-5h42a5 5 0 0 1 5 5v15H34z" fill="#C0731F" stroke="${INK}" stroke-width="2"/>
+    ${F(60,79,10,3,'#F5F0E3','HYDRA')}
+    ${F(60,106,6.5,1.5,INK,'10 SACHETS')}
+    <path d="M44 122q6-5 12 0t12 0t12 0" fill="none" stroke="#9FB59A" stroke-width="2" stroke-linecap="round"/>
+    ${F(60,138,5,1,'#63705F','CITRUS FLAVOUR')}`),
+  spray:()=>S(`
+    <ellipse cx="60" cy="150" rx="32" ry="5" fill="rgba(36,46,39,.10)"/>
+    <rect x="42" y="58" width="36" height="90" rx="9" fill="#D6DFCC" stroke="${INK}" stroke-width="2"/>
+    <rect x="44" y="78" width="32" height="48" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/>
+    <path d="M60 84c-5 7-7 11-7 15a7 7 0 0 0 14 0c0-4-2-8-7-15z" fill="#9FB59A"/>
+    ${F(60,113,6.5,1.5,INK,'FIRST')}${F(60,122,6.5,1.5,INK,'AID')}
+    <rect x="52" y="44" width="16" height="16" fill="#EFE7D2" stroke="${INK}" stroke-width="1.5"/>
+    <rect x="48" y="26" width="26" height="18" rx="4" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <rect x="38" y="28" width="12" height="8" rx="2" fill="#2E5C46" stroke="${INK}" stroke-width="1.5"/>
+    <path d="M51 44c7 8 7 14 2 22-5-3-7-12-2-22z" fill="#E7C9B6" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>`),
+  pills:(l1='RELIEF',l2='24 TABLETS')=>S(`
+    <ellipse cx="60" cy="150" rx="34" ry="5" fill="rgba(36,46,39,.10)"/>
+    <rect x="40" y="52" width="40" height="96" rx="8" fill="#EFE7D2" stroke="${INK}" stroke-width="2"/>
+    <rect x="42" y="72" width="36" height="52" fill="#FBF8EE" stroke="${INK}" stroke-width="1.5"/>
+    ${F(60,88,6.5,.8,INK,l1)}
+    <path d="M60 96v10M55 101h10" stroke="#C0731F" stroke-width="3" stroke-linecap="round"/>
+    ${F(60,118,4.8,.3,'#63705F',l2)}
+    <rect x="38" y="26" width="44" height="26" rx="5" fill="#2E5C46" stroke="${INK}" stroke-width="2"/>
+    <path d="M48 30v18M58 30v18M68 30v18M76 30v18" stroke="rgba(245,240,227,.35)" stroke-width="2"/>`)
+};
+
+/* ================= Data ================= */
+const CATLABEL = {medicine:'Pain & Fever Relief', vitamins:'Vitamins & Immunity', care:'Family & Baby Care'};
+const PRODUCTS = [
+  {id:'p1', name:'Echinacea Immune Drops',     cat:'vitamins', price:18.50, oldPrice:23.00, tag:'New',        tint:'blush', stock:24, img:'images/shelf-echinacea.jpg',
+   desc:'Concentrated echinacea tincture for early immune defense and respiratory vitality.', dose:'20 drops in water, up to 3× daily', pack:'50ml dropper bottle'},
+  {id:'p5', name:'Herbal Cough Syrup',         cat:'medicine', price:12.75, tag:'New',       tint:'sand',  stock:9,  img:'images/shelf-coughsyrup.jpg',
+   desc:'Thyme and honey-based syrup that soothes throat irritation and calms night-time coughs naturally.', dose:'10ml every 6 hours (adults)', pack:'150ml bottle'},
+  {id:'p8', name:'Arnica Relief Balm',         cat:'care',     price:14.25, tag:'',          tint:'blush', stock:18, img:'images/shelf-arnica.jpg',
+   desc:'Natural massage balm for muscle soreness, joint relief, and physical recovery.', dose:'Apply thinly 2–3× daily', pack:'60g tube'},
+  {id:'p2', name:'Deep Sleep Magnesium',       cat:'vitamins', price:24.00, oldPrice:30.00, tag:'Bestseller', tint:'sage',  stock:4,  img:'images/shelf-magnesium.jpg',
+   desc:'Magnesium glycinate complex tablets with vitamin B6 to promote deep, restorative sleep.', dose:'2 tablets before bed', pack:'60 tablets'},
+  {id:'p6', name:'First-Aid Spray',            cat:'medicine', price:8.95,  tag:'',          tint:'sage',  stock:30, img:'images/shelf-spray.jpg',
+   desc:'Hospital-grade antiseptic spray for prompt wound cleansing, cuts, and minor abrasions.', dose:'Spray on affected area as needed', pack:'100ml spray'},
+  {id:'p7', name:'Everyday Pain Relief 500mg', cat:'medicine', price:6.90,  oldPrice:8.90, tag:'10 Tablets', tint:'sand', stock:25, img:'images/shelf-painrelief.jpg',
+   desc:'Paracetamol 500mg tablets for effective relief of pain, headaches, muscle aches, and fever.', dose:'1–2 tablets every 4–6 hours (max 8/day)', pack:'10 tablets blister pack'},
+];
+const discPct = p => p.oldPrice ? Math.round((1 - p.price/p.oldPrice)*100) : 0;
+
+/* persisted state */
+(function(){ const st = lsGet('mk_stock'); if(st) st.forEach(s=>{ const p = PRODUCTS.find(x=>x.id===s.id); if(p) p.stock = s.stock; }); })();
+let orders = lsGet('mk_orders') || [];
+let rxs = lsGet('mk_rx') || [];
+let user = lsGet('mk_user') || null;
+const saveOrders = ()=> lsSet('mk_orders', orders);
+const saveStock  = ()=> lsSet('mk_stock', PRODUCTS.map(p=>({id:p.id, stock:p.stock})));
+
+/* order statuses */
+const STATUS = [
+  {label:'Order confirmed',     desc:'We received your order and the pharmacist is checking it.', icon:'check'},
+  {label:'Packed with care',    desc:'Your medicines are picked, checked and sealed.',            icon:'package'},
+  {label:'Out for delivery',    desc:'On the van — usually with you within a few hours.',         icon:'truck'},
+  {label:'Delivered',           desc:'Signed for at the door. Feel better soon.',                 icon:'home'}
+];
+
+/* ================= Static builds ================= */
+document.querySelectorAll('[data-art]').forEach(n=>{
+  n.innerHTML = ART[n.dataset.art](n.dataset.l1, n.dataset.l2);
+});
+(function(){
+  const TICKS = ['Same-day doctor appointments','Free medicine delivery over $50','Licensed pharmacy · genuine medicines','On-site lab & diagnostics','Open seven days a week','4.9★ from 12,400+ patients'];
+  const plus = `<svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  el('tickerGroup').innerHTML = TICKS.map(t=>`<span>${t}</span>${plus}`).join('');
+})();
+el('bmTrack').innerHTML += el('bmTrack').innerHTML;
+refreshIcons();
+
+/* ================= Rail render ================= */
+let currentFilter = 'all';
+const rail = el('rail');
+
+function renderRail(){
+  rail.innerHTML = PRODUCTS
+    .filter(p => currentFilter==='all' || p.cat===currentFilter)
+    .map(p=>{
+      const tag = p.tag ? `<span class="p-tag ${p.tag==='Bestseller'?'alt':''}">${p.tag}</span>`
+                : (p.oldPrice ? `<span class="p-tag">−${discPct(p)}%</span>` : '');
+      const low = p.stock<=5 ? `<span class="p-tag low">Only ${p.stock} left</span>` : '';
+      return `
+      <article class="p-card" data-pid="${p.id}" data-cursor="View">
+        <div class="p-art">
+          <img src="${p.img}" alt="${p.name}" class="p-prod-img" loading="lazy">
+        </div>
+        <div class="p-body">
+          <span class="p-cat">${CATLABEL[p.cat]}</span>
+          <h3 class="p-name">${p.name}</h3>
+          <div class="p-row">
+            <span class="p-price">${p.oldPrice?`<s>${fmt(p.oldPrice)}</s>`:''}${fmt(p.price)}</span>
+            <button class="p-add" data-add="${p.id}" aria-label="Add ${p.name} to basket"><i data-lucide="plus"></i></button>
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+  refreshIcons();
+  rail.scrollTo({left:0});
+  setTimeout(updateRailBtns, 60);
+}
+function updateRailBtns(){
+  el('railPrev').disabled = rail.scrollLeft <= 8;
+  el('railNext').disabled = rail.scrollLeft >= rail.scrollWidth - rail.clientWidth - 8;
+  const max = rail.scrollWidth - rail.clientWidth;
+  el('railFill').style.transform = `scaleX(${max>4 ? Math.min(rail.scrollLeft/max,1) : 0})`;
+}
+renderRail();
+rail.addEventListener('scroll', updateRailBtns, {passive:true});
+el('railPrev').addEventListener('click', ()=> rail.scrollBy({left:-560, behavior:'smooth'}));
+el('railNext').addEventListener('click', ()=> rail.scrollBy({left: 560, behavior:'smooth'}));
+
+function setFilter(f){
+  currentFilter = f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.filter===f));
+  const swap = ()=>{
+    renderRail();
+    if(ANIM) gsap.fromTo(rail.querySelectorAll('.p-card'), {opacity:0, y:24}, {opacity:1, y:0, duration:.55, stagger:.05, ease:'power3.out'});
+  };
+  const cards = [...rail.querySelectorAll('.p-card')];
+  if(ANIM && cards.length){
+    gsap.to(cards, {opacity:0, y:16, duration:.22, stagger:{each:.02, from:'end'}, ease:'power2.in', onComplete:swap});
+  } else swap();
+}
+el('tabs').addEventListener('click', e=>{
+  const t = e.target.closest('.tab'); if(t) setFilter(t.dataset.filter);
+});
+
+/* service cards → navigate */
+document.querySelectorAll('.cat-card').forEach(c=>{
+  const nav = c.dataset.nav;
+  const go = ()=>{
+    if(nav==='shop'){ setFilter('all'); goTo('#medicines'); }
+    else goTo(nav);
+  };
+  c.addEventListener('click', go);
+  c.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+});
+document.querySelectorAll('[data-goto]').forEach(c=>{
+  c.addEventListener('click', ()=>{ setFilter(c.dataset.goto); goTo('#medicines'); });
+});
+
+/* ================= Modal system ================= */
+let activeModal = null;
+function openModal(html, opts={}){
+  closeModal(true);
+  const scrim = document.createElement('div'); scrim.className='mscrim';
+  const wrap = document.createElement('div'); wrap.className='mwrap';
+  const box = document.createElement('div'); box.className='mbox'+(opts.wide?' wide':'');
+  box.innerHTML = html;
+  wrap.appendChild(box);
+  document.body.append(scrim, wrap);
+  activeModal = {scrim, wrap, box, kind:opts.kind||null, ref:opts.ref||null, tweens:[]};
+  scrim.addEventListener('click', ()=> closeModal());
+  box.querySelectorAll('[data-close]').forEach(b=> b.addEventListener('click', ()=> closeModal()));
+  lockScroll(true);
+  refreshIcons();
+  if(ANIM){
+    gsap.fromTo(scrim, {opacity:0}, {opacity:1, duration:.35});
+    gsap.fromTo(box, {y:46, opacity:0, scale:.96}, {y:0, opacity:1, scale:1, duration:.6, ease:'power3.out'});
+  }
+  return box;
+}
+function closeModal(instant){
+  if(!activeModal) return;
+  const m = activeModal; activeModal = null;
+  m.tweens.forEach(t=>{ try{ t.kill(); }catch(e){} });
+  const done = ()=>{ m.scrim.remove(); m.wrap.remove(); if(!panelsOpen()) lockScroll(false); };
+  if(ANIM && !instant){
+    gsap.to(m.scrim, {opacity:0, duration:.3});
+    gsap.to(m.box, {y:30, opacity:0, scale:.97, duration:.32, ease:'power2.in', onComplete:done});
+  } else done();
+}
+
+/* ================= Basket ================= */
+const cart = new Map();
+const drawer = el('drawer'), overlay = el('overlay');
+function lockScroll(on){
+  if(lenis){ on ? lenis.stop() : lenis.start(); }
+  document.body.style.overflow = on ? 'hidden' : '';
+}
+function panelsOpen(){
+  return drawer.classList.contains('open') || el('mobileMenu').classList.contains('open') || el('siteHeader').classList.contains('search-open') || !!activeModal;
+}
+function flyToCart(srcEl){
+  if(!ANIM) return;
+  const svg = srcEl.querySelector('svg'); if(!svg) return;
+  const s = srcEl.getBoundingClientRect(), d = el('cartBtn').getBoundingClientRect();
+  const fly = document.createElement('div');
+  fly.className = 'fly';
+  fly.style.cssText = `left:${s.left + s.width*.29}px;top:${s.top + s.height*.24}px;width:${s.width*.42}px`;
+  const clone = svg.cloneNode(true);
+  clone.style.transform = 'none';
+  fly.appendChild(clone);
+  document.body.appendChild(fly);
+  const dx = (d.left + d.width/2) - (s.left + s.width*.5), dy = (d.top + d.height/2) - (s.top + s.height*.5);
+  gsap.to(fly, { keyframes:[
+    {x:dx*.45, y:-90, scale:.85, duration:.34, ease:'power2.out'},
+    {x:dx, y:dy, scale:.14, opacity:.5, duration:.42, ease:'power2.in'}
+  ], onComplete:()=> fly.remove() });
+}
+function addToCart(id, srcEl, qty){
+  qty = qty || 1;
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  const cur = cart.get(id)||0;
+  const room = p.stock - cur;
+  if(room<=0){ toast(`${p.name} is out of stock — our pharmacists can order it in.`); return; }
+  const n = Math.min(qty, room);
+  cart.set(id, cur+n);
+  renderCart();
+  if(srcEl) flyToCart(srcEl);
+  toast(n>1 ? `${n} × ${p.name} added to your basket` : `${p.name} added to your basket`);
+}
+const cartSubtotal = ()=> [...cart.entries()].reduce((s,[id,q])=>s+PRODUCTS.find(x=>x.id===id).price*q,0);
+
+/* promo codes */
+let promo = null;
+const PROMOS = { WELCOME10:{pct:.10}, CARE20:{pct:.20, min:40} };
+function applyPromo(code){
+  code = String(code||'').trim().toUpperCase();
+  const def = PROMOS[code];
+  if(!def){ toast('That promo code isn\u2019t on our shelf — try WELCOME10.'); return; }
+  const sub = cartSubtotal();
+  if(def.min && sub < def.min){ toast(`${code} needs a $${def.min} subtotal first.`); return; }
+  promo = {code, pct:def.pct};
+  renderCart();
+  toast(`${code} applied — ${Math.round(def.pct*100)}% off`);
+}
+function renderCart(){
+  const items = [...cart.entries()];
+  const count = items.reduce((s,[,q])=>s+q, 0);
+  const badge = el('cartBadge');
+  badge.textContent = count;
+  badge.classList.toggle('on', count>0);
+  if(count>0){ badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
+  el('dCount').textContent = count ? `(${count})` : '';
+  const empty = items.length===0;
+  el('dFoot').style.display = empty ? 'none' : 'block';
+  el('dShip').style.display = empty ? 'none' : 'block';
+  el('dItems').innerHTML = empty
+    ? `<div class="d-empty"><p>Your basket is empty</p><span>Shall we fix that?</span><button class="d-empty-btn" id="dBrowse">Browse medicines</button></div>`
+    : items.map(([id,q])=>{
+        const p = PRODUCTS.find(x=>x.id===id);
+        return `<div class="c-item" data-id="${p.id}">
+          <div class="c-thumb tint-${p.tint}">${p.art}</div>
+          <div class="c-info">
+            <p class="c-name">${p.name}</p>
+            <p class="c-unit">${p.oldPrice?`<s>${fmt(p.oldPrice)}</s> `:''}${fmt(p.price)} each</p>
+            <div class="c-qty">
+              <button data-dec aria-label="Decrease quantity"><i data-lucide="minus"></i></button>
+              <span>${q}</span>
+              <button data-inc aria-label="Increase quantity"><i data-lucide="plus"></i></button>
+            </div>
+          </div>
+          <div class="c-right">
+            <span class="c-total">${fmt(p.price*q)}</span>
+            <button class="c-remove" data-rem aria-label="Remove ${p.name}"><i data-lucide="x"></i></button>
+          </div>
+        </div>`;
+      }).join('');
+  refreshIcons();
+  const b = el('dBrowse');
+  if(b) b.addEventListener('click', ()=>{ closeDrawer(); goTo('#medicines'); });
+  /* totals */
+  const sub = cartSubtotal();
+  const disc = promo ? sub*promo.pct : 0;
+  const base = sub - disc;
+  const ship = sub===0 ? 0 : (base>=50 ? 0 : 4.95);
+  const total = base + ship;
+  el('dSubtotal').textContent = fmt(sub);
+  const pl = el('promoLine');
+  if(promo && disc>0){ pl.hidden=false; pl.classList.add('disc'); pl.innerHTML = `<span>Promo · ${promo.code}</span><span>−${fmt(disc)}</span>`; }
+  else { pl.hidden=true; pl.classList.remove('disc'); }
+  el('dShipCost').textContent = sub===0 ? '—' : (ship===0 ? 'Free' : fmt(ship));
+  el('dTotal').textContent = fmt(total);
+  /* promo UI */
+  const zone = el('promoZone');
+  if(promo){
+    zone.innerHTML = `<div class="promo-on">${promo.code} · −${Math.round(promo.pct*100)}%<button id="promoClear" aria-label="Remove promo"><i data-lucide="x"></i></button></div>`;
+  } else {
+    zone.innerHTML = `<form class="inline-form" id="promoForm"><input id="promoInput" placeholder="Promo code (try WELCOME10)"><button type="submit">Apply</button></form>`;
+  }
+  const pf = el('promoForm');
+  if(pf) pf.addEventListener('submit', e=>{ e.preventDefault(); applyPromo(el('promoInput').value); });
+  const pc = el('promoClear');
+  if(pc) pc.addEventListener('click', ()=>{ promo=null; renderCart(); toast('Promo removed'); });
+  /* ship bar */
+  const fill = el('shipFill');
+  fill.style.width = Math.min(base/50*100, 100)+'%';
+  fill.classList.toggle('full', base>=50);
+  el('shipMsg').innerHTML = base>=50
+    ? `You've unlocked <b>free delivery</b>`
+    : `You're <b>${fmt(50-base)}</b> away from free delivery`;
+  refreshIcons();
+}
+el('dItems').addEventListener('click', e=>{
+  const item = e.target.closest('.c-item'); if(!item) return;
+  const id = item.dataset.id;
+  if(e.target.closest('[data-inc]')){ addToCart(id, null, 1); }
+  else if(e.target.closest('[data-dec]')){
+    const q = cart.get(id)-1;
+    q<=0 ? cart.delete(id) : cart.set(id,q);
+    renderCart();
+  }
+  else if(e.target.closest('[data-rem]')){ cart.delete(id); renderCart(); }
+});
+function openDrawer(){
+  drawer.classList.add('open'); overlay.classList.add('on'); lockScroll(true);
+  if(ANIM && cart.size){
+    gsap.fromTo('.c-item', {x:26, opacity:0}, {x:0, opacity:1, stagger:.06, duration:.5, delay:.15, ease:'power3.out'});
+  }
+}
+function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('on'); if(!panelsOpen()) lockScroll(false); }
+el('cartBtn').addEventListener('click', openDrawer);
+el('drawerClose').addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+renderCart();
+
+/* rail click: add or open detail */
+let dragKill = false;
+rail.addEventListener('click', e=>{
+  if(dragKill){ e.preventDefault(); e.stopPropagation(); return; }
+  const b = e.target.closest('[data-add]');
+  if(b){
+    addToCart(b.dataset.add, b.closest('.p-art'));
+    b.classList.add('added');
+    setTimeout(()=> b.classList.remove('added'), 700);
+    return;
+  }
+  const card = e.target.closest('.p-card');
+  if(card) openProduct(card.dataset.pid);
+}, true);
+
+/* ================= Product detail modal ================= */
+function openProduct(id){
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  const save = discPct(p);
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <div class="pd-grid">
+      <div class="pd-art tint-${p.tint}"><img src="${p.img || 'images/prod-drops.jpg'}" alt="${p.name}" class="pd-modal-img"></div>
+      <div>
+        <span class="p-cat">${CATLABEL[p.cat]}</span>
+        <h3 class="pd-name">${p.name}</h3>
+        <div class="pd-pricing">
+          ${p.oldPrice?`<span class="price-old">${fmt(p.oldPrice)}</span><span class="save-chip">Save ${save}%</span>`:''}
+          <span class="pd-price">${fmt(p.price)}</span>
+        </div>
+        <p class="pd-desc">${p.desc}</p>
+        <ul class="pd-meta">
+          <li><i data-lucide="package"></i>${p.pack}</li>
+          <li><i data-lucide="pill"></i>${p.dose}</li>
+          <li><i data-lucide="truck"></i>Same-day delivery on orders over $50</li>
+          ${p.stock<=5?`<li class="pd-low"><i data-lucide="triangle-alert"></i>Only ${p.stock} left in stock</li>`:''}
+        </ul>
+        <div class="pd-buy">
+          <div class="c-qty qty-lg">
+            <button type="button" id="pdDec" aria-label="Decrease quantity"><i data-lucide="minus"></i></button>
+            <span id="pdQty">1</span>
+            <button type="button" id="pdInc" aria-label="Increase quantity"><i data-lucide="plus"></i></button>
+          </div>
+          <button class="btn-green-full" id="pdAdd">Add to basket — <span id="pdTotal">${fmt(p.price)}</span></button>
+        </div>
+        <p class="pd-note">Always read the label and follow the directions for use.</p>
+      </div>
+    </div>`, {wide:true});
+  let q = 1;
+  const upd = ()=>{
+    box.querySelector('#pdQty').textContent = q;
+    box.querySelector('#pdTotal').textContent = fmt(p.price*q);
+  };
+  box.querySelector('#pdDec').addEventListener('click', ()=>{ if(q>1){ q--; upd(); } });
+  box.querySelector('#pdInc').addEventListener('click', ()=>{
+    if(q >= p.stock){ toast(`Only ${p.stock} in stock right now.`); return; }
+    q++; upd();
+  });
+  box.querySelector('#pdAdd').addEventListener('click', ()=>{
+    addToCart(p.id, box.querySelector('.pd-art'), q);
+    closeModal();
+  });
+  if(ANIM){
+    gsap.fromTo(box.querySelector('.pd-art svg'), {y:40, scale:.8, opacity:0}, {y:0, scale:1, opacity:1, duration:.8, ease:'back.out(1.4)'});
+    if(activeModal) activeModal.tweens.push(gsap.to(box.querySelector('.pd-art svg'), {y:-10, duration:2.6, yoyo:true, repeat:-1, ease:'sine.inOut'}));
+  }
+}
+
+/* ================= Checkout & orders ================= */
+el('checkoutBtn').addEventListener('click', ()=>{
+  if(cart.size===0) return;
+  const items = [...cart.entries()].map(([id,q])=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return {id:p.id, name:p.name, price:p.price, qty:q};
+  });
+  const sub = cartSubtotal();
+  const disc = promo ? {code:promo.code, amt:sub*promo.pct} : null;
+  const base = sub - (disc?disc.amt:0);
+  const ship = base>=50 ? 0 : 4.95;
+  const order = {
+    id: 'MK-' + (1000 + Math.floor(Math.random()*9000)),
+    items, sub, disc, ship, total: base+ship,
+    status: 0, user: user ? user.name : 'Guest', date: today()
+  };
+  orders.unshift(order); saveOrders();
+  cart.clear(); promo = null; renderCart();
+  closeDrawer();
+  openConfirm(order);
+});
+function openConfirm(o){
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <div style="text-align:center;padding:12px 4px 4px">
+      <div class="success-ic" id="cfIc"><i data-lucide="check"></i></div>
+      <h3 class="m-title">Order placed</h3>
+      <p class="m-sub" style="margin:0 auto 6px;max-width:38ch">Thanks${user?' again, '+esc(user.name.split(' ')[0]):''} — <b style="color:var(--green-800)">${o.id}</b> is with our pharmacist now. We'll text you at each step.</p>
+      <div class="trk-actions" style="justify-content:center;margin-top:12px">
+        <button class="chip-btn" id="cfTrack">Track order</button>
+        <button class="chip-btn" data-close>Keep browsing</button>
+      </div>
+    </div>`);
+  box.querySelector('#cfTrack').addEventListener('click', ()=> openTrack(o.id));
+  if(ANIM) gsap.fromTo(box.querySelector('#cfIc'), {scale:0}, {scale:1, duration:.7, ease:'elastic.out(1,.5)'});
+}
+
+/* ================= Order tracking ================= */
+function trackHTML(o){
+  const steps = STATUS.map((s,i)=>`
+    <div class="trk-step ${i<=o.status?'done':''} ${i===o.status?'now':''}">
+      <span class="trk-dot"><i data-lucide="${s.icon}"></i></span>
+      <div><h5>${s.label}</h5><p>${s.desc}</p></div>
+    </div>`).join('');
+  const items = o.items.map(it=>`<div class="trk-item"><span>${it.qty} × ${esc(it.name)}</span><span>${fmt(it.price*it.qty)}</span></div>`).join('');
+  return `
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <div class="trk-head">
+      <div><p class="trk-id">${o.id}</p><p class="trk-sub">${o.date} · ${o.items.reduce((s,i)=>s+i.qty,0)} item(s) · ${esc(o.user)}</p></div>
+      <div><p class="trk-total">${fmt(o.total)}</p><p class="trk-sub" style="margin-top:4px">${o.status===3?'Delivered':'In progress'}</p></div>
+    </div>
+    <div class="trk-steps">
+      <div class="trk-rail"><span class="trk-fill" style="transform:scaleY(${o.status/3})"></span></div>
+      ${steps}
+    </div>
+    <div class="trk-items">
+      <h6>Order contents</h6>
+      ${items}
+      ${o.disc?`<div class="trk-item"><span>Promo ${o.disc.code}</span><span>−${fmt(o.disc.amt)}</span></div>`:''}
+      <div class="trk-item" style="border-top:1px solid var(--line);margin-top:6px;padding-top:8px"><span>Delivery</span><span>${o.ship===0?'Free':fmt(o.ship)}</span></div>
+    </div>
+    <div class="trk-actions">
+      ${o.status<3?`<button class="chip-btn" id="trkAdvance">Advance status (demo)</button>`:''}
+      <button class="chip-btn" id="trkReorder">Re-order items</button>
+    </div>
+    <form class="inline-form trk-find" id="trkFind">
+      <input type="text" id="trkInput" placeholder="Track another order no. e.g. MK-4821">
+      <button type="submit">Find</button>
+    </form>`;
+}
+function wireTrack(box, id){
+  const adv = box.querySelector('#trkAdvance');
+  if(adv) adv.addEventListener('click', ()=> advanceOrder(id, true));
+  box.querySelector('#trkReorder').addEventListener('click', ()=> reorder(id));
+  box.querySelector('#trkFind').addEventListener('submit', e=>{
+    e.preventDefault();
+    const v = box.querySelector('#trkInput').value.trim().toUpperCase();
+    const o = orders.find(x=>x.id===v);
+    if(o) openTrack(o.id);
+    else toast('No order found for that number on this device.');
+  });
+}
+function animateTrack(box, o){
+  if(!ANIM) return;
+  const fill = box.querySelector('.trk-fill');
+  gsap.fromTo(fill, {scaleY:0}, {scaleY:o.status/3, duration:.9, ease:'power3.inOut'});
+  gsap.fromTo(box.querySelectorAll('.trk-step'), {x:18, opacity:0}, {x:0, opacity:1, stagger:.09, duration:.5, ease:'power3.out'});
+  gsap.fromTo(box.querySelectorAll('.trk-dot'), {scale:0}, {scale:1, stagger:.09, duration:.45, ease:'back.out(2)'});
+}
+function openTrack(id){
+  const o = orders.find(x=>x.id===id); if(!o) return openTrackPicker();
+  const box = openModal(trackHTML(o), {kind:'track', ref:o.id});
+  wireTrack(box, o.id);
+  animateTrack(box, o);
+}
+function openTrackPicker(){
+  if(orders.length) return openTrack(orders[0].id);
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <h3 class="m-title">Track an order</h3>
+    <p class="m-sub">No orders on this device yet. Place one from the shelf, or enter an order number below.</p>
+    <form class="inline-form" id="tpForm"><input id="tpInput" placeholder="Order no. e.g. MK-4821"><button type="submit">Find</button></form>`);
+  box.querySelector('#tpForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    const v = box.querySelector('#tpInput').value.trim().toUpperCase();
+    const o = orders.find(x=>x.id===v);
+    if(o) openTrack(o.id);
+    else toast('No order found for that number on this device.');
+  });
+}
+function advanceOrder(id, notify){
+  const o = orders.find(x=>x.id===id); if(!o || o.status>=3) return;
+  o.status++;
+  saveOrders();
+  if(notify) toast(`${o.id} — ${STATUS[o.status].label}`);
+  if(activeModal){
+    if(activeModal.kind==='track' && activeModal.ref===id){
+      const box = activeModal.box;
+      box.innerHTML = trackHTML(o);
+      refreshIcons();
+      wireTrack(box, id);
+      animateTrack(box, o);
+    } else if(activeModal.kind==='account') openAccount();
+    else if(activeModal.kind==='admin') renderAdmin();
+  }
+}
+function reorder(id){
+  const o = orders.find(x=>x.id===id); if(!o) return;
+  let added = 0;
+  o.items.forEach(it=>{
+    const p = PRODUCTS.find(x=>x.id===it.id); if(!p) return;
+    const cur = cart.get(p.id)||0;
+    const can = Math.min(it.qty, p.stock - cur);
+    if(can>0){ cart.set(p.id, cur+can); added += can; }
+  });
+  if(added){ renderCart(); closeModal(); openDrawer(); toast(`${added} item${added>1?'s':''} returned to your basket`); }
+  else toast('Those items are out of stock right now.');
+}
+/* quiet auto-advance: orders move one step every 60s while page is open */
+setInterval(()=>{
+  let changed = false;
+  orders.forEach(o=>{ if(o.status<3){ o.status++; changed = true; } });
+  if(!changed) return;
+  saveOrders();
+  if(!activeModal) return;
+  if(activeModal.kind==='track'){
+    const o = orders.find(x=>x.id===activeModal.ref);
+    if(o){ const box = activeModal.box; box.innerHTML = trackHTML(o); refreshIcons(); wireTrack(box, o.id); animateTrack(box, o); }
+  } else if(activeModal.kind==='account') openAccount();
+  else if(activeModal.kind==='admin') renderAdmin();
+}, 60000);
+
+/* ================= Account ================= */
+function updateAccBtn(){
+  const btn = el('accBtn'); if(!btn) return;
+  if(user){ btn.classList.add('logged'); el('accIco').textContent = initials(user.name); }
+  else { btn.classList.remove('logged'); el('accIco').innerHTML = '<i data-lucide="user-round"></i>'; refreshIcons(); }
+}
+function openAccount(){
+  if(!user){
+    const box = openModal(`
+      <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      <h3 class="m-title">Welcome back</h3>
+      <p class="m-sub">Sign in to see your orders, prescriptions and refills. No password needed — this is a friendly demo.</p>
+      <form id="signinForm" novalidate>
+        <div class="field" id="f-aname"><input type="text" id="aName" placeholder=" " autocomplete="name"><label for="aName">Full name</label><p class="err">Please tell us your name.</p></div>
+        <div class="field" id="f-aemail"><input type="text" id="aEmail" placeholder=" " autocomplete="email"><label for="aEmail">Email address</label><p class="err">That email doesn\u2019t look quite right.</p></div>
+        <button class="btn-green-full" type="submit">Sign in / Create account</button>
+      </form>`);
+    box.querySelector('#signinForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const name = box.querySelector('#aName').value.trim();
+      const email = box.querySelector('#aEmail').value.trim();
+      const badName = name.length<2;
+      const badMail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      box.querySelector('#f-aname').classList.toggle('error', badName);
+      box.querySelector('#f-aemail').classList.toggle('error', badMail);
+      if(badName) shake(box.querySelector('#f-aname'));
+      if(badMail) shake(box.querySelector('#f-aemail'));
+      if(badName||badMail) return;
+      user = {name, email};
+      lsSet('mk_user', user);
+      updateAccBtn();
+      toast(`Welcome, ${esc(name.split(' ')[0])}`);
+      openAccount();
+    });
+    return;
+  }
+  const orderRows = orders.length ? orders.slice(0,6).map(o=>`
+    <div class="acc-row">
+      <div class="grow"><b>${o.id}</b><small>${o.date} · ${o.items.reduce((s,i)=>s+i.qty,0)} items · ${fmt(o.total)}</small></div>
+      <span class="status-chip ${o.status===3?'done':(o.status===0?'pend':'')}">${STATUS[o.status].label}</span>
+      <button class="chip-btn" data-track="${o.id}">Track</button>
+    </div>`).join('')
+    : `<p class="m-sub" style="margin:0">No orders on this device yet — the shelf awaits.</p>`;
+  const rxRows = rxs.length ? rxs.slice(0,4).map(r=>`
+    <div class="acc-row">
+      <div class="grow"><b>${r.id}</b><small>${esc(r.note)||'General prescription'} · ${r.date}</small></div>
+      <span class="status-chip ${r.status==='Approved'?'done':'pend'}">${r.status}</span>
+    </div>`).join('')
+    : `<p class="m-sub" style="margin:0">No prescriptions uploaded yet.</p>`;
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <div style="text-align:center;margin-bottom:4px">
+      <span class="acc-ava-lg tint-sage">${initials(user.name)}</span>
+      <h3 class="acc-hello">Hello, ${esc(user.name.split(' ')[0])}.</h3>
+      <p class="acc-mail">${esc(user.email)}</p>
+    </div>
+    <div class="acc-sec">
+      <h6><span>Recent orders</span><button class="link-plain" id="accRx">+ Upload Rx</button></h6>
+      ${orderRows}
+    </div>
+    <div class="acc-sec">
+      <h6><span>Prescriptions</span></h6>
+      ${rxRows}
+    </div>
+    <div class="acc-signout"><button class="link-plain" id="signout">Sign out</button></div>
+  `, {kind:'account'});
+  box.querySelectorAll('[data-track]').forEach(b=> b.addEventListener('click', ()=> openTrack(b.dataset.track)));
+  box.querySelector('#accRx').addEventListener('click', openRx);
+  box.querySelector('#signout').addEventListener('click', ()=>{
+    user = null;
+    try{ localStorage.removeItem('mk_user'); }catch(e){}
+    updateAccBtn();
+    toast('Signed out — see you soon');
+    closeModal();
+  });
+}
+el('accBtn').addEventListener('click', openAccount);
+updateAccBtn();
+
+/* ================= Prescription upload ================= */
+function openRx(){
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <h3 class="m-title">Upload a prescription</h3>
+    <p class="m-sub">Snap a photo of your prescription — a pharmacist verifies it, prices the items, and texts you before anything is charged.</p>
+    <form id="rxForm2" novalidate>
+      <div class="field" id="f-rxname"><input type="text" id="rxName2" placeholder=" " value="${user?esc(user.name):''}"><label for="rxName2">Patient name</label><p class="err">Please enter the patient name.</p></div>
+      <span class="f-label" style="margin-bottom:8px">What's on it? (optional)</span>
+      <textarea id="rxNotes" class="ta" placeholder="e.g. Metformin 500mg — 3 month supply"></textarea>
+      <label class="upload-zone" for="rxFile2" style="margin:16px 0 20px">
+        <i data-lucide="paperclip"></i><span id="rxUploadText">Attach a photo of the prescription</span>
+        <input type="file" id="rxFile2" accept="image/*" hidden>
+      </label>
+      <button class="btn-green-full" type="submit">Send to pharmacist</button>
+    </form>`);
+  const fileIn = box.querySelector('#rxFile2');
+  fileIn.addEventListener('change', ()=>{
+    if(fileIn.files[0]){
+      box.querySelector('#rxUploadText').innerHTML = `Received: <span class="fname">${esc(fileIn.files[0].name)}</span>`;
+      toast('Prescription photo attached');
+    }
+  });
+  box.querySelector('#rxForm2').addEventListener('submit', e=>{
+    e.preventDefault();
+    const f = box.querySelector('#f-rxname');
+    const name = box.querySelector('#rxName2').value.trim();
+    if(name.length<2){ f.classList.add('error'); shake(f); return; }
+    f.classList.remove('error');
+    if(!fileIn.files[0]){ toast('Attach a photo so the pharmacist can verify it.'); return; }
+    const rx = {
+      id: 'RX-' + (100 + Math.floor(Math.random()*900)),
+      name, note: box.querySelector('#rxNotes').value.trim(),
+      file: fileIn.files[0].name, status: 'Under review', date: today()
+    };
+    rxs.unshift(rx); lsSet('mk_rx', rxs);
+    closeModal();
+    toast(`${rx.id} sent to our pharmacist`);
+    /* it gets "reviewed" after a while */
+    setTimeout(()=>{
+      rx.status = 'Approved'; lsSet('mk_rx', rxs);
+      toast(`${rx.id} approved — ready to collect`);
+      if(activeModal && activeModal.kind==='account') openAccount();
+    }, 45000);
+  });
+}
+el('fRx').addEventListener('click', openRx);
+el('fTrack').addEventListener('click', openTrackPicker);
+el('trackBtn').addEventListener('click', openTrackPicker);
+
+/* ================= Staff / admin ================= */
+let admAuth = false;
+function openAdmin(){
+  if(!admAuth){
+    const box = openModal(`
+      <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      <h3 class="m-title">Staff area</h3>
+      <p class="m-sub">Enter the staff PIN to open the dispensary dashboard.</p>
+      <form class="inline-form adm-pin" id="pinForm"><input id="pinInput" type="password" placeholder="Staff PIN" inputmode="numeric"><button type="submit">Unlock</button></form>
+      <p class="m-hint">Demo PIN: 1234</p>`);
+    box.querySelector('#pinForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      if(box.querySelector('#pinInput').value === '1234'){ admAuth = true; toast('Welcome to the back office'); openAdmin(); }
+      else { shake(box.querySelector('#pinForm')); toast('That PIN doesn\u2019t open this door.'); }
+    });
+    return;
+  }
+  renderAdmin();
+}
+function renderAdmin(){
+  const revenue = orders.reduce((s,o)=>s+o.total,0);
+  const low = PRODUCTS.filter(p=>p.stock<=5).length;
+  const pend = rxs.filter(r=>r.status==='Under review').length;
+  const stats = `
+    <div class="adm-stat"><b>${orders.length}</b><span>orders</span></div>
+    <div class="adm-stat"><b>${fmt(revenue)}</b><span>revenue</span></div>
+    <div class="adm-stat"><b>${pend}</b><span>Rx pending</span></div>
+    <div class="adm-stat"><b class="${low?'low-hi':''}">${low}</b><span>low stock</span></div>`;
+  const orderRows = orders.length ? orders.slice(0,8).map(o=>`
+    <div class="adm-row">
+      <div class="grow"><b>${o.id}</b> <small>${esc(o.user)} · ${o.date}</small></div>
+      <small>${fmt(o.total)}</small>
+      <span class="status-chip ${o.status===3?'done':(o.status===0?'pend':'')}">${STATUS[o.status].label}</span>
+      ${o.status<3?`<button class="chip-btn" data-adv="${o.id}">Advance</button>`:''}
+    </div>`).join('') : `<p class="m-sub" style="margin:0">No orders yet.</p>`;
+  const prodRows = PRODUCTS.map(p=>`
+    <div class="adm-row">
+      <div class="grow"><b>${p.name}</b> <small>${CATLABEL[p.cat]} · ${p.oldPrice?`<s>${fmt(p.oldPrice)}</s> `:''}${fmt(p.price)}</small></div>
+      <button class="stock-btn" data-stock="${p.id}" data-d="-1" aria-label="Decrease stock"><i data-lucide="minus"></i></button>
+      <span class="stock-n ${p.stock<=5?'low-hi':''}">${p.stock}</span>
+      <button class="stock-btn" data-stock="${p.id}" data-d="1" aria-label="Increase stock"><i data-lucide="plus"></i></button>
+    </div>`).join('');
+  const box = openModal(`
+    <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+    <h3 class="m-title">Dispensary dashboard</h3>
+    <p class="m-sub">Live demo — orders, stock and fulfilment at a glance.</p>
+    <div class="adm-stats">${stats}</div>
+    <div class="adm-sec"><h6>Orders</h6>${orderRows}</div>
+    <div class="adm-sec"><h6>Shelf stock</h6>${prodRows}</div>
+  `, {kind:'admin', wide:true});
+  box.querySelectorAll('[data-adv]').forEach(b=> b.addEventListener('click', ()=> advanceOrder(b.dataset.adv, false)));
+  box.querySelectorAll('[data-stock]').forEach(b=> b.addEventListener('click', ()=>{
+    const p = PRODUCTS.find(x=>x.id===b.dataset.stock);
+    p.stock = Math.max(0, Math.min(99, p.stock + (+b.dataset.d)));
+    saveStock(); renderRail(); renderAdmin();
+  }));
+}
+el('staffBtn').addEventListener('click', openAdmin);
+
+/* ================= Search ================= */
+const header = el('siteHeader');
+el('searchBtn').addEventListener('click', ()=>{
+  header.classList.toggle('search-open');
+  closeMobileMenu();
+  if(header.classList.contains('search-open')) setTimeout(()=> el('searchInput').focus(), 300);
+});
+el('searchClose').addEventListener('click', ()=> header.classList.remove('search-open'));
+function renderSearch(q){
+  const box = el('sResults');
+  if(!q){ box.innerHTML = `<p class="s-hint">Try “magnesium”, “cough” or “baby care”.</p>`; return; }
+  const res = PRODUCTS.filter(p => (p.name+' '+CATLABEL[p.cat]).toLowerCase().includes(q));
+  if(!res.length){ box.innerHTML = `<p class="s-hint">Nothing on the shelf matches “${esc(q)}” — but our pharmacists can order it in.</p>`; return; }
+  box.innerHTML = res.map(p=>`
+    <button class="s-row" data-add="${p.id}">
+      <span class="s-thumb tint-${p.tint}">${p.art}</span>
+      <span class="s-meta"><span class="s-name">${p.name}</span><span class="s-cat">${CATLABEL[p.cat]}</span></span>
+      <span class="s-price">${p.oldPrice?`<s>${fmt(p.oldPrice)}</s> `:''}${fmt(p.price)}</span>
+      <span class="s-add"><i data-lucide="plus"></i></span>
+    </button>`).join('');
+  refreshIcons();
+}
+el('searchInput').addEventListener('input', e=> renderSearch(e.target.value.trim().toLowerCase()));
+el('sResults').addEventListener('click', e=>{
+  const r = e.target.closest('[data-add]'); if(r) addToCart(r.dataset.add, r.querySelector('.s-thumb'));
+});
+renderSearch('');
+
+/* ================= Mobile menu ================= */
+const menuBtn = el('menuBtn'), mobileMenu = el('mobileMenu');
+function closeMobileMenu(){
+  mobileMenu.classList.remove('open'); menuBtn.classList.remove('open');
+  if(!panelsOpen()) lockScroll(false);
+}
+menuBtn.addEventListener('click', ()=>{
+  const open = mobileMenu.classList.toggle('open');
+  menuBtn.classList.toggle('open', open);
+  lockScroll(open);
+  if(open){
+    header.classList.remove('search-open');
+    if(ANIM) gsap.fromTo('#mobileMenu a', {y:34, opacity:0}, {y:0, opacity:1, stagger:.05, duration:.55, delay:.15, ease:'power3.out'});
+  }
+});
+mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeMobileMenu));
+
+document.addEventListener('click', e=>{
+  const a = e.target.closest('a[href^="#"]');
+  if(!a) return;
+  e.preventDefault();
+  const act = a.dataset.mm;
+  if(act){
+    closeMobileMenu();
+    if(act==='account') openAccount();
+    else if(act==='track') openTrackPicker();
+    else if(act==='rx') openRx();
+    return;
+  }
+  const id = a.getAttribute('href');
+  if(id.length > 1) goTo(id);
+});
+
+/* ================= Booking form ================= */
+document.querySelectorAll('.pillset input').forEach(r=>{
+  r.addEventListener('change', ()=>{
+    r.closest('.pillset').querySelectorAll('label').forEach(l=> l.classList.toggle('on', l.querySelector('input').checked));
+  });
+});
+el('bName').addEventListener('input', ()=> el('f-bname').classList.remove('error'));
+el('bPhone').addEventListener('input', ()=> el('f-bphone').classList.remove('error'));
+el('bookForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = el('bName').value.trim(), phone = el('bPhone').value.trim();
+  const badName = name.length < 2;
+  const badPhone = !/^[+\d][\d\s()-]{6,14}$/.test(phone);
+  el('f-bname').classList.toggle('error', badName);
+  el('f-bphone').classList.toggle('error', badPhone);
+  if(badName) shake(el('f-bname'));
+  if(badPhone) shake(el('f-bphone'));
+  if(badName || badPhone){ toast('Please check the highlighted fields.'); return; }
+  const dept = document.querySelector('input[name=dept]:checked').value;
+  const time = document.querySelector('input[name=time]:checked').value;
+  const ref = 'BK-' + (1000 + Math.floor(Math.random()*9000));
+  el('bookConfirm').innerHTML =
+    `Thanks, <b>${esc(name.split(' ')[0])}</b> — <b>${esc(dept)}</b>, <b>${esc(time)}</b> requested. Your reference is <b>${ref}</b>; we'll text you within 15 minutes to confirm the exact slot.`;
+  el('bookCard').classList.add('done');
+  refreshIcons();
+  if(ANIM) gsap.fromTo('.refill-success', {y:18, opacity:0}, {y:0, opacity:1, duration:.6, ease:'power3.out'});
+  toast('Appointment request sent');
+});
+el('bookAgain').addEventListener('click', ()=>{
+  el('bookCard').classList.remove('done');
+  el('bookForm').reset();
+  document.querySelectorAll('.pillset').forEach(ps=>{
+    ps.querySelectorAll('label').forEach(l=> l.classList.toggle('on', l.querySelector('input').checked));
+  });
+});
+
+/* ================= Departments accordion ================= */
+function setBody(body, open){
+  if(ANIM){
+    if(open){ gsap.set(body, {height:'auto'}); gsap.from(body, {height:0, duration:.55, ease:'power3.inOut'}); }
+    else gsap.to(body, {height:0, duration:.45, ease:'power3.inOut'});
+    gsap.delayedCall(.7, ()=> ScrollTrigger.refresh());
+  } else body.style.height = open ? 'auto' : '0px';
+}
+document.querySelectorAll('.art-head').forEach(h=>{
+  h.addEventListener('click', ()=>{
+    const item = h.closest('.art-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.art-item.open').forEach(o=>{
+      if(o!==item){ o.classList.remove('open'); o.querySelector('.art-head').setAttribute('aria-expanded','false'); setBody(o.querySelector('.art-body'), false); }
+    });
+    item.classList.toggle('open', !isOpen);
+    h.setAttribute('aria-expanded', String(!isOpen));
+    setBody(item.querySelector('.art-body'), !isOpen);
+  });
+});
+function openDept(i){
+  document.querySelectorAll('.art-item').forEach((it, idx)=>{
+    const head = it.querySelector('.art-head');
+    if(idx===i){
+      const willOpen = !it.classList.contains('open');
+      it.classList.toggle('open', willOpen);
+      head.setAttribute('aria-expanded', String(willOpen));
+      setBody(it.querySelector('.art-body'), willOpen);
+    } else if(it.classList.contains('open')){
+      it.classList.remove('open');
+      head.setAttribute('aria-expanded','false');
+      setBody(it.querySelector('.art-body'), false);
+    }
+  });
+}
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    goTo('#departments');
+    setTimeout(()=> openDept(+b.dataset.open), 900);
+  });
+});
+
+/* ================= Newsletter ================= */
+el('nlForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const v = el('nlEmail').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){
+    el('nlError').textContent = 'That email doesn\u2019t look quite right — mind checking it?';
+    return;
+  }
+  el('nlError').textContent = '';
+  const show = ()=>{
+    el('newsletter').classList.add('done');
+    refreshIcons();
+    if(ANIM) gsap.fromTo('#nlDone', {y:14, opacity:0}, {y:0, opacity:1, duration:.5, ease:'power3.out'});
+    toast('Welcome to Health Notes');
+  };
+  if(ANIM) gsap.to('#nlForm', {y:-12, opacity:0, duration:.3, ease:'power2.in', onComplete:show});
+  else show();
+});
+
+/* ================= Misc ================= */
+  const storyBtn = el('watchStoryBtn');
+  if(storyBtn){
+    storyBtn.addEventListener('click', ()=>{
+      openModal(`
+        <button class="icon-btn mclose" data-close aria-label="Close"><i data-lucide="x"></i></button>
+        <div style="padding:10px 0;text-align:center;">
+          <div style="width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;margin-bottom:20px;box-shadow:0 12px 30px rgba(14,52,36,0.15);position:relative;">
+            <img src="images/freewheel-building.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Freewheel Building">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(14,52,36,0.7), transparent);display:flex;align-items:flex-end;padding:24px;">
+              <p style="color:#ffffff;font-size:18px;font-weight:600;text-align:left;margin:0;">Care and chemistry under one roof — since 1998.</p>
+            </div>
+          </div>
+          <h3 style="font-family:'Fraunces',serif;font-size:26px;color:var(--green-950);margin-bottom:10px;">Our Story</h3>
+          <p style="color:var(--muted);font-size:15px;line-height:1.6;max-width:540px;margin:0 auto 20px;">Founded over 28 years ago as a friendly corner apothecary, Freewheel+ has grown to serve over 120,000 patients with on-site doctors, full prescription fulfillment, diagnostic laboratory, and warm neighborhood care.</p>
+          <button class="btn-green-full" data-close style="max-width:240px;margin:0 auto;">Close Story</button>
+        </div>
+      `);
+    });
+  }
+
+el('toTop').addEventListener('click', ()=> lenis ? lenis.scrollTo(0, {duration:1.6}) : window.scrollTo({top:0, behavior:'smooth'}));
+addEventListener('keydown', e=>{
+  if(e.key==='Escape'){
+    if(activeModal){ closeModal(); return; }
+    closeDrawer(); header.classList.remove('search-open'); closeMobileMenu();
+  }
+});
+
+/* ============================================================
+   ANIMATION LAYER (GSAP + ScrollTrigger + Lenis)
+   ============================================================ */
+if(ANIM){
+  const clampV = gsap.utils.clamp;
+
+  gsap.set('.w', {yPercent:115});
+  gsap.set('.hero-lead, .hero-cta, .hero-trust', {opacity:0, y:26});
+  gsap.set('.hero .eb-line', {scaleX:0});
+  gsap.set('.announce', {yPercent:-100});
+  gsap.set('.site-header', {y:-90});
+  gsap.set('#stageArch', {clipPath:'inset(100% 0 0 0)'});
+  gsap.set('#stageDoc', {opacity:0, y:70});
+  gsap.set('.fl', {y:90, scale:.7, opacity:0});
+  gsap.set('#seal', {scale:0, rotation:-90});
+  gsap.set('.cs-nodes circle, .cs-orbit', {opacity:0});
+  gsap.set('.reveal', {opacity:0, y:32});
+  gsap.set('.step', {opacity:.45});
+  gsap.set('.fw-l', {yPercent:110});
+  const underPath = document.querySelector('#hUnder');
+  let underLen = 240;
+  try{ underLen = underPath.getTotalLength(); }catch(e){}
+  gsap.set(underPath, {strokeDasharray:underLen, strokeDashoffset:underLen});
+  document.querySelectorAll('.constellation .draw').forEach(p=>{
+    let L = 300; try{ L = p.getTotalLength(); }catch(e){}
+    gsap.set(p, {strokeDasharray:L, strokeDashoffset:L});
+  });
+
+  const ecgP = document.querySelector('#ecgPath');
+  if(ecgP){
+    let L = 1400; try{ L = ecgP.getTotalLength(); }catch(e){}
+    gsap.set(ecgP, {strokeDasharray:L, strokeDashoffset:L});
+    gsap.to(ecgP, {strokeDashoffset:0, duration:7, repeat:-1, ease:'none'});
+  }
+
+  const cnt = {v:0};
+  const heroIntro = gsap.timeline({paused:true})
+    .to('.announce', {yPercent:0, duration:.7, ease:'power3.out'}, 0)
+    .to('.site-header', {y:0, duration:.8, ease:'power3.out'}, .05)
+    .to('.hero .eb-line', {scaleX:1, duration:.6, ease:'power2.out'}, .15)
+    .to('.hero .eyebrow', {opacity:1, duration:.4}, .15)
+    .to('.hero-title .w', {yPercent:0, duration:1.1, ease:'power4.out', stagger:.075}, .18)
+    .to(underPath, {strokeDashoffset:0, duration:.7, ease:'power2.inOut'}, .95)
+    .to('.hero-lead', {opacity:1, y:0, duration:.7, ease:'power3.out'}, .5)
+    .to('.hero-cta', {opacity:1, y:0, duration:.7, ease:'power3.out'}, .62)
+    .to('.hero-trust', {opacity:1, y:0, duration:.7, ease:'power3.out'}, .74)
+    .to('#stageArch', {clipPath:'inset(0% 0 0 0)', duration:1.1, ease:'power4.out'}, .25)
+    .to('#stageDoc', {opacity:1, y:0, duration:1, ease:'power3.out'}, .45)
+    .to('.fl', {y:0, scale:1, opacity:1, duration:.9, ease:'back.out(1.6)', stagger:.09}, .6)
+    .to('#seal', {scale:1, rotation:0, duration:1.1, ease:'elastic.out(1,.5)'}, .95)
+    .to('.constellation .draw', {strokeDashoffset:0, duration:1.5, stagger:.1, ease:'power2.inOut'}, .3)
+    .to('.cs-nodes circle, .cs-orbit', {opacity:1, duration:.6, stagger:.04}, 1.1);
+  gsap.set('.hero .eyebrow', {opacity:0});
+
+  const ltl = gsap.timeline();
+  ltl.to('.lc-cross', {strokeDashoffset:0, duration:.65, ease:'power2.inOut'})
+     .to('.lc-ring', {strokeDashoffset:0, duration:.9, ease:'power2.inOut'}, '-=.5')
+     .to('.loader-word span', {yPercent:0, duration:.6, stagger:.06, ease:'power3.out'}, '-=.55')
+     .fromTo('.loader-sub', {opacity:0, y:10}, {opacity:1, y:0, duration:.5}, '-=.4')
+     .to(cnt, {v:100, duration:1, ease:'power2.inOut', onUpdate:()=>{ el('loaderNum').textContent = Math.round(cnt.v); }}, '-=.9')
+     .to('.loader-inner', {yPercent:-46, opacity:0, duration:.5, ease:'power2.in'}, '+=.1')
+     .to('.loader-count', {opacity:0, duration:.3}, '<')
+     .add('exit', '+=.05')
+     .to('#loader', {clipPath:'inset(0 0 100% 0)', duration:.9, ease:'power4.inOut'}, 'exit')
+     .add(()=>{ document.body.classList.remove('loading'); if(lenis) lenis.start(); }, 'exit+=.45')
+     .add(()=>{ heroIntro.play(); }, 'exit+=.3')
+     .set('#loader', {display:'none'});
+  el('loader').addEventListener('click', ()=> ltl.timeScale(2.6));
+
+  gsap.to('#stageDoc svg', {y:-8, duration:3.2, repeat:-1, yoyo:true, ease:'sine.inOut'});
+  gsap.to('.fl-2 svg', {keyframes:{scale:[1,1.14,1,1.09,1]}, transformOrigin:'50% 58%', duration:1.15, repeat:-1, ease:'sine.inOut'});
+
+  gsap.utils.toArray('.fl-bob').forEach((b,i)=>{
+    gsap.to(b, {y: i%2 ? 13 : -13, duration: 2.8 + i*.45, repeat:-1, yoyo:true, ease:'sine.inOut', delay: i*.4});
+  });
+  gsap.to('.cs1', {y:-22, x:12, rotation:6, duration:24, repeat:-1, yoyo:true, ease:'sine.inOut'});
+  gsap.to('.cs2', {y:18, x:-10, rotation:-8, duration:30, repeat:-1, yoyo:true, ease:'sine.inOut'});
+
+  const hero = document.querySelector('.hero');
+  if(fine){
+    document.querySelectorAll('.fl').forEach(it=>{
+      it._x = gsap.quickTo(it.querySelector('.fl-in'), 'x', {duration:.7, ease:'power3'});
+      it._y = gsap.quickTo(it.querySelector('.fl-in'), 'y', {duration:.7, ease:'power3'});
+    });
+    hero.addEventListener('mousemove', e=>{
+      const r = hero.getBoundingClientRect();
+      const rx = (e.clientX - r.left)/r.width - .5, ry = (e.clientY - r.top)/r.height - .5;
+      document.querySelectorAll('.fl').forEach(it=>{
+        const d = +it.dataset.depth;
+        it._x(rx * d * 18); it._y(ry * d * 14);
+      });
+    });
+    hero.addEventListener('mouseleave', ()=>{
+      document.querySelectorAll('.fl').forEach(it=>{ it._x(0); it._y(0); });
+    });
+  }
+
+  gsap.to('#scrollProgress', {scaleX:1, ease:'none', scrollTrigger:{start:0, end:'max', scrub:.3}});
+
+  ScrollTrigger.create({
+    start:0, end:'max',
+    onUpdate(self){
+      header.classList.toggle('scrolled', self.scroll()>8);
+      const hide = self.direction===1 && self.scroll()>160 && !panelsOpen();
+      header.classList.toggle('hide', hide);
+    }
+  });
+
+  ScrollTrigger.batch('.reveal', {
+    start:'top 88%', once:true,
+    onEnter: b => gsap.to(b, {opacity:1, y:0, duration:.9, ease:'power3.out', stagger:.09, overwrite:true})
+  });
+
+  document.querySelectorAll('[data-words]').forEach(t=>{
+    ScrollTrigger.create({
+      trigger:t, start:'top 88%', once:true,
+      onEnter:()=> gsap.to(t.querySelectorAll('.w'), {yPercent:0, duration:1.05, ease:'power4.out', stagger:.08})
+    });
+  });
+  document.querySelectorAll('.eyebrow .eb-line').forEach(l=>{
+    gsap.set(l, {scaleX:0});
+    ScrollTrigger.create({trigger:l, start:'top 90%', once:true, onEnter:()=> gsap.to(l, {scaleX:1, duration:.8, ease:'power2.out'})});
+  });
+
+  gsap.utils.toArray('.cat-card').forEach((card,i)=>{
+    const ai = card.querySelectorAll('.ai');
+    gsap.set(card, {y:56, opacity:0});
+    ScrollTrigger.create({
+      trigger:card, start:'top 86%', once:true,
+      onEnter:()=> gsap.timeline()
+        .to(card, {y:0, opacity:1, duration:.9, ease:'power3.out', delay:i*.12})
+        .to(ai, {y:0, opacity:1, duration:.8, ease:'back.out(1.5)', stagger:.09}, '-=.5')
+    });
+  });
+
+  ScrollTrigger.create({
+    trigger:'#rail', start:'top 85%', once:true,
+    onEnter:()=> gsap.fromTo('#rail .p-card', {y:60, opacity:0}, {y:0, opacity:1, duration:.9, stagger:.08, ease:'power3.out'})
+  });
+
+  if(fine){
+    document.querySelectorAll('[data-tilt]').forEach(card=>{
+      const rx = gsap.quickTo(card, 'rotationX', {duration:.6, ease:'power3'});
+      const ry = gsap.quickTo(card, 'rotationY', {duration:.6, ease:'power3'});
+      const glare = card.querySelector('.tilt-glare');
+      card.addEventListener('mousemove', e=>{
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left)/r.width, py = (e.clientY - r.top)/r.height;
+        ry((px-.5)*10); rx((.5-py)*8);
+        if(glare){
+          glare.style.setProperty('--gx', px*100+'%');
+          glare.style.setProperty('--gy', py*100+'%');
+          glare.style.opacity = 1;
+        }
+      });
+      card.addEventListener('mouseenter', ()=> gsap.to(card, {y:-6, duration:.45, ease:'power3.out'}));
+      card.addEventListener('mouseleave', ()=>{
+        rx(0); ry(0);
+        gsap.to(card, {y:0, duration:.5, ease:'power3.out'});
+        if(glare) glare.style.opacity = 0;
+      });
+    });
+
+    document.addEventListener('mousemove', e=>{
+      const card = e.target.closest('.p-card'); if(!card) return;
+      const art = card.querySelector('.p-art svg'); if(!art) return;
+      if(!art._qx){
+        art._qx = gsap.quickTo(art,'x',{duration:.5,ease:'power3'});
+        art._qy = gsap.quickTo(art,'y',{duration:.5,ease:'power3'});
+      }
+      const r = card.getBoundingClientRect();
+      art._qx(((e.clientX-r.left)/r.width - .5)*14);
+      art._qy(((e.clientY-r.top)/r.height - .5)*10);
+    });
+
+    document.querySelectorAll('[data-magnetic]').forEach(m=>{
+      const x = gsap.quickTo(m, 'x', {duration:.4, ease:'power3'});
+      const y = gsap.quickTo(m, 'y', {duration:.4, ease:'power3'});
+      m.addEventListener('mousemove', e=>{
+        const r = m.getBoundingClientRect();
+        x((e.clientX - r.left - r.width/2)*.28);
+        y((e.clientY - r.top - r.height/2)*.28);
+      });
+      m.addEventListener('mouseleave', ()=>{ x(0); y(0); });
+    });
+
+    document.documentElement.classList.add('cursor-on');
+    const dot = el('cDot'), ringCore = el('ringCore'), cLabel = el('cLabel');
+    gsap.set([dot, el('cRing')], {xPercent:-50, yPercent:-50});
+    const rx = gsap.quickTo(el('cRing'), 'x', {duration:.35, ease:'power3'});
+    const ry = gsap.quickTo(el('cRing'), 'y', {duration:.35, ease:'power3'});
+    let shown = false;
+    addEventListener('mousemove', e=>{
+      if(!shown){ shown = true; gsap.to([dot, el('cRing')], {opacity:1, duration:.3}); }
+      gsap.set(dot, {x:e.clientX, y:e.clientY});
+      rx(e.clientX); ry(e.clientY);
+    });
+    document.addEventListener('mouseleave', ()=>{ shown=false; gsap.to([dot, el('cRing')], {opacity:0, duration:.3}); });
+    const HOVER = 'a, button, input, label, textarea, [data-tilt], .p-card, .art-head, .tab';
+    document.addEventListener('mouseover', e=>{
+      const t = e.target.closest(HOVER); if(!t) return;
+      const c = e.target.closest('[data-cursor]');
+      const txt = c ? c.dataset.cursor : '';
+      cLabel.textContent = txt;
+      ringCore.classList.add('on');
+      ringCore.classList.toggle('txt', !!txt);
+    });
+    document.addEventListener('mouseout', e=>{
+      if(e.target.closest(HOVER)){ ringCore.classList.remove('on','txt'); }
+    });
+
+    document.querySelectorAll('.nav a').forEach(a=>{
+      const orig = a.textContent;
+      let raf = null;
+      a.addEventListener('mouseenter', ()=>{
+        const chars = 'ACDEFGHLMNPRSTUW';
+        let i = 0;
+        cancelAnimationFrame(raf);
+        const step = ()=>{
+          i += .4;
+          const done = Math.floor(i);
+          a.textContent = orig.slice(0, done) + orig.slice(done).split('').map(c => c===' ' ? ' ' : chars[Math.random()*chars.length|0]).join('');
+          if(done < orig.length) raf = requestAnimationFrame(step);
+          else a.textContent = orig;
+        };
+        step();
+      });
+    });
+
+    (function(){
+      let down=false, sx=0, sl=0, moved=0, vel=0, lastX=0, lastT=0, inertia=null;
+      rail.addEventListener('pointerdown', e=>{
+        if(e.pointerType !== 'mouse') return;
+        down = true; moved = 0;
+        sx = e.clientX; sl = rail.scrollLeft; lastX = e.clientX; lastT = performance.now(); vel = 0;
+        rail.classList.add('dragging');
+        if(inertia) gsap.killTweensOf(inertia);
+        e.preventDefault();
+      });
+      addEventListener('pointermove', e=>{
+        if(!down) return;
+        const dx = e.clientX - sx;
+        moved = Math.max(moved, Math.abs(dx));
+        rail.scrollLeft = sl - dx;
+        const now = performance.now();
+        vel = (e.clientX - lastX) / Math.max(now - lastT, 1);
+        lastX = e.clientX; lastT = now;
+      });
+      addEventListener('pointerup', ()=>{
+        if(!down) return;
+        down = false;
+        rail.classList.remove('dragging');
+        if(moved > 8){ dragKill = true; setTimeout(()=> dragKill=false, 60); }
+        const v0 = vel * 16;
+        if(Math.abs(v0) > 2){
+          inertia = {v:v0};
+          gsap.to(inertia, {v:0, duration:1.1, ease:'power3.out', onUpdate(){ rail.scrollLeft -= inertia.v; }});
+        }
+      });
+    })();
+  }
+
+  const bmTween = gsap.to('#bmTrack', {xPercent:-50, ease:'none', duration:26, repeat:-1});
+  const tickTween = gsap.to('#tickerTrack', {xPercent:-50, ease:'none', duration:22, repeat:-1});
+  const bmSkew = gsap.quickTo('#bigmarq', 'skewX', {duration:.5, ease:'power3'});
+  const tsTargets = [1, 1];
+  let skewTO = null;
+  ScrollTrigger.create({
+    onUpdate(self){
+      const v = self.getVelocity();
+      tsTargets[0] = clampV(-2, 3.5, 1 + v/700);
+      tsTargets[1] = clampV(-2.5, 4, 1 + v/600);
+      bmSkew(clampV(-7, 7, v/160));
+      if(skewTO) skewTO.kill();
+      skewTO = gsap.delayedCall(.18, ()=> bmSkew(0));
+    }
+  });
+  gsap.ticker.add(()=>{
+    [bmTween, tickTween].forEach((tw,i)=>{
+      tw.timeScale(tw.timeScale() + (tsTargets[i] - tw.timeScale())*.06);
+      tsTargets[i] += (1 - tsTargets[i])*.04;
+    });
+  });
+
+  document.querySelectorAll('.stat-n').forEach(n=>{
+    const target = +n.dataset.count, suf = n.dataset.suffix || '', comma = n.dataset.comma;
+    const render = v => n.textContent = (comma ? Math.round(v).toLocaleString('en-US') : Math.round(v)) + suf;
+    ScrollTrigger.create({
+      trigger:n, start:'top 88%', once:true,
+      onEnter:()=>{
+        const o = {v:0};
+        gsap.to(o, {v:target, duration:2, ease:'power3.out', onUpdate:()=> render(o.v)});
+      }
+    });
+    render(0);
+  });
+
+  gsap.to('#stepsFill', {
+    scaleY:1, ease:'none',
+    scrollTrigger:{trigger:'#stepsWrap', start:'top 72%', end:'bottom 45%', scrub:.6}
+  });
+  document.querySelectorAll('.step').forEach(s=>{
+    ScrollTrigger.create({trigger:s, start:'top 64%', once:true, onEnter:()=> s.classList.add('active')});
+  });
+
+  document.querySelectorAll('[data-parallax]').forEach(w=>{
+    const svg = w.querySelector('svg'); if(!svg) return;
+    gsap.fromTo(svg, {y:-22}, {y:22, ease:'none',
+      scrollTrigger:{trigger:w, start:'top bottom', end:'bottom top', scrub:true}});
+  });
+
+  ScrollTrigger.create({
+    trigger:'#reviews', start:'top 75%', once:true,
+    onEnter(){
+      const o = {v:0};
+      gsap.to(o, {v:4.9, duration:1.6, ease:'power3.out', onUpdate:()=> el('rvNum').textContent = o.v.toFixed(1)});
+      gsap.fromTo('#reviews .rv-stars svg, #reviews .rv-mini svg', {scale:0}, {scale:1, duration:.5, stagger:.05, ease:'back.out(2.4)'});
+    }
+  });
+
+  gsap.to('#heroCopy', {y:60, opacity:.25, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+  gsap.to('#heroVisual', {y:-80, rotation:-3, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+  gsap.to('#constellations', {y:-110, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+  gsap.to('.ecg', {y:-60, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+
+  ScrollTrigger.create({
+    trigger:'#footerWord', start:'top 94%', once:true,
+    onEnter:()=> gsap.to('.fw-l', {yPercent:0, duration:1.1, ease:'power4.out', stagger:.06})
+  });
+  gsap.fromTo('#footerWord', {yPercent:26}, {yPercent:0, ease:'none',
+    scrollTrigger:{trigger:'#footerWord', start:'top bottom', end:'bottom bottom', scrub:true}});
+
+  addEventListener('load', ()=> ScrollTrigger.refresh());
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=> ScrollTrigger.refresh());
+}
+
+})();
+</script>
+</body>
+</html>
