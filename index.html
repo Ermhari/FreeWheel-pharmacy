@@ -1172,27 +1172,66 @@ textarea.ta:focus{outline:none;border-color:var(--green-700)}
 @media (max-width: 980px) {
   .about-custom-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 36px;
   }
   .afc-top-right {
+    top: 0;
     right: 0;
   }
   .afc-bottom-left {
+    bottom: 0;
     left: 0;
   }
   .about-people-first {
-    right: 10px;
-    top: 15%;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-7deg);
+    font-size: 26px;
   }
   .stats-custom-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 28px 20px;
+    gap: 24px 16px;
   }
   .stat-custom-item:nth-child(2n+1) {
     border-left: none;
   }
   .doc-card-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .about-people-first {
+    display: none !important;
+  }
+  .afc-top-right {
+    top: -6px;
+    right: 6px;
+    padding: 7px 12px;
+    border-radius: 14px;
+  }
+  .afc-bottom-left {
+    bottom: -6px;
+    left: 6px;
+    padding: 7px 12px;
+    border-radius: 14px;
+  }
+  .afc-icon-badge {
+    width: 32px;
+    height: 32px;
+  }
+  .afc-icon-badge svg {
+    width: 15px;
+    height: 15px;
+  }
+  .afc-title-text {
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+  .afc-sub-label {
+    font-size: 9.5px;
+  }
+  .afc-main-val {
+    font-size: 12.5px;
   }
 }
 @media (max-width: 560px) {
