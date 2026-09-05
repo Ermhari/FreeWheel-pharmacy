@@ -1,0 +1,9 @@
+{
+  "name": "freewheel-pharmacy",
+  "version": "1.0.0",
+  "description": "Freewheel+ Clinic & Pharmacy web application",
+  "private": true,
+  "scripts": {
+    "start": "serve ."
+  }
+}
